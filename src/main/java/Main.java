@@ -59,6 +59,6 @@ class Invoice implements Ipaybable {
 }
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello nờ quy đê.");
+        System.out.println("Hello hehe mathcuot");
     }
 }

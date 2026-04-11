@@ -1,0 +1,13 @@
+package uet.model.ItemFactory;
+
+import uet.model.items.Electronics;
+import uet.model.items.Item;
+
+public class ElectronicsFactory extends ItemFactory {
+    @Override
+    public Item createItem(String name, String description, double startingPrice, String imageUrl, String... extraInfo) {
+        String brand = extraInfo[0];
+        int warrantyMonths = Integer.parseInt(extraInfo[1]);
+        return new Electronics(name,description,startingPrice,imageUrl,brand,warrantyMonths);
+    }
+}

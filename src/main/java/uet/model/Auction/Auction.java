@@ -1,10 +1,10 @@
-package uet.model;
-import uet.model.items.Item;
+package uet.model.Auction;
+
+import uet.model.CustomException.InvalidBidException;
 
 import java.time.LocalDateTime;
 
 public class Auction {
-    public enum AuctionState { OPEN, RUNNING, FINISHED, PAID, CANCELED }
     private static int count;
     private String auctionId;
     private String itemId;
@@ -26,7 +26,38 @@ public class Auction {
         this.state = AuctionState.OPEN;
         Auction.count++;
     }
-
+    public void updateHighestBid(double amount, String bidderId) {
+        if (state != AuctionState.RUNNING)
+            throw new IllegalStateException("Auction is not RUNNING.");
+        if (amount<=currentHighestBid)
+            throw new InvalidBidException("Bid must be higher than current highest: " + currentHighestBid);
+        this.currentHighestBid = amount;
+        this.highestBidderId = bidderId;
+    }
+    public boolean isActive(){
+        return LocalDateTime.now().isBefore(endTime);
+    }
+    public void start() {
+        if (state != AuctionState.OPEN)
+            throw new IllegalStateException("Can only start an OPEN auction. Current: " + state);
+        this.state = AuctionState.RUNNING;
+    }
+    public void finish() {
+        if (state != AuctionState.RUNNING)
+            throw new IllegalStateException("Can only finish a RUNNING auction. Current: " + state);
+        this.state = AuctionState.FINISHED;
+    }
+    public void markPaid() {
+        if (state != AuctionState.FINISHED)
+            throw new IllegalStateException("Can only mark FINISHED auction as PAID. Current: " + state);
+        this.state = AuctionState.PAID;
+    }
+    public void cancel() {
+        if (state == AuctionState.PAID)
+            throw new IllegalStateException("Cannot cancel a PAID auction.");
+        this.state = AuctionState.CANCELED;
+    }
+    
     //getter
 
     public double getCurrentHighestBid() {

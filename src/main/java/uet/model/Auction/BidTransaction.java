@@ -1,4 +1,4 @@
-package uet.model;
+package uet.model.Auction;
 
 import java.time.LocalDateTime;
 

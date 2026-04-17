@@ -11,6 +11,7 @@ public abstract class User extends Entity {
         this.balance = balance;
         this.email = email;
     }
+
     //getter
     public double getBalance() {
         return balance;
@@ -28,13 +29,10 @@ public abstract class User extends Entity {
     public void setEmail(String email) {
         this.email = email;
     }
-    public void addBalnce(double money){
-        this.balance += money;
-    }
-    public void withdraw(double money){
-        this.balance -= money;
-    }
     public void setPassword(String password) {
         this.password = password;
+    }
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 }

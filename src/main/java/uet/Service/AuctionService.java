@@ -5,6 +5,7 @@ import uet.model.User.Bidder;
 import uet.model.User.Seller;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class AuctionService {
@@ -33,10 +34,14 @@ public class AuctionService {
         }
     }
     // thanh toán
-    public void markAuctionPaid(String auctionId){
+    public void markAuctionPaid(String auctionId) throws InterruptedException{
         ReentrantLock auctionLock = manager.auctionGetLock(auctionId);
-        auctionLock.lock();
+        boolean gotAuctionLock = false;
         try {
+            gotAuctionLock = auctionLock.tryLock(2, TimeUnit.SECONDS);
+            if (!gotAuctionLock){
+                throw new RuntimeException("The auction system is busy.");
+            }
             Auction auction = manager.getAuction(auctionId);
             String winnerId = auction.getHighestBidderId();
             auction.markPaid();

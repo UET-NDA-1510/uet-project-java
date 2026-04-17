@@ -57,9 +57,9 @@ public class BidService {
                     throw new RuntimeException("Can not refund money for pre user");
                 }
             }
+            auction.updateHighestBid(amount,bidderId);
             bidder.deductBalance(amount);
             bidder.updateBalance();
-            auction.updateHighestBid(amount,bidderId);
             BidTransaction bidTransaction = new BidTransaction(auctionId,bidderId,amount);
             return bidTransaction;
         } finally {

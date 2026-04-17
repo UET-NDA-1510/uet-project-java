@@ -38,7 +38,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>Main</mainClass>
+                    <mainClass>uet.client.ClientMain</mainClass>
                 </configuration>
             </plugin>
         </plugins>

@@ -28,7 +28,6 @@ public class Auction {
     }
 
     //getter
-
     public double getCurrentHighestBid() {
         return currentHighestBid;
     }
@@ -53,8 +52,13 @@ public class Auction {
     public String getAuctionId() {
         return auctionId;
     }
+    public AuctionState getState() {
+        return state;
+    }
     //setter
-
+    public void setState(AuctionState state) {
+        this.state = state;
+    }
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }

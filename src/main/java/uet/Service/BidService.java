@@ -6,6 +6,7 @@ import uet.model.CustomException.AuctionClosedException;
 import uet.model.CustomException.InvalidBidException;
 import uet.model.User.Bidder;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class BidService {
@@ -13,12 +14,22 @@ public class BidService {
     public BidService(AuctionManager manager){
         this.manager = manager;
     }
-    public BidTransaction placeBid(String auctionId,String bidderId,double amount){
+    public BidTransaction placeBid(String auctionId,String bidderId,double amount) throws InterruptedException{
         ReentrantLock auctionLock = manager.auctionGetLock(auctionId);
         ReentrantLock userLock = manager.userGetLock(bidderId);
-        auctionLock.lock();
-        userLock.lock();
+        boolean gotAuctionLock = false;
+        boolean gotUserLock = false;
         try {
+            // lấy lock auction tối đa 2 giây , nếu không được trả về false
+            gotAuctionLock = auctionLock.tryLock(2, TimeUnit.SECONDS);
+            if (!gotAuctionLock) {
+                throw new RuntimeException("The auction system is busy, please try again.");
+            }
+            // Thử lấy khóa User của người đang đặt giá
+            gotUserLock = userLock.tryLock(2, TimeUnit.SECONDS);
+            if (!gotUserLock) {
+                throw new RuntimeException("Your account is processing another transaction.");
+            }
             Auction auction = manager.getAuction(auctionId);
             if (!auction.isActive()){
                 throw new AuctionClosedException();
@@ -33,9 +44,18 @@ public class BidService {
             // hoàn tiền người trước
             String preId = auction.getHighestBidderId();
             if (preId !=null && !preId.equals(bidderId)){
-                Bidder preBidder = manager.getBidderbyId(preId);
-                preBidder.refundBalance(auction.getCurrentHighestBid());
-                preBidder.updateBalance();
+                ReentrantLock preUserLock = manager.userGetLock(preId);
+                if (preUserLock.tryLock(2, TimeUnit.SECONDS)) {
+                    try {
+                        Bidder preBidder = manager.getBidderbyId(preId);
+                        preBidder.refundBalance(auction.getCurrentHighestBid());
+                        preBidder.updateBalance();
+                    } finally {
+                        preUserLock.unlock();
+                    }
+                } else {
+                    throw new RuntimeException("Can not refund money for pre user");
+                }
             }
             bidder.deductBalance(amount);
             bidder.updateBalance();
@@ -43,8 +63,12 @@ public class BidService {
             BidTransaction bidTransaction = new BidTransaction(auctionId,bidderId,amount);
             return bidTransaction;
         } finally {
-            userLock.unlock();
-            auctionLock.unlock();
+            if (gotUserLock){
+                userLock.unlock();
+            }
+            if (gotAuctionLock) {
+                auctionLock.unlock();
+            }
         }
     }
 }

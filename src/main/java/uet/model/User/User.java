@@ -1,15 +1,20 @@
 package uet.model.User;
 import uet.model.Entity;
+
+import java.time.LocalDate;
+
 public abstract class User extends Entity {
     private String username;
     private String email;
     private String password;
     private double balance;
-    User(String username,String password,double balance,String email){
+    private LocalDate dateOfbirth;    // sinh nhật
+    User(String username,String email,String password,LocalDate dateOfbirth){
         this.username = username;
-        this.password = password;
-        this.balance = balance;
         this.email = email;
+        this.password = password;
+        this.balance = 10000;
+        this.dateOfbirth = dateOfbirth;
     }
 
     //getter

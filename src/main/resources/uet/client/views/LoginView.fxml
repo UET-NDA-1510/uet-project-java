@@ -24,7 +24,7 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Button>
-      <Button mnemonicParsing="false" onAction="#handleLogin" prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: #3498db;" text="Đăng Ký" textFill="WHITE">
+      <Button mnemonicParsing="false" onAction="#switchRegister" prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: #3498db;" text="Đăng Ký" textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>

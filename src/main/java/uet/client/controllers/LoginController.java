@@ -8,10 +8,12 @@ import javafx.scene.control.TextField;
 
 public class LoginController {
 
-    @FXML private TextField usernameField;
-    @FXML private PasswordField passwordField;
-    @FXML private ComboBox<String> roleComboBox;
-
+    @FXML
+    private TextField usernameField;
+    @FXML
+    private PasswordField passwordField;
+    @FXML
+    private ComboBox<String> roleComboBox;
     @FXML
     public void initialize() {
         // Đổ dữ liệu vào ComboBox khi màn hình vừa được load
@@ -33,5 +35,9 @@ public class LoginController {
         
         // Chuyển sang màn hình Dashboard (kích thước 800x600)
         ClientMain.switchTo("DashboardView.fxml", 800, 600);
+    }
+    @FXML
+    private void switchRegister(){
+        ClientMain.switchTo("RegisterView.fxml",600,400);
     }
 }

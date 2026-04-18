@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="400.0" prefWidth="400.0" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uet.client.controllers.LoginController">
+<VBox alignment="CENTER" prefHeight="400.0" prefWidth="400.0" spacing="20.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uet.client.controllers.LoginController">
    <children>
       <Label text="HỆ THỐNG ĐẤU GIÁ" textFill="#2c3e50">
          <font>
@@ -20,6 +20,11 @@
       <PasswordField fx:id="passwordField" maxWidth="250.0" prefHeight="35.0" promptText="Mật khẩu" />
       <ComboBox fx:id="roleComboBox" maxWidth="250.0" prefHeight="35.0" promptText="Chọn vai trò" />
       <Button mnemonicParsing="false" onAction="#handleLogin" prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: #3498db;" text="Đăng nhập" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <Button mnemonicParsing="false" onAction="#handleLogin" prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: #3498db;" text="Đăng Ký" textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>

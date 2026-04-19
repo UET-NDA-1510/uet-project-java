@@ -39,6 +39,10 @@ public class RegisterController {
             note.setText("Phải trên 18 tuổi.");
             return;
         }
+        if ( ! password.equals(repass)){
+            note.setText("2 phần mật khẩu phải khớp nhau. ");
+            return;
+        }
         ClientMain.switchTo("DashboardView.fxml", 800, 600);
 
     }

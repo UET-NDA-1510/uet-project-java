@@ -38,6 +38,6 @@ public class LoginController {
     }
     @FXML
     private void switchRegister(){
-        ClientMain.switchTo("RegisterView.fxml",600,400);
+        ClientMain.switchTo("RegisterView.fxml",800,600);
     }
 }

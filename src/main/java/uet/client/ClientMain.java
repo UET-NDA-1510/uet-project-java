@@ -33,8 +33,14 @@ public class ClientMain extends Application {
         try {
             FXMLLoader loader = new FXMLLoader(ClientMain.class.getResource("/uet/client/views/" + fxmlFile));
             Parent root = loader.load();
-            window.setScene(new Scene(root, width, height));
-            window.centerOnScreen();
+            if (window.getScene() != null) {
+                // Nếu CÓ RỒI: Chỉ cần tráo đổi nội dung bên trong (Root).
+                window.getScene().setRoot(root);
+            } else {
+                // Nếu CHƯA CÓ (thường là lần load màn hình đầu tiên khi bật app):
+                window.setScene(new Scene(root, width, height));
+                window.centerOnScreen();
+            }
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Không thể tải giao diện: " + fxmlFile);

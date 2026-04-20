@@ -20,14 +20,12 @@ public class HomeController {
     public void handleLogin(ActionEvent event) {
         String user = txtUsername.getText();
         String pass = txtPassword.getText();
-
         if (user.isEmpty() || pass.isEmpty()) {
             System.out.println("Vui lòng điền đầy đủ thông tin!");
         } else {
             System.out.println("Đang kiểm tra tài khoản: " + user);
         }
     }
-
 //    @FXML
 //    public void handleAction(ActionEvent event) {
 //

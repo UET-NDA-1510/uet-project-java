@@ -22,6 +22,7 @@
             <Pane HBox.hgrow="ALWAYS">
                <children>
                   <Button layoutX="294.0" layoutY="5.0" mnemonicParsing="false" onAction="#switchProduct" text="Tạo Sản Phẩm" />
+                  <Button layoutX="161.0" layoutY="5.0" mnemonicParsing="false" text="quản lý sản phẩm" />
                </children></Pane>
           <Button mnemonicParsing="false" onAction="#handleCreateAuction" text="Tạo phiên mới" />
             <Button mnemonicParsing="false" text="Đăng xuất" />

@@ -20,7 +20,7 @@ public class ClientMain extends Application {
         window.setTitle("Hệ thống Đấu giá Trực tuyến");
 
         // Load màn hình đăng nhập đầu tiên
-        switchTo("Home.fxml", 1024, 768);
+        switchTo("LoginView.fxml", 1024, 768);
         window.show();
         window.setOnCloseRequest(e ->{
             e.consume();  // giúp cửa sổ không bị tắt đột ngột

@@ -17,7 +17,7 @@ public class LoginController {
     @FXML
     public void initialize() {
         // Đổ dữ liệu vào ComboBox khi màn hình vừa được load
-        roleComboBox.getItems().addAll("Bidder", "Seller", "Admin");
+        roleComboBox.getItems().addAll("User", "Admin");
     }
 
     @FXML

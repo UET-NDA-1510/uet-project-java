@@ -5,6 +5,9 @@ import uet.model.CustomException.InvalidBidException;
 import java.time.LocalDateTime;
 
 public class Auction {
+    public enum AuctionState {
+        OPEN, RUNNING, FINISHED, PAID, CANCELED;
+    }
     private static int count;
     private String auctionId;
     private String itemId;

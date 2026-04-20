@@ -1,5 +1,6 @@
 package uet.client.controllers;
 
+import javafx.scene.control.Button;
 import uet.client.ClientMain;
 import uet.model.Auction.Auction;
 
@@ -18,7 +19,6 @@ public class DashboardController {
     @FXML private TableColumn<Auction, String> nameColumn;
     @FXML private TableColumn<Auction, Double> priceColumn;
     @FXML private TableColumn<Auction, String> statusColumn;
-
     private ObservableList<Auction> auctionList = FXCollections.observableArrayList();
 
     @FXML
@@ -48,5 +48,9 @@ public class DashboardController {
     
     public void addOrUpdateAuction(Auction newAuction) {
         auctionList.add(newAuction);
+    }
+    @FXML
+    private void switchProduct(){
+        ClientMain.switchTo("CreateProduct.fxml",800,600);
     }
 }

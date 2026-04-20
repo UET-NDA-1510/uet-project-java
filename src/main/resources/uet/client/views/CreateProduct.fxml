@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<StackPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uet.client.controllers.CreateProductController">
+   <children>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="800.0">
+         <children>
+            <Label layoutX="236.0" layoutY="25.0" text="TẠO SẢN PHẨM ĐẤU GIÁ" textFill="#2c3e50">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="imageView" fitHeight="196.0" fitWidth="200.0" layoutX="52.0" layoutY="134.0" pickOnBounds="true" preserveRatio="true" />
+            <TextField fx:id="name" layoutX="428.0" layoutY="146.0" maxWidth="250.0" prefHeight="35.0" prefWidth="194.0" promptText="Tên Sản Phẩm" />
+            <TextField fx:id="startingPrice" layoutX="428.0" layoutY="196.0" maxWidth="250.0" prefHeight="35.0" prefWidth="194.0" promptText="Giá Khởi Điểm (USD)" />
+            <ComboBox fx:id="roleComboBox" layoutX="428.0" layoutY="98.0" maxWidth="250.0" prefHeight="35.0" prefWidth="169.0" promptText="Chọn Loại Sản Phẩm" />
+            <Button layoutX="461.0" layoutY="500.0" mnemonicParsing="false" text="Tạo sản phẩm" />
+            <TextField fx:id="extraInfo1" layoutX="428.0" layoutY="388.0" maxWidth="250.0" prefHeight="35.0" prefWidth="194.0" promptText="Thương hiệu / Họa sĩ" />
+            <TextField fx:id="extraInfo2" layoutX="431.0" layoutY="442.0" maxWidth="250.0" prefHeight="35.0" prefWidth="193.0" promptText="Thời gian ra đời-bảo hành" />
+            <Button layoutX="102.0" layoutY="373.0" mnemonicParsing="false" onAction="#addImage" text="Chọn ảnh" />
+            <Button layoutX="30.0" layoutY="530.0" mnemonicParsing="false" onAction="#switchDashboarde" text="Hủy Tạo" />
+            <TextArea fx:id="description" layoutX="428.0" layoutY="242.0" prefHeight="132.0" prefWidth="200.0" promptText="Nhập mô tả về sản phẩm" wrapText="true" />
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

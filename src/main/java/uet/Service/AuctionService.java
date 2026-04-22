@@ -50,7 +50,6 @@ public class AuctionService {
             }
             Seller seller = manager.getSellerbyId(auction.getSellerId());
             seller.getMoney(auction.getCurrentHighestBid());
-            seller.updateBalance();
         } finally {
             auctionLock.unlock();
             manager.removeAuctionLock(auctionId);
@@ -70,7 +69,6 @@ public class AuctionService {
             auction.cancel();
             Bidder highestBidder = manager.getBidderbyId(highestId);     //  người đặt cao nhất
             highestBidder.refundBalance(auction.getCurrentHighestBid()); // trả tiền nếu bị lỗi
-            highestBidder.updateBalance();
         } finally {
             auctionLock.unlock();
             manager.removeAuction(auctionId);

@@ -1,14 +1,12 @@
 package uet.model.User;
 
-public class Admin {
-    private User user;// Seller đại diện cho User này
-    public Admin(User user) {
-        this.user = user;
+import java.time.LocalDate;
+
+public class Admin extends User {
+    public Admin(String username, String email, String password, LocalDate dateOfbirth) {
+        super(username, email, password, dateOfbirth);
     }
     public String getType(){
         return "Admin";
-    }
-    public User getUser() {
-        return user;
     }
 }

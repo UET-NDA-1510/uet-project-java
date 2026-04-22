@@ -49,7 +49,6 @@ public class BidService {
                     try {
                         Bidder preBidder = manager.getBidderbyId(preId);
                         preBidder.refundBalance(auction.getCurrentHighestBid());
-                        preBidder.updateBalance();
                     } finally {
                         preUserLock.unlock();
                     }
@@ -59,7 +58,6 @@ public class BidService {
             }
             auction.updateHighestBid(amount,bidderId);
             bidder.deductBalance(amount);
-            bidder.updateBalance();
             BidTransaction bidTransaction = new BidTransaction(auctionId,bidderId,amount);
             return bidTransaction;
         } finally {

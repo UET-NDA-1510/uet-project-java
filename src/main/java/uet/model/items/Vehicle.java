@@ -1,8 +1,11 @@
 package uet.model.items;
+
+import java.math.BigDecimal;
+
 public class Vehicle extends Item{
     private String brand;
     private String vehicleType;  // Car, Motorbike...
-    public Vehicle(String name, String description, double startingPrice, String imageUrl,String brand,String vehicleType){
+    public Vehicle(String name, String description, BigDecimal startingPrice, String imageUrl, String brand, String vehicleType){
         super(name, description, startingPrice, imageUrl);
         this.brand = brand;
         this.vehicleType = vehicleType;

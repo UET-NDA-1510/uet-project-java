@@ -2,6 +2,7 @@ package uet.model.Auction;
 
 import uet.model.CustomException.InvalidBidException;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class Auction {
@@ -9,17 +10,16 @@ public class Auction {
         OPEN, RUNNING, FINISHED, PAID, CANCELED;
     }
     private static int count;
-    private String auctionId;
+    private long auctionId;
     private String itemId;
     private String sellerId;
-    private double startingPrice;
-    private double currentHighestBid;
+    private BigDecimal startingPrice;
+    private BigDecimal currentHighestBid;
     private String highestBidderId;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private AuctionState state;
-    public Auction(String itemId, String sellerId, double startingPrice,LocalDateTime startTime, LocalDateTime endTime) {
-        this.auctionId = "AU"+count;
+    public Auction(String itemId, String sellerId, BigDecimal startingPrice,LocalDateTime startTime, LocalDateTime endTime) {
         this.itemId = itemId;
         this.sellerId = sellerId;
         this.startingPrice = startingPrice;
@@ -29,10 +29,10 @@ public class Auction {
         this.state = AuctionState.OPEN;
         Auction.count++;
     }
-    public void updateHighestBid(double amount, String bidderId) {
+    public void updateHighestBid(BigDecimal amount, String bidderId) {
         if (state != AuctionState.RUNNING)
             throw new IllegalStateException("Auction is not RUNNING.");
-        if (amount<=currentHighestBid)
+        if (amount.compareTo(currentHighestBid) <= 0)
             throw new InvalidBidException("Bid must be higher than current highest: " + currentHighestBid);
         this.currentHighestBid = amount;
         this.highestBidderId = bidderId;
@@ -62,7 +62,7 @@ public class Auction {
     }
     
     //getter
-    public double getCurrentHighestBid() {
+    public BigDecimal getCurrentHighestBid() {
         return currentHighestBid;
     }
     public LocalDateTime getEndTime() {
@@ -74,7 +74,7 @@ public class Auction {
     public LocalDateTime getStartTime() {
         return startTime;
     }
-    public double getStartingPrice() {
+    public BigDecimal getStartingPrice() {
         return startingPrice;
     }
     public String getItemId() {
@@ -83,7 +83,7 @@ public class Auction {
     public String getSellerId() {
         return sellerId;
     }
-    public String getAuctionId() {
+    public long getAuctionId() {
         return auctionId;
     }
     public AuctionState getState() {

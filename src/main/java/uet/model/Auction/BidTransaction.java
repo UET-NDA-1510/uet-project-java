@@ -1,13 +1,14 @@
 package uet.model.Auction;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class BidTransaction {
     private String auctionId;
     private String bidderId;
-    private double amount;
+    private BigDecimal amount;
     private LocalDateTime bidTime;
-    public BidTransaction(String auctionId, String bidderId, double amount) {
+    public BidTransaction(String auctionId, String bidderId, BigDecimal amount) {
         this.auctionId = auctionId;
         this.bidderId = bidderId;
         this.amount = amount;
@@ -19,7 +20,7 @@ public class BidTransaction {
     public String getBidderId() {
         return bidderId;
     }
-    public double getAmount(){
+    public BigDecimal getAmount(){
         return amount;
     }
     public LocalDateTime getBidTime() {

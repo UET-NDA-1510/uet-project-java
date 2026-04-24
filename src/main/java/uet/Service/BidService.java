@@ -6,6 +6,7 @@ import uet.model.CustomException.AuctionClosedException;
 import uet.model.CustomException.InvalidBidException;
 import uet.model.User.Bidder;
 
+import java.math.BigDecimal;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -14,7 +15,7 @@ public class BidService {
     public BidService(AuctionManager manager){
         this.manager = manager;
     }
-    public BidTransaction placeBid(String auctionId,String bidderId,double amount) throws InterruptedException{
+    public BidTransaction placeBid(String auctionId, String bidderId, BigDecimal amount) throws InterruptedException{
         ReentrantLock auctionLock = manager.auctionGetLock(auctionId);
         ReentrantLock userLock = manager.userGetLock(bidderId);
         boolean gotAuctionLock = false;
@@ -35,7 +36,7 @@ public class BidService {
                 throw new AuctionClosedException();
             }
             Bidder bidder = manager.getBidderbyId(bidderId);
-            if (amount<=auction.getCurrentHighestBid()){   // kiểm tra bắt đặt giá cao hơn giá hiện tại
+            if (amount.compareTo(auction.getCurrentHighestBid()) <= 0){   // kiểm tra bắt đặt giá cao hơn giá hiện tại
                 throw new InvalidBidException("You must set a price higher than the currentHighest price : "+auction.getCurrentHighestBid());
             }
             if (!bidder.checkBalance(amount)){         // kiểm tra xem đủ số dư không

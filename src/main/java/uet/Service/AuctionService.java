@@ -4,6 +4,7 @@ import uet.model.Auction.Auction;
 import uet.model.User.Bidder;
 import uet.model.User.Seller;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
@@ -15,7 +16,7 @@ public class AuctionService {
     }
     // tạo đấu giá
 
-    public Auction createAuction(String itemId, String sellerId, double startingPrice, LocalDateTime startTime, LocalDateTime endTime){
+    public Auction createAuction(String itemId, String sellerId, BigDecimal startingPrice, LocalDateTime startTime, LocalDateTime endTime){
         Auction newAuction = new Auction(itemId, sellerId, startingPrice, startTime, endTime);
         manager.addAuction(newAuction);
         newAuction.start();

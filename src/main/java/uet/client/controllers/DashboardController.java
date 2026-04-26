@@ -32,7 +32,6 @@ public class DashboardController {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("itemId")); 
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("currentHighestBid"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("state"));
-        
         setupActionColumn();
         loadMockData();
         

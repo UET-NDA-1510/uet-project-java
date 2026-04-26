@@ -1,21 +1,24 @@
 package uet.model.items;
 import uet.model.Entity;
+
+import java.math.BigDecimal;
+
 public abstract class Item extends Entity {
     private String name;
     private String description;     // miêu tả
-    private double startingPrice;   // giá khởi điểm
+    private BigDecimal startingPrice;   // giá khởi điểm
     private String imageUrl;        // link ảnh
     private ItemStatus status;      // trạng thái
     public Item(){
         super();
         this.status = ItemStatus.PENDING;
     }
-    public Item(String name,String description,double startingPrice,String imageUrl){
+    public Item(String name,String description,BigDecimal startingPrice,String imageUrl){
         super();
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Name cannot be empty");
         }
-        if (startingPrice < 0) {
+        if ( startingPrice.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Price must be >= 0");
         }
         this.name = name;
@@ -28,7 +31,7 @@ public abstract class Item extends Entity {
     public String getImageUrl() {
         return imageUrl;
     }
-    public double getStartingPrice() {
+    public BigDecimal getStartingPrice() {
         return startingPrice;
     }
     public String getDescription() {

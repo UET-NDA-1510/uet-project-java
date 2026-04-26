@@ -1,27 +1,35 @@
 package uet.model.User;
-public class Bidder {
-    private User user; // Bidder đại diện cho User này
-    private double bidderBalance;
-    public Bidder(User user) {
-        this.user = user;
-        this.bidderBalance = user.getBalance();
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+public class Bidder extends User{
+    private int total_win;
+    public Bidder(String username, String email, String password, LocalDate dateOfbirth) {
+        super(username, email, password, dateOfbirth);;
     }
+    @Override
     public String getType(){
         return "Bidder";
     }
-    public User getUser() {
-        return user;
+    public boolean checkBalance(BigDecimal amount){
+        return this.getBalance().compareTo(amount) >= 0;
     }
-    public boolean checkBalance(double amount){
-        return this.bidderBalance>=amount;
+    public void deductBalance(BigDecimal amount){  //trừ tiền
+        this.setBalance(this.getBalance().subtract(amount));
     }
-    public void deductBalance(double amount){  //hoàn tiền khi mất lượt đấu giá
-        this.bidderBalance -= amount;
+    public void refundBalance(BigDecimal amount){   //hoàn tiền khi mất lượt đấu giá
+        this.setBalance(this.getBalance().add(amount));
     }
-    public void refundBalance(double amount){   //trừ tiền
-        this.bidderBalance += amount;
+
+    public int getTotal_win() {
+        return total_win;
     }
-    public void updateBalance(){
-        this.user.setBalance(this.bidderBalance);
+
+    public void setTotal_win(int total_win) {
+        this.total_win = total_win;
+    }
+    public void addTotalWin(){
+        this.total_win ++ ;
     }
 }

@@ -28,6 +28,6 @@ replay_pid*
 
 # Bỏ qua cấu hình của VS Code
 .vscode/
-
+db.properties
 # Bỏ qua thư mục build của Maven
 target/

@@ -1,24 +1,25 @@
 package uet.model.User;
 import uet.model.Entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public abstract class User extends Entity {
     private String username;
     private String email;
     private String password;
-    private double balance;
+    private BigDecimal balance;
     private LocalDate dateOfbirth;    // sinh nhật
     User(String username,String email,String password,LocalDate dateOfbirth){
         this.username = username;
         this.email = email;
         this.password = password;
-        this.balance = 10000;
+        this.balance = new BigDecimal(10000);
         this.dateOfbirth = dateOfbirth;
     }
 
     //getter
-    public double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
     public String getUsername() {
@@ -37,7 +38,7 @@ public abstract class User extends Entity {
     public void setPassword(String password) {
         this.password = password;
     }
-    public void setBalance(double balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 }

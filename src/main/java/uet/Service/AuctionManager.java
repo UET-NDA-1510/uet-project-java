@@ -14,7 +14,7 @@ public class AuctionManager {
     private static final AuctionManager instance = new AuctionManager();
     private final Map<String, ReentrantLock> auctionLocks;
     private final Map<String, ReentrantLock> userLocks;
-    private final Map<String, Auction> auctions;
+    private final Map<Long, Auction> auctions;
     private AuctionManager(){
         auctions = new ConcurrentHashMap<>();
         auctionLocks = new ConcurrentHashMap<>();

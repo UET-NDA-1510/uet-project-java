@@ -31,7 +31,7 @@ public class Auction {
         if (state != AuctionState.RUNNING)
             throw new IllegalStateException("Auction is not RUNNING.");
         if (amount.compareTo(currentHighestBid) <= 0)
-            throw new InvalidBidException("Bid must be higher than current highest: " + currentHighestBid);
+            throw new InvalidBidException("Phải đặt giá cao hơn: " + currentHighestBid);
         this.currentHighestBid = amount;
         this.highestBidderId = bidderId;
     }

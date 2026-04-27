@@ -63,6 +63,7 @@ public class LoginController {
         }
         System.out.println("Đang kết nối Server... Chào mừng " + username);
         uet.client.controllers.DashboardController.currentRole = role;
+        uet.client.controllers.DashboardController.currentUser = username;
         
         // Chuyển sang màn hình Dashboard (kích thước 800x600)
         ClientMain.switchTo("DashboardView.fxml", 800, 600);

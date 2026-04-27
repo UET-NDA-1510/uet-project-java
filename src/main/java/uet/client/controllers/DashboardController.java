@@ -9,19 +9,28 @@ import java.time.LocalDateTime;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TextInputDialog;
+import java.util.Optional;
 
 public class DashboardController {
     public static String currentRole = "";
+    public static String currentUser = ""; 
     @FXML private TableView<Auction> auctionTable;
     @FXML private TableColumn<Auction, String> idColumn;
     @FXML private TableColumn<Auction, String> nameColumn;
-    @FXML private TableColumn<Auction, Double> priceColumn;
+    @FXML private TableColumn<Auction, BigDecimal> priceColumn;
     @FXML private TableColumn<Auction, Auction.AuctionState> statusColumn;
     @FXML private TableColumn<Auction, Void> actionColumn; 
     //3 nút ẩn
@@ -42,6 +51,10 @@ public class DashboardController {
             btnManageProducts.setManaged(false);
             btnCreateProduct.setManaged(false);
             btnCreateAuction.setManaged(false);
+        } else if ("Seller".equals(currentRole)) {
+            
+            btnManageProducts.setVisible(false);
+            btnManageProducts.setManaged(false);
         }
         idColumn.setCellValueFactory(new PropertyValueFactory<>("auctionId"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("itemId")); 
@@ -59,9 +72,46 @@ public class DashboardController {
 
             {
                 btn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold;");
+                
+                // SỰ KIỆN KHI BẤM NÚT ĐẤU GIÁ
                 btn.setOnAction(event -> {
+                    if (!"Bidder".equals(currentRole)) {
+                        showAlert(Alert.AlertType.WARNING, "Từ chối truy cập", "Chỉ có Bidder mới được tham gia đặt giá!");
+                        return;
+                    }
+
                     Auction selectedAuction = getTableView().getItems().get(getIndex());
-                    System.out.println("Đang mở phòng đấu giá cho mã: " + selectedAuction.getAuctionId());
+                    
+                    try {
+                        // Tải file FXML mới
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/uet/client/views/BidDialogView.fxml")); // Đổi đường dẫn cho đúng với dự án của bạn
+                        Parent root = loader.load();
+                        
+                        // Lấy Controller của màn hình nhỏ để truyền dữ liệu
+                        BidDialogController dialogController = loader.getController();
+                        dialogController.setAuctionData(selectedAuction);
+                        
+                        // Tạo một cửa sổ mới (Stage) đè lên cửa sổ chính
+                        Stage dialogStage = new Stage();
+                        dialogStage.setTitle("Đặt giá");
+                        dialogStage.initModality(Modality.APPLICATION_MODAL); // Chặn tương tác với cửa sổ mẹ khi chưa đóng cửa sổ con
+                        dialogStage.setScene(new Scene(root));
+                        dialogStage.setResizable(false);
+                        
+                        // Hiển thị và chờ người dùng thao tác xong mới chạy tiếp code bên dưới
+                        dialogStage.showAndWait();
+                        
+                        // Sau khi cửa sổ đóng, kiểm tra xem có đặt giá thành công không để Refresh bảng
+                        if (dialogController.isBidSuccessful()) {
+                            getTableView().refresh();
+                            showAlert(Alert.AlertType.INFORMATION, "Thành công", "Cập nhật giá mới thành công!");
+                        }
+                        
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        showAlert(Alert.AlertType.ERROR, "Lỗi hệ thống", "Không thể tải giao diện đặt giá.");
+                    }
+                
                 });
             }
 
@@ -74,13 +124,11 @@ public class DashboardController {
                     Auction currentAuction = getTableView().getItems().get(getIndex());
                     if (currentAuction.getState() == Auction.AuctionState.RUNNING) {
                         setGraphic(btn);
-                    } 
-                    else if (currentAuction.getState() == Auction.AuctionState.OPEN) {
+                    } else if (currentAuction.getState() == Auction.AuctionState.OPEN) {
                         Label lblWait = new Label("Chờ bắt đầu");
                         lblWait.setStyle("-fx-text-fill: #e67e22; -fx-font-weight: bold; -fx-font-style: italic;");
                         setGraphic(lblWait);
-                    } 
-                    else {
+                    } else {
                         Label lblEnd = new Label("Đã kết thúc");
                         lblEnd.setStyle("-fx-text-fill: gray; -fx-font-style: italic;");
                         setGraphic(lblEnd);
@@ -88,6 +136,15 @@ public class DashboardController {
                 }
             }
         });
+    }
+
+    // Hàm tiện ích giúp hiển thị thông báo nhanh gọn
+    private void showAlert(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
     private void loadMockData() {
         auctionList.clear();

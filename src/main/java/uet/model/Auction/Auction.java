@@ -9,7 +9,6 @@ public class Auction {
     public enum AuctionState {
         OPEN, RUNNING, FINISHED, PAID, CANCELED;
     }
-    private static int count;
     private long auctionId;
     private String itemId;
     private String sellerId;
@@ -27,7 +26,6 @@ public class Auction {
         this.startTime = startTime;
         this.endTime = endTime;
         this.state = AuctionState.OPEN;
-        Auction.count++;
     }
     public void updateHighestBid(BigDecimal amount, String bidderId) {
         if (state != AuctionState.RUNNING)

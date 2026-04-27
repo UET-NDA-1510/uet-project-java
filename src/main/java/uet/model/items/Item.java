@@ -4,6 +4,7 @@ import uet.model.Entity;
 import java.math.BigDecimal;
 
 public abstract class Item extends Entity {
+    private long sellerId;
     private String name;
     private String description;     // miêu tả
     private BigDecimal startingPrice;   // giá khởi điểm
@@ -13,7 +14,7 @@ public abstract class Item extends Entity {
         super();
         this.status = ItemStatus.PENDING;
     }
-    public Item(String name,String description,BigDecimal startingPrice,String imageUrl){
+    public Item(long sellerId,String name,String description,BigDecimal startingPrice,String imageUrl){
         super();
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Name cannot be empty");
@@ -21,6 +22,7 @@ public abstract class Item extends Entity {
         if ( startingPrice.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Price must be >= 0");
         }
+        this.sellerId = sellerId;
         this.name = name;
         this.description = description;
         this.startingPrice = startingPrice;
@@ -43,6 +45,10 @@ public abstract class Item extends Entity {
     public String getName() {
         return name;
     }
+    public long getSellerId() {
+        return sellerId;
+    }
+
     // setter
     public void setName(String name) {
         if (name == null || name.isBlank()) {      // check khác null và khoảng trắng

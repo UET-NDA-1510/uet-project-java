@@ -4,20 +4,21 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class BidTransaction {
-    private String auctionId;
-    private String bidderId;
+    private long auctionId;
+    private long bidderId;
     private BigDecimal amount;
     private LocalDateTime bidTime;
-    public BidTransaction(String auctionId, String bidderId, BigDecimal amount) {
+    public BidTransaction(long auctionId, long bidderId, BigDecimal amount) {
         this.auctionId = auctionId;
         this.bidderId = bidderId;
         this.amount = amount;
         this.bidTime = LocalDateTime.now();
     }
-    public String getAuctionId() {
+    public BidTransaction(){};
+    public long getAuctionId() {
         return auctionId;
     }
-    public String getBidderId() {
+    public long getBidderId() {
         return bidderId;
     }
     public BigDecimal getAmount(){

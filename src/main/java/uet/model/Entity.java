@@ -4,11 +4,9 @@ public abstract class Entity {
     private long id;
     private LocalDateTime createdAt;     //thời gian tạo
     private LocalDateTime updatedAt;     // thời gian cập nhật
-    private static long totalEntity;    // tổng số thực thế
     public Entity(){
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
-        Entity.totalEntity++;
     }
     public LocalDateTime getUpdatedAt() {
         return updatedAt;

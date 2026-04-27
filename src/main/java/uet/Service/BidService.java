@@ -59,7 +59,7 @@ public class BidService {
             }
             auction.updateHighestBid(amount,bidderId);
             bidder.deductBalance(amount);
-            BidTransaction bidTransaction = new BidTransaction(auctionId,bidderId,amount);
+            BidTransaction bidTransaction = new BidTransaction();
             return bidTransaction;
         } finally {
             if (gotUserLock){

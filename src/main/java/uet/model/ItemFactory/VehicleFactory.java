@@ -7,9 +7,9 @@ import java.math.BigDecimal;
 
 public class VehicleFactory extends ItemFactory {
     @Override
-    public Item createItem(String name, String description, BigDecimal startingPrice, String imageUrl, String... extraInfo) {
+    public Item createItem(long sellerId,String name, String description, BigDecimal startingPrice, String imageUrl, String... extraInfo) {
         String brand = extraInfo[0];
         String vehicleType = extraInfo[1];
-        return new Vehicle(name,description,startingPrice,imageUrl,brand,vehicleType);
+        return new Vehicle(sellerId,name,description,startingPrice,imageUrl,brand,vehicleType);
     }
 }

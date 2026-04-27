@@ -50,7 +50,6 @@ public class LoginController {
             }
         });
     }
-
     @FXML
     private void handleLogin() {
         String username = usernameField.getText();

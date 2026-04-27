@@ -17,18 +17,32 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class DashboardController {
-
+    public static String currentRole = "";
     @FXML private TableView<Auction> auctionTable;
     @FXML private TableColumn<Auction, String> idColumn;
     @FXML private TableColumn<Auction, String> nameColumn;
     @FXML private TableColumn<Auction, Double> priceColumn;
     @FXML private TableColumn<Auction, Auction.AuctionState> statusColumn;
     @FXML private TableColumn<Auction, Void> actionColumn; 
-
+    //3 nút ẩn
+    @FXML private Button btnManageProducts;
+    @FXML private Button btnCreateProduct;
+    @FXML private Button btnCreateAuction;
     private ObservableList<Auction> auctionList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
+        if ("Bidder".equals(currentRole)) {
+            // setVisible(false) làm nút tàng hình
+            btnManageProducts.setVisible(false);
+            btnCreateProduct.setVisible(false);
+            btnCreateAuction.setVisible(false);
+            
+            // setManaged(false) giúp thu hồi lại khoảng trống của nút, không để lại lỗ hổng trên thanh Header
+            btnManageProducts.setManaged(false);
+            btnCreateProduct.setManaged(false);
+            btnCreateAuction.setManaged(false);
+        }
         idColumn.setCellValueFactory(new PropertyValueFactory<>("auctionId"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("itemId")); 
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("currentHighestBid"));

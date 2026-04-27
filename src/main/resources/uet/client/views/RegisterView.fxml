@@ -37,7 +37,8 @@
       
       <PasswordField fx:id="repasswordField" maxWidth="250.0" prefHeight="35.0" promptText="Nhập lại mật khẩu" 
                      style="-fx-background-color: #333333; -fx-text-fill: white; -fx-background-radius: 5; -fx-prompt-text-fill: #aaaaaa;" />
-
+      <ComboBox fx:id="roleComboBox" maxWidth="250.0" prefHeight="35.0" promptText="Chọn vai trò" 
+                style="-fx-background-color: #333333; -fx-background-radius: 5;" />
       <VBox alignment="CENTER_LEFT" maxWidth="250.0" spacing="5.0">
          <children>
             <Label text="Ngày tháng năm sinh:" textFill="#aaaaaa">

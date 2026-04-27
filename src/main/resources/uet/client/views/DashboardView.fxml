@@ -27,19 +27,19 @@
             
             <Region HBox.hgrow="ALWAYS" />
             
-            <Button mnemonicParsing="false" onAction="#handleManageProducts" style="-fx-background-color: #ecf0f1; -fx-text-fill: #2c3e50; -fx-cursor: hand;" text="Quản lý sản phẩm">
+            <Button fx:id="btnManageProducts" mnemonicParsing="false" onAction="#handleManageProducts" style="-fx-background-color: #ecf0f1; -fx-text-fill: #2c3e50; -fx-cursor: hand;" text="Quản lý sản phẩm">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
 
-            <Button mnemonicParsing="false" onAction="#switchProduct" style="-fx-background-color: #ecf0f1; -fx-text-fill: #2c3e50; -fx-cursor: hand;" text="Tạo Sản Phẩm">
+            <Button fx:id="btnCreateProduct" mnemonicParsing="false" onAction="#switchProduct" style="-fx-background-color: #ecf0f1; -fx-text-fill: #2c3e50; -fx-cursor: hand;" text="Tạo Sản Phẩm">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
 
-            <Button mnemonicParsing="false" onAction="#handleCreateAuction" style="-fx-background-color: #ecf0f1; -fx-text-fill: #2c3e50; -fx-cursor: hand;" text="Tạo phiên mới">
+            <Button fx:id="btnCreateAuction" mnemonicParsing="false" onAction="#handleCreateAuction" style="-fx-background-color: #ecf0f1; -fx-text-fill: #2c3e50; -fx-cursor: hand;" text="Tạo phiên mới">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>

@@ -17,25 +17,24 @@ public class RegisterController {
     @FXML private PasswordField passwordField, repasswordField;
     @FXML private Label note;
 
-    // Khai báo 3 ComboBox mới
-    @FXML private ComboBox<Integer> dayCombo;
-    @FXML private ComboBox<Integer> monthCombo;
-    @FXML private ComboBox<Integer> yearCombo;
+    @FXML private ComboBox<Integer> dayCombo, monthCombo, yearCombo;
+    @FXML private ComboBox<String> roleComboBox; 
 
     @FXML
     public void initialize() {
-
         IntStream.rangeClosed(1, 31).forEach(dayCombo.getItems()::add);
         IntStream.rangeClosed(1, 12).forEach(monthCombo.getItems()::add);
         int currentYear = LocalDate.now().getYear();
         IntStream.rangeClosed(currentYear - 70, currentYear - 18).forEach(yearCombo.getItems()::add);
 
+        roleComboBox.getItems().addAll("Bidder", "Seller", "Admin");
+        
+        styleDarkCombo(roleComboBox, "Chọn vai trò");
         styleDarkCombo(dayCombo, "Ngày");
         styleDarkCombo(monthCombo, "Tháng");
         styleDarkCombo(yearCombo, "Năm");
     }
 
-    // Hàm bổ trợ để nhuộm đen bất kỳ ComboBox nào
     private <T> void styleDarkCombo(ComboBox<T> combo, String prompt) {
         combo.setButtonCell(new ListCell<T>() {
             @Override
@@ -69,26 +68,34 @@ public class RegisterController {
 
     @FXML
     public void handleRegister() {
-        // Lấy giá trị từ 3 ComboBox
-        Integer day = dayCombo.getValue();
-        Integer month = monthCombo.getValue();
-        Integer year = yearCombo.getValue();
+        String username = usernameField.getText();
+        String mail = emailField.getText();
+        String password = passwordField.getText();
+        String repass = repasswordField.getText();
+        String role = roleComboBox.getValue();
+        Integer d = dayCombo.getValue();
+        Integer m = monthCombo.getValue();
+        Integer y = yearCombo.getValue();
 
-        if (day == null || month == null || year == null || usernameField.getText().isEmpty()) {
+        if (username.isEmpty() || mail.isEmpty() || password.isEmpty() || repass.isEmpty() || role == null || d == null || m == null || y == null) {
             note.setText("Phải nhập đầy đủ thông tin.");
             return;
         }
 
-        // Tạo đối tượng LocalDate từ 3 giá trị đã chọn
-        LocalDate dateOfBirth = LocalDate.of(year, month, day);
-        
-        // Giữ nguyên logic bắt lỗi tuổi và mật khẩu của bạn...
-        if (!passwordField.getText().equals(repasswordField.getText())) {
+        if (!password.equals(repass)) {
             note.setText("2 phần mật khẩu phải khớp nhau.");
             return;
         }
 
-        ClientMain.switchTo("DashboardView.fxml", 800, 600);
+        LocalDate dateOfBirth = LocalDate.of(y, m, d);
+        if (dateOfBirth.isAfter(LocalDate.now().minusYears(18))) {
+            note.setText("Phải trên 18 tuổi.");
+            return;
+        }
+
+        System.out.println("Đăng ký thành công! Quay lại trang Đăng nhập...");
+        
+        ClientMain.switchTo("LoginView.fxml", 400, 400); 
     }
 
     @FXML

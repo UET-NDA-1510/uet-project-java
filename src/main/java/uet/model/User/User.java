@@ -28,6 +28,13 @@ public abstract class User extends Entity {
     public String getEmail() {
         return email;
     }
+    public String getPassword() {
+        return password;
+    }
+    public LocalDate getDateOfbirth() {
+        return dateOfbirth;
+    }
+
     // setter
     public void setUsername(String username) {
         this.username = username;

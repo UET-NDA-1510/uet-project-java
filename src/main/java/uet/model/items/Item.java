@@ -62,4 +62,14 @@ public abstract class Item extends Entity {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    public void setStartingPrice(BigDecimal startingPrice) {
+        this.startingPrice = startingPrice;
+    }
+    public void setStatus(ItemStatus status) {
+        this.status = status;
+    }
+    public void setSellerId(long sellerId) {
+        this.sellerId = sellerId;
+    }
 }

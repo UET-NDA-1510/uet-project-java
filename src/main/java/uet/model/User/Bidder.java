@@ -21,11 +21,10 @@ public class Bidder extends User{
     public void refundBalance(BigDecimal amount){   //hoàn tiền khi mất lượt đấu giá
         this.setBalance(this.getBalance().add(amount));
     }
-
+// getter
     public int getTotal_win() {
         return total_win;
     }
-
     public void setTotal_win(int total_win) {
         this.total_win = total_win;
     }

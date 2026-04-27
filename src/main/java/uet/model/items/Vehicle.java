@@ -10,9 +10,12 @@ public class Vehicle extends Item{
         this.brand = brand;
         this.vehicleType = vehicleType;
     }
+    public Vehicle(){
+        super();
+    }
     @Override
     public String getType() {
-        return "Vehicle";
+        return "VEHICLE";
     }
     // getter
     public String getBrand() {

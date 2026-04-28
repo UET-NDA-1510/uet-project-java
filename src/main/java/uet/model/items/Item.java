@@ -48,6 +48,7 @@ public abstract class Item extends Entity {
     public long getSellerId() {
         return sellerId;
     }
+    public abstract String getType();
 
     // setter
     public void setName(String name) {

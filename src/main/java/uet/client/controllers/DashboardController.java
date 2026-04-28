@@ -51,11 +51,7 @@ public class DashboardController {
             btnManageProducts.setManaged(false);
             btnCreateProduct.setManaged(false);
             btnCreateAuction.setManaged(false);
-        } else if ("Seller".equals(currentRole)) {
-            
-            btnManageProducts.setVisible(false);
-            btnManageProducts.setManaged(false);
-        }
+        } 
         idColumn.setCellValueFactory(new PropertyValueFactory<>("auctionId"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("itemId")); 
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("currentHighestBid"));
@@ -164,14 +160,24 @@ public class DashboardController {
         System.out.println("Chuyển sang màn hình Tạo Sản Phẩm...");
         ClientMain.switchTo("CreateProduct.fxml", 800, 600);
     }
-    @FXML
-    private void handleManageProducts() {
-        System.out.println("Mở màn hình Quản lý sản phẩm...");
-    }
 
     @FXML
     private void handleCreateAuction() {
-        System.out.println("Mở màn hình tạo phiên đấu giá...");
+        try {
+
+            uet.client.ClientMain.switchTo("CreateAuctionView.fxml", 800, 600);
+        } catch (Exception e) {
+            System.err.println("Lỗi khi mở giao diện Tạo Phiên:");
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    private void handleManageProducts() {
+        try {
+            ClientMain.switchTo("ManageProductsView.fxml", 900, 600);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
     public void addOrUpdateAuction(Auction newAuction) {

@@ -1,35 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uet.client.controllers.CreateProductController">
+<VBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" spacing="20.0" style="-fx-background-color: #2c3e50;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uet.client.controllers.CreateProductController">
+   <padding>
+      <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
+   </padding>
    <children>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="800.0">
+      <Label text="TẠO SẢN PHẨM ĐẤU GIÁ" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      
+      <HBox alignment="CENTER" spacing="40.0">
          <children>
-            <Label layoutX="236.0" layoutY="25.0" text="TẠO SẢN PHẨM ĐẤU GIÁ" textFill="#2c3e50">
-               <font>
-                  <Font name="System Bold" size="24.0" />
-               </font>
-            </Label>
-            <ImageView fx:id="imageView" fitHeight="196.0" fitWidth="200.0" layoutX="52.0" layoutY="134.0" pickOnBounds="true" preserveRatio="true" />
-            <TextField fx:id="name" layoutX="428.0" layoutY="146.0" maxWidth="250.0" prefHeight="35.0" prefWidth="194.0" promptText="Tên Sản Phẩm" />
-            <TextField fx:id="startingPrice" layoutX="428.0" layoutY="196.0" maxWidth="250.0" prefHeight="35.0" prefWidth="194.0" promptText="Giá Khởi Điểm (USD)" />
-            <ComboBox fx:id="roleComboBox" layoutX="428.0" layoutY="98.0" maxWidth="250.0" prefHeight="35.0" prefWidth="169.0" promptText="Chọn Loại Sản Phẩm" />
-            <Button layoutX="461.0" layoutY="500.0" mnemonicParsing="false" text="Tạo sản phẩm" />
-            <TextField fx:id="extraInfo1" layoutX="428.0" layoutY="388.0" maxWidth="250.0" prefHeight="35.0" prefWidth="194.0" promptText="Thương hiệu / Họa sĩ" />
-            <TextField fx:id="extraInfo2" layoutX="431.0" layoutY="442.0" maxWidth="250.0" prefHeight="35.0" prefWidth="193.0" promptText="Thời gian ra đời-bảo hành" />
-            <Button layoutX="102.0" layoutY="373.0" mnemonicParsing="false" onAction="#addImage" text="Chọn ảnh" />
-            <Button layoutX="30.0" layoutY="530.0" mnemonicParsing="false" onAction="#switchDashboarde" text="Hủy Tạo" />
-            <TextArea fx:id="description" layoutX="428.0" layoutY="242.0" prefHeight="132.0" prefWidth="200.0" promptText="Nhập mô tả về sản phẩm" wrapText="true" />
+            <VBox alignment="TOP_CENTER" spacing="15.0" style="-fx-background-color: #34495e; -fx-background-radius: 10; -fx-padding: 20;">
+               <children>
+                  <StackPane prefHeight="220.0" prefWidth="220.0" style="-fx-border-color: #7f8c8d; -fx-border-width: 2; -fx-border-style: dashed; -fx-border-radius: 5; -fx-background-color: #2c3e50; -fx-background-radius: 5;">
+                     <children>
+                        <ImageView fx:id="imageView" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                     </children>
+                  </StackPane>
+                  <Button mnemonicParsing="false" onAction="#addImage" prefHeight="35.0" prefWidth="120.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 5;" text="Tải Ảnh Lên" />
+               </children>
+            </VBox>
+
+            <VBox spacing="15.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <ComboBox fx:id="categoryComboBox" maxWidth="1.7976931348623157E308" prefHeight="40.0" promptText="Chọn Loại Sản Phẩm" style="-fx-background-color: #333333; -fx-background-radius: 5;" />
+                  
+                  <TextField fx:id="name" prefHeight="40.0" promptText="Tên Sản Phẩm" style="-fx-background-color: #333333; -fx-text-fill: white; -fx-background-radius: 5; -fx-prompt-text-fill: #95a5a6;" />
+                  
+                  <TextField fx:id="startingPrice" prefHeight="40.0" promptText="Giá Khởi Điểm ($)" style="-fx-background-color: #333333; -fx-text-fill: white; -fx-background-radius: 5; -fx-prompt-text-fill: #95a5a6;" />
+                  
+                  <TextArea fx:id="description" prefHeight="100.0" promptText="Nhập mô tả chi tiết về sản phẩm" style="-fx-control-inner-background: #333333; -fx-text-fill: white; -fx-background-radius: 5; -fx-prompt-text-fill: #95a5a6; -fx-border-color: transparent;" wrapText="true" />
+                  
+                  <HBox spacing="15.0">
+                     <children>
+                        <TextField fx:id="extraInfo1" prefHeight="40.0" promptText="Thông tin phụ 1" style="-fx-background-color: #333333; -fx-text-fill: white; -fx-background-radius: 5; -fx-prompt-text-fill: #95a5a6;" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="extraInfo2" prefHeight="40.0" promptText="Thông tin phụ 2" style="-fx-background-color: #333333; -fx-text-fill: white; -fx-background-radius: 5; -fx-prompt-text-fill: #95a5a6;" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
          </children>
-      </AnchorPane>
+      </HBox>
+      
+      <Region VBox.vgrow="ALWAYS" />
+      
+      <HBox alignment="CENTER" spacing="20.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#switchDashboarde" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 5;" text="Hủy Bỏ" />
+            <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 5;" text="Xác nhận Tạo" />
+         </children>
+      </HBox>
    </children>
-</StackPane>
+</VBox>

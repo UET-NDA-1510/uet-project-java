@@ -29,6 +29,15 @@ public class CreateAuctionController {
         itemNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         itemTypeCol.setCellValueFactory(new PropertyValueFactory<>("type")); 
         itemPriceCol.setCellValueFactory(new PropertyValueFactory<>("startingPrice"));
+        itemTable.setRowFactory(tv -> {
+            TableRow<Item> row = new TableRow<>();
+            row.styleProperty().bind(
+                javafx.beans.binding.Bindings.when(row.emptyProperty())
+                .then("")
+                .otherwise("-fx-cursor: hand;")
+            );
+            return row;
+        });
 
         loadPendingItems();
     }

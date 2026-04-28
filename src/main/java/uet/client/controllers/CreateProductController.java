@@ -23,8 +23,8 @@ public class CreateProductController {
 
     @FXML
     public void initialize() {
-        // Đã bổ sung thêm "Item" vào danh sách (Tổng cộng 4 lựa chọn)
-        categoryComboBox.getItems().addAll("Item", "Electronics", "Art", "Vehicle");
+        // Đã bổ sung thêm "Item" vào danh sách (Tổng cộng 3 lựa chọn)
+        categoryComboBox.getItems().addAll("Electronics", "Art", "Vehicle");
         
         // Làm đẹp ComboBox
         styleDarkCombo(categoryComboBox, "Chọn Loại Sản Phẩm");

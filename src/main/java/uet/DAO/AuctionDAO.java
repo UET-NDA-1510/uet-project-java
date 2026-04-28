@@ -38,6 +38,7 @@ public class AuctionDAO{
     public Auction findById(Connection connect,long auctionID) throws SQLException{
         String sql = "SELECT * FROM auctions WHERE id = ?";
         try (PreparedStatement ps = connect.prepareStatement(sql)){
+            ps.setLong(1, auctionID);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return mapResultSetToAuction(rs);
@@ -67,7 +68,7 @@ public class AuctionDAO{
     }
     public boolean updateCurrentHighestBid(Connection connect,long auctionId, long userId, BigDecimal newBidAmount) throws SQLException{
         String sql = """
-            UPDATE auction
+            UPDATE auctions
             SET
                 current_highest_bid = ?,
                 highest_bidder_id = ?

@@ -14,6 +14,7 @@ public class bidtransactionDAO {
             ps.setLong(2,bidTransaction.getBidderId());
             ps.setBigDecimal(3,bidTransaction.getAmount());
             ps.setObject(4,bidTransaction.getBidTime());
+            ps.executeUpdate();
         }
     }
 }

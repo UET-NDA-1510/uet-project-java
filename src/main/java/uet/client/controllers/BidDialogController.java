@@ -39,7 +39,7 @@ public class BidDialogController {
             
             // Lấy tên người dùng hiện tại từ DashboardController
             String bidderId = DashboardController.currentUser;
-            currentAuction.updateHighestBid(newBid, bidderId);
+//            currentAuction.updateHighestBid(newBid, bidderId);
             
             isBidSuccessful = true;
             closeStage();

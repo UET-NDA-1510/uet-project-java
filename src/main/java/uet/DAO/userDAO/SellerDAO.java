@@ -28,10 +28,9 @@ public class SellerDAO extends UserDAO {
         user.setRating(rs.getInt("rating"));
         return user;
     }
-    public void getMoney(long sellerId, BigDecimal amount){
+    public void getMoney(Connection connect,long sellerId, BigDecimal amount){
         String sql = "UPDATE sellers SET balance = balance + ? WHERE id = ?";
-        try (Connection connect = DBConnection.getConnection();
-             PreparedStatement ps = connect.prepareStatement(sql)) {
+        try (PreparedStatement ps = connect.prepareStatement(sql)) {
             ps.setBigDecimal(1, amount);
             ps.setLong(2, sellerId);
             int affectedRows = ps.executeUpdate();

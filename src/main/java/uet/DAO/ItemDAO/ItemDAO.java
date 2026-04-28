@@ -15,11 +15,10 @@ public abstract class ItemDAO <T extends Item>{
     public abstract String getType();
     public abstract String buildInsertSQL();
     public abstract void fillInsertParams(PreparedStatement ps, T product) throws SQLException;
-    public List<Item> findAllBySellerId(int sellerId) throws SQLException {
+    public List<Item> findAllBySellerId(Connection connect,int sellerId) throws SQLException {
         String sql = "SELECT * FROM item WHERE seller_id = ?";
         List<Item> result = new ArrayList<>();
-        try (Connection connect = DBConnection.getConnection();
-             PreparedStatement ps = connect.prepareStatement(sql)) {
+        try (PreparedStatement ps = connect.prepareStatement(sql)) {
             ps.setInt(1, sellerId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -29,18 +28,16 @@ public abstract class ItemDAO <T extends Item>{
         return result;
     }
 
-    public boolean delete(int id) throws SQLException {
+    public boolean delete(Connection connect,int id) throws SQLException {
         String sql = "DELETE FROM item WHERE id = ?";
-        try (Connection connect = DBConnection.getConnection();
-             PreparedStatement ps = connect.prepareStatement(sql)) {
+        try (PreparedStatement ps = connect.prepareStatement(sql)) {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
         }
     }
-    public T save(T product) throws SQLException {
+    public boolean save(Connection connect,T product) throws SQLException {
         String sql = buildInsertSQL();
-        try (Connection connect = DBConnection.getConnection();
-             PreparedStatement ps = connect.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {   // lấy khóa chính(id) ngay khi lưu để có  luôn id của itrm khi lưu
+        try (PreparedStatement ps = connect.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {   // lấy khóa chính(id) ngay khi lưu để có  luôn id của itrm khi lưu
             fillInsertParams(ps, product);  // subclass fill params
             int affected = ps.executeUpdate();
             if (affected == 0) throw new SQLException("Insert failed, no rows affected.");
@@ -49,10 +46,9 @@ public abstract class ItemDAO <T extends Item>{
                     product.setId(keys.getInt(1)); // gán id sinh ra từ DB
                 }
             }
+            return affected>0;
         }
-        return product;
     }
-
     // Helper: fill các cột chung ───────────────────────────
     public void fillCommonFields(PreparedStatement ps, Item item, int startIndex) throws SQLException {
         ps.setString(startIndex,item.getName());

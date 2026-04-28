@@ -28,7 +28,7 @@ public class BidderDAO extends UserDAO {
         user.setTotal_win(rs.getInt("total_win"));
         return user;
     }
-    public void updateBalance(long bidderId, BigDecimal amount) {
+    public void updateBalance(Connection connect,long bidderId, BigDecimal amount) {
         // Cập nhật trực tiếp trên DB để đảm bảo tính Atomic, tránh Race Condition
         String sql;
         boolean isDeduction = amount.compareTo(BigDecimal.ZERO) < 0;
@@ -36,8 +36,7 @@ public class BidderDAO extends UserDAO {
             // Lấy giá trị tuyệt đối của số tiền cần trừ để so sánh
             BigDecimal absoluteAmount = amount.abs();
             sql = "UPDATE bidders SET balance = balance + ? WHERE id = ? AND balance >= ?";
-            try (Connection connect = DBConnection.getConnection();
-                 PreparedStatement ps = connect.prepareStatement(sql)) {
+            try (PreparedStatement ps = connect.prepareStatement(sql)) {
                 ps.setBigDecimal(1, amount); // Vẫn cộng với số âm (tương đương trừ)
                 ps.setLong(2, bidderId);
                 ps.setBigDecimal(3, absoluteAmount); // Đảm bảo số dư hiện tại phải lớn hơn hoặc bằng số tiền cần trừ
@@ -52,8 +51,7 @@ public class BidderDAO extends UserDAO {
         } else {
             // Nếu là nạp tiền (cộng thêm), không cần check điều kiện số dư
             sql = "UPDATE bidders SET balance = balance + ? WHERE id = ?";
-            try (Connection connect = DBConnection.getConnection();
-                 PreparedStatement ps = connect.prepareStatement(sql)) {
+            try (PreparedStatement ps = connect.prepareStatement(sql)) {
                 ps.setBigDecimal(1, amount);
                 ps.setLong(2, bidderId);
                 int affectedRows = ps.executeUpdate();

@@ -14,10 +14,9 @@ import java.util.List;
 public abstract class UserDAO {
     public abstract String getTableName();
     public abstract User mapRow(ResultSet rs) throws SQLException;
-    public User findById(long id) {
+    public User findById(Connection connect,long id) {
         String sql = "SELECT * FROM "+getTableName()+" WHERE id = ?";
-        try (Connection connect = DBConnection.getConnection();
-             PreparedStatement ps = connect.prepareStatement(sql)) {
+        try (PreparedStatement ps = connect.prepareStatement(sql)) {
             ps.setLong(1,id);
             try (ResultSet rs = ps.executeQuery()){
                 if (rs.next()){
@@ -29,11 +28,10 @@ public abstract class UserDAO {
         }
         return null;
     }
-    public List<User> findAll() {
+    public List<User> findAll(Connection connect) {
         List<User> list = new ArrayList<>();
         String sql = "SELECT * FROM " + getTableName();
-        try (Connection connect = DBConnection.getConnection();
-             PreparedStatement stmt = connect.prepareStatement(sql);
+        try (PreparedStatement stmt = connect.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 list.add(mapRow(rs));
@@ -43,10 +41,9 @@ public abstract class UserDAO {
         }
         return list;
     }
-    public User findByName(String name){
+    public User findByName(Connection connect,String name){
         String sql = "SELECT * FROM "+getTableName()+" WHERE username = ?";
-        try (Connection connect = DBConnection.getConnection();
-             PreparedStatement ps = connect.prepareStatement(sql)) {
+        try (PreparedStatement ps = connect.prepareStatement(sql)) {
             ps.setString(1,name);
             try (ResultSet rs = ps.executeQuery()){
                 if (rs.next()){
@@ -58,18 +55,15 @@ public abstract class UserDAO {
         }
         return null;
     }
-    public void save(User user) {
+    public void save(Connection connect,User user) throws SQLException {
         String sql = "INSERT INTO bidders (email,username,balance,password,date_of_birth) VALUES (?,?,?,?,?)";
-        try (Connection connect = DBConnection.getConnection();
-             PreparedStatement ps = connect.prepareStatement(sql)){
+        try (PreparedStatement ps = connect.prepareStatement(sql)){
             ps.setString(1,user.getEmail());
             ps.setString(2,user.getUsername());
             ps.setBigDecimal(3, user.getBalance());
             ps.setString(4, user.getPassword());
             ps.setObject(5,user.getDateOfbirth());
             ps.executeUpdate();
-        } catch( SQLException e){
-            throw new DataAccessException("can not save user.");
         }
     }
 }

@@ -1,69 +1,112 @@
 package uet.Service;
 
+import uet.DAO.AuctionDAO;
+import uet.DAO.DBConnection;
+import uet.DAO.bidtransactionDAO;
+import uet.DAO.userDAO.BidderDAO;
 import uet.model.Auction.Auction;
 import uet.model.Auction.BidTransaction;
 import uet.model.CustomException.AuctionClosedException;
 import uet.model.CustomException.InvalidBidException;
 import uet.model.User.Bidder;
-
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class BidService {
     private final AuctionManager manager;
+    private final BidderDAO bidderDAO = new BidderDAO();
+    private final AuctionDAO auctionDAO = new AuctionDAO();
+    private final bidtransactionDAO bidtransactionDAO = new bidtransactionDAO();
     public BidService(AuctionManager manager){
         this.manager = manager;
     }
-    public BidTransaction placeBid(String auctionId, String bidderId, BigDecimal amount) throws InterruptedException{
+    public boolean placeBid(long auctionId, long bidderId, BigDecimal amount) throws InterruptedException, SQLException {
         ReentrantLock auctionLock = manager.auctionGetLock(auctionId);
-        ReentrantLock userLock = manager.userGetLock(bidderId);
         boolean gotAuctionLock = false;
-        boolean gotUserLock = false;
+        Connection connect = null;
         try {
-            // lấy lock auction tối đa 2 giây , nếu không được trả về false
-            gotAuctionLock = auctionLock.tryLock(2, TimeUnit.SECONDS);
+            gotAuctionLock = auctionLock.tryLock(10, TimeUnit.SECONDS);
             if (!gotAuctionLock) {
                 throw new RuntimeException("The auction system is busy, please try again.");
             }
-            // Thử lấy khóa User của người đang đặt giá
-            gotUserLock = userLock.tryLock(2, TimeUnit.SECONDS);
-            if (!gotUserLock) {
-                throw new RuntimeException("Your account is processing another transaction.");
+            connect = DBConnection.getConnection();
+            connect.setAutoCommit(false);
+            Auction auction = auctionDAO.findById(connect,auctionId);
+            if (!auction.isActive()) {
+                throw new AuctionClosedException("Phiên đấu giá đã kết thúc.");
             }
-            Auction auction = manager.getAuction(auctionId);
-            if (!auction.isActive()){
-                throw new AuctionClosedException();
+            BigDecimal startingPrice = Optional.ofNullable(auction.getStartingPrice()).orElse(BigDecimal.ZERO);
+            BigDecimal currentHighest = Optional.ofNullable(auction.getCurrentHighestBid()).orElse(startingPrice);
+            if (amount.compareTo(currentHighest) <= 0) {
+                throw new InvalidBidException("Giá đặt phải cao hơn giá hiện tại: " + currentHighest);
             }
-            Bidder bidder = manager.getBidderbyId(bidderId);
-            if (amount.compareTo(auction.getCurrentHighestBid()) <= 0){   // kiểm tra bắt đặt giá cao hơn giá hiện tại
-                throw new InvalidBidException("You must set a price higher than the currentHighest price : "+auction.getCurrentHighestBid());
+            Long preId = auction.getHighestBidderId();
+            boolean isSelfOutbid = preId != null && preId.equals(bidderId);
+            BigDecimal deductAmount;    // tính toán số tiền để trừ trong trường hợp người dẫn đầu đặt giá tiếp
+            if (isSelfOutbid) {
+                deductAmount = amount.subtract(currentHighest); // Chỉ trả phần chênh lệch
+            } else {
+                deductAmount = amount; // Trả toàn bộ số tiền
             }
-            if (!bidder.checkBalance(amount)){         // kiểm tra xem đủ số dư không
-                throw new InvalidBidException("You do not have enough money");
+            Bidder bidder = (Bidder) bidderDAO.findById(connect,bidderId);
+            if (!bidder.checkBalance(deductAmount)) {
+                throw new InvalidBidException("Số dư không đủ.");
             }
-            // hoàn tiền người trước
-            String preId = auction.getHighestBidderId();
-            if (preId !=null && !preId.equals(bidderId)){
-                ReentrantLock preUserLock = manager.userGetLock(preId);
-                if (preUserLock.tryLock(2, TimeUnit.SECONDS)) {
-                    try {
-                        Bidder preBidder = manager.getBidderbyId(preId);
-                        preBidder.refundBalance(auction.getCurrentHighestBid());
-                    } finally {
-                        preUserLock.unlock();
+             //Thao tác database
+            if (isSelfOutbid) {
+                // Tự nâng giá: Chỉ trừ phần chênh lệch
+                bidderDAO.updateBalance(connect, bidderId, deductAmount.negate());
+            } else {
+                // Khác người: Hoàn tiền người cũ, trừ toàn bộ tiền người mới
+                if (preId != null) {
+                    bidderDAO.updateBalance(connect, preId, currentHighest);
+                }
+                bidderDAO.updateBalance(connect, bidderId, amount.negate());
+            }
+            // Cập nhật giá cao nhất
+            auctionDAO.updateCurrentHighestBid(connect, auctionId, bidderId, amount);
+            // ghi bid transaction
+            BidTransaction bidTransaction = new BidTransaction(auctionId, bidderId, amount);
+            bidtransactionDAO.InsertBidTransaction(connect, bidTransaction);
+            connect.commit();
+            // cập nhật trong ram
+            auction.updateHighestBid(amount, bidderId);
+            if (isSelfOutbid) {
+                // Tự nâng giá
+                bidder.deductBalance(deductAmount);
+            } else {
+                // Khác người
+                bidder.deductBalance(amount);
+                if (preId != null) {
+                    Bidder preBidder = (Bidder) bidderDAO.findById(connect,preId);
+                    if (preBidder != null) {
+                        preBidder.refundBalance(currentHighest);
                     }
-                } else {
-                    throw new RuntimeException("Can not refund money for pre user");
                 }
             }
-            auction.updateHighestBid(amount,bidderId);
-            bidder.deductBalance(amount);
-            BidTransaction bidTransaction = new BidTransaction();
-            return bidTransaction;
+            return true;
+        } catch (SQLException | RuntimeException e) {
+            if (connect != null) {
+                try {
+                    connect.rollback();
+                } catch (SQLException ex) {
+                    System.err.println("[ROLLBACK ERROR] auctionId=" + auctionId + ", bidderId=" + bidderId + ", reason=" + ex.getMessage());
+                }
+            }
+            throw e;
         } finally {
-            if (gotUserLock){
-                userLock.unlock();
+            if (connect != null) {
+                try {
+                    connect.setAutoCommit(true);
+                    connect.close();
+                } catch (SQLException ex) {
+                    System.err.println("[CONNECTION CLOSE ERROR] auctionId=" + auctionId + ", bidderId=" + bidderId + ", reason=" + ex.getMessage());
+                }
             }
             if (gotAuctionLock) {
                 auctionLock.unlock();

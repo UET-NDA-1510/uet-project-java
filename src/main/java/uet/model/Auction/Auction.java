@@ -10,15 +10,16 @@ public class Auction {
         OPEN, RUNNING, FINISHED, PAID, CANCELED;
     }
     private long auctionId;
-    private String itemId;
-    private String sellerId;
+    private long itemId;
+    private long sellerId;
     private BigDecimal startingPrice;
     private BigDecimal currentHighestBid;
-    private String highestBidderId;
+    private long highestBidderId;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private AuctionState state;
-    public Auction(String itemId, String sellerId, BigDecimal startingPrice,LocalDateTime startTime, LocalDateTime endTime) {
+    public Auction(){};
+    public Auction(long itemId, long sellerId, BigDecimal startingPrice,LocalDateTime startTime, LocalDateTime endTime) {
         this.itemId = itemId;
         this.sellerId = sellerId;
         this.startingPrice = startingPrice;
@@ -27,7 +28,7 @@ public class Auction {
         this.endTime = endTime;
         this.state = AuctionState.OPEN;
     }
-    public void updateHighestBid(BigDecimal amount, String bidderId) {
+    public void updateHighestBid(BigDecimal amount, long bidderId) {
         if (state != AuctionState.RUNNING)
             throw new IllegalStateException("Auction is not RUNNING.");
         if (amount.compareTo(currentHighestBid) <= 0)
@@ -66,7 +67,7 @@ public class Auction {
     public LocalDateTime getEndTime() {
         return endTime;
     }
-    public String getHighestBidderId() {
+    public long getHighestBidderId() {
         return highestBidderId;
     }
     public LocalDateTime getStartTime() {
@@ -75,10 +76,10 @@ public class Auction {
     public BigDecimal getStartingPrice() {
         return startingPrice;
     }
-    public String getItemId() {
+    public long getItemId() {
         return itemId;
     }
-    public String getSellerId() {
+    public long getSellerId() {
         return sellerId;
     }
     public long getAuctionId() {
@@ -96,5 +97,28 @@ public class Auction {
     }
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
+    }
+
+    public void setCurrentHighestBid(BigDecimal currentHighestBid) {
+        this.currentHighestBid = currentHighestBid;
+    }
+
+    public void setStartingPrice(BigDecimal startingPrice) {
+        this.startingPrice = startingPrice;
+    }
+
+    public void setAuctionId(long auctionId) {
+        this.auctionId = auctionId;
+    }
+    public void setSellerId(long sellerId) {
+        this.sellerId = sellerId;
+    }
+
+    public void setItemId(long itemId) {
+        this.itemId = itemId;
+    }
+
+    public void setHighestBidderId(long highestBidderId) {
+        this.highestBidderId = highestBidderId;
     }
 }

@@ -13,7 +13,7 @@ import java.io.File;
 
 public class CreateProductController {
 
-    @FXML private ComboBox<String> categoryComboBox; // Đổi tên biến cho chuẩn
+    @FXML private ComboBox<String> categoryComboBox; 
     @FXML private TextField name;
     @FXML private ImageView imageView;
     @FXML private TextField startingPrice;
@@ -34,11 +34,6 @@ public class CreateProductController {
             String selectedType = categoryComboBox.getValue();
             if (selectedType != null) {
                 switch (selectedType) {
-                    case "Item":
-                        // Với loại hàng hóa chung, đổi gợi ý thành các thông tin cơ bản
-                        extraInfo1.setPromptText("Xuất xứ / Chất liệu");
-                        extraInfo2.setPromptText("Tình trạng sản phẩm");
-                        break;
                     case "Art":
                         extraInfo1.setPromptText("Tên họa sĩ");
                         extraInfo2.setPromptText("Năm sáng tác");

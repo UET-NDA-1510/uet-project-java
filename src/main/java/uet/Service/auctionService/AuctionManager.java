@@ -1,8 +1,4 @@
-package uet.Service;
-
-import uet.model.Auction.Auction;
-import uet.model.User.Bidder;
-import uet.model.User.Seller;
+package uet.Service.auctionService;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

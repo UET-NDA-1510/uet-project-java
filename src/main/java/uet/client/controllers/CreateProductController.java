@@ -20,7 +20,7 @@ public class CreateProductController {
     @FXML private TextArea description;
     @FXML private TextField extraInfo1;
     @FXML private TextField extraInfo2;
-
+    private String imageUrl;
     @FXML
     public void initialize() {
         // Đã bổ sung thêm "Item" vào danh sách (Tổng cộng 3 lựa chọn)
@@ -50,7 +50,6 @@ public class CreateProductController {
             }
         });
     }
-
     @FXML
     public void addImage(ActionEvent event){
         FileChooser fileChooser = new FileChooser();
@@ -61,7 +60,7 @@ public class CreateProductController {
         File selectedFile = fileChooser.showOpenDialog(((Node) event.getSource()).getScene().getWindow());
 
         if (selectedFile != null) {
-            String imageUrl = selectedFile.toURI().toString();
+            imageUrl = selectedFile.toURI().toString();
             Image image = new Image(imageUrl);
             imageView.setImage(image);
         }

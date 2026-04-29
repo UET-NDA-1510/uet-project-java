@@ -1,4 +1,4 @@
-package uet.Service;
+package uet.Service.auctionService;
 import uet.DAO.AuctionDAO;
 import uet.DAO.DBConnection;
 import uet.DAO.userDAO.BidderDAO;

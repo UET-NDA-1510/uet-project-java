@@ -1,4 +1,4 @@
-package uet.Service;
+package uet.Service.auctionService;
 
 import uet.DAO.AuctionDAO;
 import uet.DAO.DBConnection;
@@ -12,7 +12,6 @@ import uet.model.User.Bidder;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;

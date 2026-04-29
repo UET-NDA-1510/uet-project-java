@@ -24,7 +24,7 @@ public class BidService {
     public BidService(AuctionManager manager){
         this.manager = manager;
     }
-    public boolean placeBid(long auctionId, long bidderId, BigDecimal amount) throws InterruptedException, SQLException {
+    public void placeBid(long auctionId, long bidderId, BigDecimal amount) throws InterruptedException, SQLException {
         ReentrantLock auctionLock = manager.auctionGetLock(auctionId);
         boolean gotAuctionLock = false;
         Connection connect = null;
@@ -41,6 +41,9 @@ public class BidService {
             }
             BigDecimal startingPrice = Optional.ofNullable(auction.getStartingPrice()).orElse(BigDecimal.ZERO);
             BigDecimal currentHighest = Optional.ofNullable(auction.getCurrentHighestBid()).orElse(startingPrice);
+            if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+                throw new InvalidBidException("Giá không hợp lệ.");
+            }
             if (amount.compareTo(currentHighest) <= 0) {
                 throw new InvalidBidException("Giá đặt phải cao hơn giá hiện tại: " + currentHighest);
             }
@@ -68,27 +71,14 @@ public class BidService {
                 bidderDAO.updateBalance(connect, bidderId, amount.negate());
             }
             // Cập nhật giá cao nhất
-            auctionDAO.updateCurrentHighestBid(connect, auctionId, bidderId, amount);
+            boolean updated = auctionDAO.updateCurrentHighestBid(connect, auctionId, bidderId, amount);
+            if (!updated) {
+                throw new InvalidBidException("Giá đã bị người khác vượt trước, vui lòng thử lại.");
+            }
             // ghi bid transaction
             BidTransaction bidTransaction = new BidTransaction(auctionId, bidderId, amount);
             bidtransactionDAO.InsertBidTransaction(connect, bidTransaction);
             connect.commit();
-            // cập nhật trong ram
-            auction.updateHighestBid(amount, bidderId);
-            if (isSelfOutbid) {
-                // Tự nâng giá
-                bidder.deductBalance(deductAmount);
-            } else {
-                // Khác người
-                bidder.deductBalance(amount);
-                if (preId != null) {
-                    Bidder preBidder = (Bidder) bidderDAO.findById(connect,preId);
-                    if (preBidder != null) {
-                        preBidder.refundBalance(currentHighest);
-                    }
-                }
-            }
-            return true;
         } catch (SQLException | RuntimeException e) {
             if (connect != null) {
                 try {

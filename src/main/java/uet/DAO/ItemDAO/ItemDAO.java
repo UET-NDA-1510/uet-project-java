@@ -15,11 +15,12 @@ public abstract class ItemDAO <T extends Item>{
     public abstract String getType();
     public abstract String buildInsertSQL();
     public abstract void fillInsertParams(PreparedStatement ps, T product) throws SQLException;
-    public List<Item> findAllBySellerId(Connection connect,int sellerId) throws SQLException {
-        String sql = "SELECT * FROM item WHERE seller_id = ?";
+    public List<Item> findAllBySellerId(Connection connect,int sellerId,String type) throws SQLException {
+        String sql = "SELECT * FROM item WHERE seller_id = ? AND type = ?";
         List<Item> result = new ArrayList<>();
         try (PreparedStatement ps = connect.prepareStatement(sql)) {
             ps.setInt(1, sellerId);
+            ps.setString(2,type);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 result.add(mapRow(rs));

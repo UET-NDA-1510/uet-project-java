@@ -48,10 +48,14 @@ public class ClientMain extends Application {
     }
     public static void exit (){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Exit");
-        alert.setHeaderText("You are about to Exit.");
-        alert.setContentText("Do you want to Exit app .");
-        if (alert.showAndWait().get() == ButtonType.OK){
+        alert.setTitle("Thoát");
+        alert.setHeaderText("Bạn nghĩ sao về việc thoát khỏi hệ thống ?");
+        alert.setContentText("Bạn muốn thoát ?");
+        ButtonType buttonYes = new ButtonType("Thoát", javafx.scene.control.ButtonBar.ButtonData.OK_DONE);
+        ButtonType buttonNo = new ButtonType("Hủy", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(buttonYes, buttonNo);
+
+        if (alert.showAndWait().orElse(buttonNo) == buttonYes){
             window.close();
             Platform.exit();    // Dừng bộ máy JavaFX
             System.exit(0);     // Tắt hoàn toàn chương trình (Kill process)

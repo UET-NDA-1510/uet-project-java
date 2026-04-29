@@ -22,6 +22,8 @@
          </font>
       </Label>
       
+      <Label text="1. Chọn sản phẩm từ danh sách chờ:" textFill="#bdc3c7" />
+      
       <TableView fx:id="itemTable" prefHeight="200.0" VBox.vgrow="ALWAYS">
         <columns>
           <TableColumn fx:id="itemNameCol" prefWidth="350.0" text="Tên Sản Phẩm" />
@@ -33,29 +35,29 @@
          </columnResizePolicy>
       </TableView>
 
-      <VBox spacing="20.0" style="-fx-background-color: #34495e; -fx-padding: 25; -fx-background-radius: 15;">
+      <VBox alignment="CENTER" spacing="20.0" style="-fx-background-color: #34495e; -fx-padding: 25; -fx-background-radius: 15;">
          <children>
             <VBox alignment="CENTER" spacing="8.0">
                <children>
                   <Label text="GÁN MÃ SẢN PHẨM (ID)" textFill="WHITE">
                      <font><Font name="System Bold" size="14.0" /></font>
                   </Label>
-                  <TextField fx:id="itemCodeField" maxWidth="350.0" prefHeight="40.0" promptText="Nhập ID định danh sản phẩm..." style="-fx-background-color: #2c3e50; -fx-text-fill: WHITE; -fx-border-color: White; -fx-border-radius: 5; -fx-alignment: CENTER;" />
+                  <TextField fx:id="itemCodeField" maxWidth="250.0" prefHeight="40.0" promptText="Nhập ID định danh..." style="-fx-background-color: #2c3e50; -fx-text-fill: white; -fx-border-color: WHITE; -fx-border-radius: 5; -fx-alignment: CENTER;" />
                </children>
             </VBox>
 
-            <HBox alignment="CENTER" spacing="30.0">
+            <HBox alignment="CENTER" spacing="40.0">
                <children>
-                  <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                  <VBox alignment="CENTER_LEFT" spacing="5.0">
                      <children>
                         <Label text="Ngày bắt đầu:" textFill="WHITE" />
-                        <DatePicker fx:id="startDatePicker" maxWidth="1.7976931348623157E308" prefHeight="35.0" style="-fx-cursor: hand;" />
+                        <DatePicker fx:id="startDatePicker" prefHeight="35.0" prefWidth="200.0" style="-fx-cursor: hand;" />
                      </children>
                   </VBox>
-                  <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                  <VBox alignment="CENTER_LEFT" spacing="5.0">
                      <children>
                         <Label text="Ngày kết thúc:" textFill="WHITE" />
-                        <DatePicker fx:id="endDatePicker" maxWidth="1.7976931348623157E308" prefHeight="35.0" style="-fx-cursor: hand;" />
+                        <DatePicker fx:id="endDatePicker" prefHeight="35.0" prefWidth="200.0" style="-fx-cursor: hand;" />
                      </children>
                   </VBox>
                </children>
@@ -68,17 +70,10 @@
       </Label>
 
       <HBox alignment="CENTER" spacing="30.0">
-        <children>
-            <Button mnemonicParsing="false" onAction="#handleCancel" 
-                    prefHeight="40.0" prefWidth="150.0" 
-                    style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" 
-                    text="Hủy / Quay lại" />
-                    
-            <Button mnemonicParsing="false" onAction="#handleCreateAuction" 
-                    prefHeight="40.0" prefWidth="220.0" 
-                    style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" 
-                    text="Phát Hành Phiên" />
-        </children>
+         <children>
+            <Button mnemonicParsing="false" onAction="#handleCancel" prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" text="Hủy / Quay lại" />
+            <Button mnemonicParsing="false" onAction="#handleCreateAuction" prefHeight="40.0" prefWidth="220.0" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" text="Phát Hành Phiên" />
+         </children>
       </HBox>
    </children>
 </VBox>

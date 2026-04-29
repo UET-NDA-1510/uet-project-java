@@ -179,6 +179,32 @@ public class DashboardController {
             e.printStackTrace();
         }
     }
+    @FXML
+    private void handleLogout() {
+        // 1. Tạo hộp thoại xác nhận
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Xác nhận đăng xuất");
+        alert.setHeaderText(null); 
+        alert.setContentText("Bạn có chắc chắn muốn đăng xuất ?");
+        javafx.scene.control.ButtonType buttonYes = new javafx.scene.control.ButtonType("Đăng xuất", javafx.scene.control.ButtonBar.ButtonData.OK_DONE);
+        javafx.scene.control.ButtonType buttonNo = new javafx.scene.control.ButtonType("Hủy", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(buttonYes, buttonNo);
+        Optional<javafx.scene.control.ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == buttonYes) {
+            try {
+                currentRole = "";
+                currentUser = "";
+                auctionList.clear();
+                uet.client.ClientMain.switchTo("LoginView.fxml", 800, 600); 
+
+            } catch (Exception e) {
+                System.err.println("Lỗi khi đăng xuất:");
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Người dùng đã hủy đăng xuất.");
+        }
+    }
     
     public void addOrUpdateAuction(Auction newAuction) {
         auctionList.add(newAuction);

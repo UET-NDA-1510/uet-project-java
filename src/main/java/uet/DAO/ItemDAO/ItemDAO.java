@@ -35,6 +35,8 @@ public abstract class ItemDAO <T extends Item>{
             return ps.executeUpdate() > 0;
         }
     }
+
+    // lưu sản phẩm
     public boolean save(Connection connect,T product) throws SQLException {
         String sql = buildInsertSQL();
         try (PreparedStatement ps = connect.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {   // lấy khóa chính(id) ngay khi lưu để có  luôn id của itrm khi lưu
@@ -59,10 +61,10 @@ public abstract class ItemDAO <T extends Item>{
     }
 
     public void mapCommonFields(ResultSet rs, Item p) throws SQLException {
-        p.setId(rs.getInt("id"));
+        p.setId(rs.getLong("id"));
         p.setName(rs.getString("name"));
         p.setStartingPrice(rs.getBigDecimal("price"));
-        p.setSellerId(rs.getInt("seller_id"));
+        p.setSellerId(rs.getLong("seller_id"));
         p.setImageUrl(rs.getString("image_url"));
         p.setDescription(rs.getString("description"));
         p.setStatus(ItemStatus.valueOf(rs.getString("status")));

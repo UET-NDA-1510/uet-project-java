@@ -24,7 +24,7 @@ public class VehicleDAO extends ItemDAO<Vehicle> {
     @Override
     public boolean update(Vehicle item) throws SQLException {
         String sql = """
-            UPDATE product
+            UPDATE item
             SET name=?, price=?, image_url=?, description=?, status=?, brand=?, vehicle_type=?
             WHERE id=?
             """;
@@ -40,7 +40,7 @@ public class VehicleDAO extends ItemDAO<Vehicle> {
     @Override
     public String buildInsertSQL() {
         return """
-        INSERT INTO product
+        INSERT INTO item
             (type, name, price, seller_id, image_url, description, status, brand, vehicle_type)
         VALUES
             (?, ?, ?, ?, ?, ?, ?, ?, ?)

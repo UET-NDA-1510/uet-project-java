@@ -24,7 +24,7 @@ public class ArtDAO extends ItemDAO<Art>{
     @Override
     public boolean update(Art item) throws SQLException {
         String sql = """
-            UPDATE product
+            UPDATE item
             SET name=?, price=?, image_url=?, description=?, status=?, artist=?
             WHERE id=?
             """;
@@ -39,7 +39,7 @@ public class ArtDAO extends ItemDAO<Art>{
     @Override
     public String buildInsertSQL() {
         return """
-        INSERT INTO product
+        INSERT INTO item
             (type, name, price, seller_id, image_url, description, status, artist)
         VALUES
             (?, ?, ?, ?, ?, ?, ?, ?)

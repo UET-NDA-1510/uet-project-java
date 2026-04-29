@@ -16,7 +16,7 @@ public class ElectronicDAO extends ItemDAO<Electronics> {
     @Override
     public boolean update(Electronics item) throws SQLException {
         String sql = """
-            UPDATE product
+            UPDATE item
             SET name=?, price=?, image_url=?, description=?, status=?, brand=?, warranty=?
             WHERE id=?
             """;
@@ -40,7 +40,7 @@ public class ElectronicDAO extends ItemDAO<Electronics> {
     @Override
     public String buildInsertSQL() {
         return """
-        INSERT INTO product
+        INSERT INTO item
             (type, name, price, seller_id, image_url, description, status, brand, warranty)
         VALUES
             (?, ?, ?, ?, ?, ?, ?, ?, ?)

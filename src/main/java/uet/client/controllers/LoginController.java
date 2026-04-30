@@ -7,6 +7,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.Label;
 
 public class LoginController {
 
@@ -16,6 +17,7 @@ public class LoginController {
     private PasswordField passwordField;
     @FXML
     private ComboBox<String> roleComboBox;
+    @FXML private Label messageLabel;
     @FXML
     public void initialize() {
         // Đổ dữ liệu vào ComboBox
@@ -57,8 +59,8 @@ public class LoginController {
         String role = roleComboBox.getValue();
 
         // Validate cơ bản
-        if (username.isEmpty() || password.isEmpty() || role == null) {
-            System.out.println("Vui lòng nhập đầy đủ thông tin!");
+        if (username.isBlank() || password.isBlank() || role == null) {
+            messageLabel.setText("Vui lòng nhập đầy đủ thông tin!");
             return;
         }
         System.out.println("Đang kết nối Server... Chào mừng " + username);

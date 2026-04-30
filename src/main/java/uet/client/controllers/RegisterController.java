@@ -2,6 +2,7 @@ package uet.client.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.PasswordField;
@@ -9,7 +10,6 @@ import javafx.scene.control.TextField;
 import uet.client.ClientMain;
 
 import java.time.LocalDate;
-import java.util.stream.IntStream;
 
 public class RegisterController {
 
@@ -17,23 +17,18 @@ public class RegisterController {
     @FXML private PasswordField passwordField, repasswordField;
     @FXML private Label note;
 
-    @FXML private ComboBox<Integer> dayCombo, monthCombo, yearCombo;
+    @FXML private DatePicker dobPicker; 
     @FXML private ComboBox<String> roleComboBox; 
 
     @FXML
     public void initialize() {
-        IntStream.rangeClosed(1, 31).forEach(dayCombo.getItems()::add);
-        IntStream.rangeClosed(1, 12).forEach(monthCombo.getItems()::add);
-        int currentYear = LocalDate.now().getYear();
-        IntStream.rangeClosed(currentYear - 70, currentYear - 18).forEach(yearCombo.getItems()::add);
-
+        // Thiết lập ComboBox cho Role
         roleComboBox.getItems().addAll("Bidder", "Seller", "Admin");
-        
         styleDarkCombo(roleComboBox, "Chọn vai trò");
-        styleDarkCombo(dayCombo, "Ngày");
-        styleDarkCombo(monthCombo, "Tháng");
-        styleDarkCombo(yearCombo, "Năm");
+        dobPicker.getEditor().setStyle("-fx-prompt-text-fill: #aaaaaa; -fx-text-fill: white;");
+        
     }
+
 
     private <T> void styleDarkCombo(ComboBox<T> combo, String prompt) {
         combo.setButtonCell(new ListCell<T>() {
@@ -73,11 +68,11 @@ public class RegisterController {
         String password = passwordField.getText();
         String repass = repasswordField.getText();
         String role = roleComboBox.getValue();
-        Integer d = dayCombo.getValue();
-        Integer m = monthCombo.getValue();
-        Integer y = yearCombo.getValue();
+        
+        // Lấy thẳng LocalDate từ DatePicker
+        LocalDate dateOfBirth = dobPicker.getValue(); 
 
-        if (username.isEmpty() || mail.isEmpty() || password.isEmpty() || repass.isEmpty() || role == null || d == null || m == null || y == null) {
+        if (username.isBlank() || mail.isBlank() || password.isBlank() || repass.isBlank() || role == null || dateOfBirth == null) {
             note.setText("Phải nhập đầy đủ thông tin.");
             return;
         }
@@ -87,7 +82,6 @@ public class RegisterController {
             return;
         }
 
-        LocalDate dateOfBirth = LocalDate.of(y, m, d);
         if (dateOfBirth.isAfter(LocalDate.now().minusYears(18))) {
             note.setText("Phải trên 18 tuổi.");
             return;

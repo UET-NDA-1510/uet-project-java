@@ -41,9 +41,10 @@ public abstract class UserDAO {
         }
         return list;
     }
-    public User findByName(Connection connect,String name){
+    public User findByName(String name){
         String sql = "SELECT * FROM "+getTableName()+" WHERE username = ?";
-        try (PreparedStatement ps = connect.prepareStatement(sql)) {
+        try (Connection connect = DBConnection.getConnection();
+             PreparedStatement ps = connect.prepareStatement(sql)) {
             ps.setString(1,name);
             try (ResultSet rs = ps.executeQuery()){
                 if (rs.next()){
@@ -55,15 +56,53 @@ public abstract class UserDAO {
         }
         return null;
     }
-    public void save(Connection connect,User user) throws SQLException {
-        String sql = "INSERT INTO bidders (email,username,balance,password,date_of_birth) VALUES (?,?,?,?,?)";
-        try (PreparedStatement ps = connect.prepareStatement(sql)){
+    public void save(User user){
+        String sql = "INSERT INTO "+getTableName()+" (email,username,balance,password,date_of_birth) VALUES (?,?,?,?,?)";
+        try (Connection connect = DBConnection.getConnection();
+             PreparedStatement ps = connect.prepareStatement(sql)){
             ps.setString(1,user.getEmail());
             ps.setString(2,user.getUsername());
             ps.setBigDecimal(3, user.getBalance());
             ps.setString(4, user.getPassword());
             ps.setObject(5,user.getDateOfbirth());
             ps.executeUpdate();
+        }catch (SQLException e) {
+            throw new DataAccessException("Lỗi khi đăng ký");
         }
+    }
+    // Kiểm tra xem Username đã tồn tại chưa
+    public boolean existsByUsername(String username) {
+        String sql = "SELECT COUNT(1) FROM " + getTableName() + " WHERE username = ?";
+        try (Connection connect = DBConnection.getConnection();
+             PreparedStatement ps = connect.prepareStatement(sql)) {
+            ps.setString(1, username);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    // Nếu COUNT > 0 nghĩa là đã tồn tại
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("Lỗi khi kiểm tra username");
+        }
+        return false;
+    }
+
+    // Kiểm tra xem Email đã tồn tại chưa
+    public boolean existsByEmail(String email) {
+        String sql = "SELECT COUNT(1) FROM " + getTableName() + " WHERE email = ?";
+        try (Connection connect = DBConnection.getConnection();
+             PreparedStatement ps = connect.prepareStatement(sql)) {
+            ps.setString(1, email);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    // Nếu COUNT > 0 nghĩa là đã tồn tại
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("Lỗi khi kiểm tra email");
+        }
+        return false;
     }
 }

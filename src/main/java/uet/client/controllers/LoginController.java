@@ -1,21 +1,21 @@
 package uet.client.controllers;
 
+import javafx.scene.control.*;
+import uet.Service.authService.AuthService;
 import uet.client.ClientMain;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ListCell;
+import uet.model.CustomException.AuthenticationException;
 
 public class LoginController {
-
+    private AuthService authService = new AuthService();
     @FXML
     private TextField usernameField;
     @FXML
     private PasswordField passwordField;
     @FXML
     private ComboBox<String> roleComboBox;
+    @FXML private Label note;
     @FXML
     public void initialize() {
         // Đổ dữ liệu vào ComboBox
@@ -64,9 +64,13 @@ public class LoginController {
         System.out.println("Đang kết nối Server... Chào mừng " + username);
         uet.client.controllers.DashboardController.currentRole = role;
         uet.client.controllers.DashboardController.currentUser = username;
-        
+        try {
+            authService.Login(username,password,role);
+            ClientMain.switchTo("DashboardView.fxml", 800, 600);
+        } catch (AuthenticationException e) {
+            note.setText(e.getMessage());
+        }
         // Chuyển sang màn hình Dashboard (kích thước 800x600)
-        ClientMain.switchTo("DashboardView.fxml", 800, 600);
     }
     @FXML
     private void switchRegister(){

@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
+import uet.DAO.DBConnection;
 
 import java.io.IOException;
 
@@ -56,6 +57,7 @@ public class ClientMain extends Application {
         alert.getButtonTypes().setAll(buttonYes, buttonNo);
 
         if (alert.showAndWait().orElse(buttonNo) == buttonYes){
+            DBConnection.closePool();
             window.close();
             Platform.exit();    // Dừng bộ máy JavaFX
             System.exit(0);     // Tắt hoàn toàn chương trình (Kill process)

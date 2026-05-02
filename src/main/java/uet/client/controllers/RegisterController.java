@@ -30,7 +30,20 @@ public class RegisterController {
         roleComboBox.getItems().addAll("Bidder", "Seller", "Admin");
         styleDarkCombo(roleComboBox, "Chọn vai trò");
         dobPicker.getEditor().setStyle("-fx-prompt-text-fill: #aaaaaa; -fx-text-fill: white;");
-        
+        emailField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!checkValidator.validateEmailFormat(newValue)) {
+                note.setText("Email phải đúng định dạng.");
+            } else {
+                note.setText(""); // hợp lệ thì xóa thông báo
+            }
+        });
+        passwordField.textProperty().addListener(((observable, oldValue, newValue) -> {
+            if (!checkValidator.validatePasswordFormat(newValue)){
+                note.setText("Mật khẩu phải đủ 8 ký tự , có cả chữ và số");
+            } else {
+                note.setText("");
+            }
+        }));
     }
 
 
@@ -80,7 +93,14 @@ public class RegisterController {
             note.setText("Phải nhập đầy đủ thông tin.");
             return;
         }
-
+        if (!checkValidator.validateEmailFormat(mail)){
+            note.setText("Email phải đúng định dạng.");
+            return;
+        }
+        if (!checkValidator.validatePasswordFormat(password)){
+            note.setText("Mật khẩu phải đủ 8 ký tự , có cả chữ và số");
+            return;
+        }
         if (!password.equals(repass)) {
             note.setText("2 phần mật khẩu phải khớp nhau.");
             return;
@@ -90,10 +110,12 @@ public class RegisterController {
             note.setText("Phải trên 18 tuổi.");
             return;
         }
-
-        System.out.println("Đăng ký thành công! Quay lại trang Đăng nhập...");
-        
-        ClientMain.switchTo("LoginView.fxml", 400, 400); 
+        try {
+            authService.register(username,mail,password,role,dateOfBirth);
+            ClientMain.switchTo("LoginView.fxml", 400, 400);
+        } catch (AuthenticationException e){
+            note.setText(e.getMessage());
+        }
     }
 
     @FXML

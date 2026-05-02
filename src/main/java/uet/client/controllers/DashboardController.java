@@ -5,6 +5,7 @@ import uet.model.Auction.Auction;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter; 
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,23 +17,26 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.beans.property.SimpleStringProperty; 
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.TextInputDialog;
 import java.util.Optional;
 
 public class DashboardController {
     public static String currentRole = "";
     public static String currentUser = ""; 
+    
     @FXML private TableView<Auction> auctionTable;
     @FXML private TableColumn<Auction, String> idColumn;
     @FXML private TableColumn<Auction, String> nameColumn;
     @FXML private TableColumn<Auction, BigDecimal> priceColumn;
     @FXML private TableColumn<Auction, Auction.AuctionState> statusColumn;
+    @FXML private TableColumn<Auction, String> timeColumn; 
     @FXML private TableColumn<Auction, Void> actionColumn; 
+    
     //3 nút ẩn
     @FXML private Button btnManageProducts;
     @FXML private Button btnCreateProduct;
@@ -52,10 +56,21 @@ public class DashboardController {
             btnCreateProduct.setManaged(false);
             btnCreateAuction.setManaged(false);
         } 
+        
         idColumn.setCellValueFactory(new PropertyValueFactory<>("auctionId"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("itemId")); 
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("currentHighestBid"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("state"));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM HH:mm");
+        
+        timeColumn.setCellValueFactory(cellData -> {
+            Auction auction = cellData.getValue();
+            String start = (auction.getStartTime() != null) ? auction.getStartTime().format(formatter) : "N/A";
+            String end = (auction.getEndTime() != null) ? auction.getEndTime().format(formatter) : "N/A";
+            
+            return new SimpleStringProperty(start + " đến " + end);
+        });
+
         setupActionColumn();
         loadMockData();
         
@@ -80,7 +95,7 @@ public class DashboardController {
                     
                     try {
                         // Tải file FXML mới
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/uet/client/views/BidDialogView.fxml")); // Đổi đường dẫn cho đúng với dự án của bạn
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/uet/client/views/BidDialogView.fxml")); 
                         Parent root = loader.load();
                         
                         // Lấy Controller của màn hình nhỏ để truyền dữ liệu
@@ -90,7 +105,7 @@ public class DashboardController {
                         // Tạo một cửa sổ mới (Stage) đè lên cửa sổ chính
                         Stage dialogStage = new Stage();
                         dialogStage.setTitle("Đặt giá");
-                        dialogStage.initModality(Modality.APPLICATION_MODAL); // Chặn tương tác với cửa sổ mẹ khi chưa đóng cửa sổ con
+                        dialogStage.initModality(Modality.APPLICATION_MODAL); 
                         dialogStage.setScene(new Scene(root));
                         dialogStage.setResizable(false);
                         
@@ -142,19 +157,21 @@ public class DashboardController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+    
     private void loadMockData() {
-//        auctionList.clear();
-//        Auction auction1 = new Auction("Laptop Lenovo LOQ", "Seller01", new BigDecimal("1500.0"), LocalDateTime.now().minusHours(2), LocalDateTime.now().plusDays(1));
-//        Auction auction2 = new Auction("Bàn phím cơ Aula F75", "Seller02", new BigDecimal("50.0"), LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(5));
-//        Auction auction3 = new Auction("Chuột hình người", "Seller03", new BigDecimal("85.0"), LocalDateTime.now().minusMinutes(10), LocalDateTime.now().plusHours(3));
-//        Auction auction4 = new Auction("Sách Tiếng Việt Premium", "Seller01", new BigDecimal("35.0"), LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(3));
-//        Auction auction5 = new Auction("Sách tiếng Anh B1", "Seller04", new BigDecimal("12.0"), LocalDateTime.now().minusDays(2), LocalDateTime.now().minusDays(1));
-//        auction1.start();
-//        auction3.start();
-//        auction5.start();
-//        auction5.finish();
-//        auctionList.addAll(auction1, auction2, auction3, auction4, auction5);
+    //    auctionList.clear();
+    //    Auction auction1 = new Auction("Laptop Lenovo LOQ", "Seller01", new BigDecimal("1500.0"), LocalDateTime.now().minusHours(2), LocalDateTime.now().plusDays(1));
+    //    Auction auction2 = new Auction("Bàn phím cơ Aula F75", "Seller02", new BigDecimal("50.0"), LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(5));
+    //    Auction auction3 = new Auction("Chuột hình người", "Seller03", new BigDecimal("85.0"), LocalDateTime.now().minusMinutes(10), LocalDateTime.now().plusHours(3));
+    //    Auction auction4 = new Auction("Sách Tiếng Việt Premium", "Seller01", new BigDecimal("35.0"), LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(3));
+    //    Auction auction5 = new Auction("Sách tiếng Anh B1", "Seller04", new BigDecimal("12.0"), LocalDateTime.now().minusDays(2), LocalDateTime.now().minusDays(1));
+    //    auction1.start();
+    //    auction3.start();
+    //    auction5.start();
+    //    auction5.finish();
+    //    auctionList.addAll(auction1, auction2, auction3, auction4, auction5);
     }
+    
     @FXML
     private void switchProduct(){
         System.out.println("Chuyển sang màn hình Tạo Sản Phẩm...");
@@ -164,13 +181,13 @@ public class DashboardController {
     @FXML
     private void handleCreateAuction() {
         try {
-
             uet.client.ClientMain.switchTo("CreateAuctionView.fxml", 800, 600);
         } catch (Exception e) {
             System.err.println("Lỗi khi mở giao diện Tạo Phiên:");
             e.printStackTrace();
         }
     }
+    
     @FXML
     private void handleManageProducts() {
         try {
@@ -179,6 +196,7 @@ public class DashboardController {
             e.printStackTrace();
         }
     }
+    
     @FXML
     private void handleLogout() {
         // 1. Tạo hộp thoại xác nhận

@@ -16,9 +16,6 @@ public abstract class Item extends Entity {
     }
     public Item(long sellerId,String name,String description,BigDecimal startingPrice,String imageUrl){
         super();
-        if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("Name cannot be empty");
-        }
         if ( startingPrice.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Price must be >= 0");
         }

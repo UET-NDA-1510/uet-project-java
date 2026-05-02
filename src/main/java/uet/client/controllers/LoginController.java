@@ -1,13 +1,19 @@
 package uet.client.controllers;
 
 import javafx.scene.control.*;
+import uet.DAO.userDAO.AdminDAO;
+import uet.DAO.userDAO.BidderDAO;
+import uet.DAO.userDAO.SellerDAO;
+import uet.DAO.userDAO.UserDAO;
 import uet.Service.authService.AuthService;
 import uet.client.ClientMain;
 import javafx.fxml.FXML;
+import uet.client.UserSession;
 import uet.model.CustomException.AuthenticationException;
+import uet.model.User.User;
 
 public class LoginController {
-    private AuthService authService = new AuthService();
+    private AuthService authService = AuthService.getInstance();
     
     @FXML private TextField usernameField;
     @FXML private PasswordField hiddenPasswordField;
@@ -86,13 +92,24 @@ public class LoginController {
         uet.client.controllers.DashboardController.currentRole = role;
         uet.client.controllers.DashboardController.currentUser = username;
         try {
-            authService.Login(username,password,role);
+            authService.login(username,password,role);
+            UserDAO userDAO = getRole(role);
+            User user = userDAO.findByName(username);
+            UserSession.getInstance().setLoggedInUser(user.getId(),user.getUsername());
             ClientMain.switchTo("DashboardView.fxml", 800, 600);
         } catch (AuthenticationException e) {
             note.setText(e.getMessage());
         }
     }
-
+    private UserDAO getRole(String role){
+        if (role.equals("Bidder")){
+            return new BidderDAO();
+        } else if (role.equals( "Seller")) {
+            return new SellerDAO();
+        } else {
+            return new AdminDAO();
+        }
+    }
     @FXML
     private void switchRegister(){
         ClientMain.switchTo("RegisterView.fxml",800,600);

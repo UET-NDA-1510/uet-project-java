@@ -8,5 +8,5 @@ public abstract class ItemFactory {
     public Item registerItem(long sellerId,String name, String description, BigDecimal startingPrice, String imageUrl, String...extraInfo){
         return createItem(sellerId,name,description,startingPrice,imageUrl,extraInfo);
     }
-    public abstract Item createItem(long sellerId,String name,String description,BigDecimal startingPrice,String imageUrl,String...extraInfo);
+    protected abstract Item createItem(long sellerId,String name,String description,BigDecimal startingPrice,String imageUrl,String...extraInfo);
 }

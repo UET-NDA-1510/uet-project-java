@@ -17,8 +17,7 @@ import java.time.LocalDate;
 
 public class RegisterController {
     private RegisterValidator checkValidator = new RegisterValidator();
-    private AuthService authService = new AuthService();
-    
+    private AuthService authService = AuthService.getInstance();
     @FXML private TextField usernameField, emailField;
     @FXML private PasswordField hiddenPasswordField;
     @FXML private TextField visiblePasswordField;

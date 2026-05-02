@@ -15,10 +15,11 @@ public abstract class ItemDAO <T extends Item>{
     public abstract String getType();
     public abstract String buildInsertSQL();
     public abstract void fillInsertParams(PreparedStatement ps, T product) throws SQLException;
-    public List<Item> findAllBySellerId(Connection connect,int sellerId,String type) throws SQLException {
+    public List<Item> findAllBySellerId(int sellerId,String type) throws SQLException {
         String sql = "SELECT * FROM item WHERE seller_id = ? AND type = ?";
         List<Item> result = new ArrayList<>();
-        try (PreparedStatement ps = connect.prepareStatement(sql)) {
+        try (Connection connect = DBConnection.getConnection();
+             PreparedStatement ps = connect.prepareStatement(sql)) {
             ps.setInt(1, sellerId);
             ps.setString(2,type);
             ResultSet rs = ps.executeQuery();
@@ -29,18 +30,20 @@ public abstract class ItemDAO <T extends Item>{
         return result;
     }
 
-    public boolean delete(Connection connect,int id) throws SQLException {
+    public boolean delete(int id) throws SQLException {
         String sql = "DELETE FROM item WHERE id = ?";
-        try (PreparedStatement ps = connect.prepareStatement(sql)) {
+        try (Connection connect = DBConnection.getConnection();
+             PreparedStatement ps = connect.prepareStatement(sql)) {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
         }
     }
 
     // lưu sản phẩm
-    public boolean save(Connection connect,T product) throws SQLException {
+    public boolean save(T product) throws SQLException {
         String sql = buildInsertSQL();
-        try (PreparedStatement ps = connect.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {   // lấy khóa chính(id) ngay khi lưu để có  luôn id của itrm khi lưu
+        try (Connection connect = DBConnection.getConnection();
+             PreparedStatement ps = connect.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {   // lấy khóa chính(id) ngay khi lưu để có  luôn id của itrm khi lưu
             fillInsertParams(ps, product);  // subclass fill params
             int affected = ps.executeUpdate();
             if (affected == 0) throw new SQLException("Insert failed, no rows affected.");

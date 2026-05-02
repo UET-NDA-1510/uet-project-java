@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 public class ArtFactory extends ItemFactory {
     @Override
-    public Item createItem(long sellerId,String name, String description, BigDecimal startingPrice, String imageUrl, String...extraInfo) {
+    protected Item createItem(long sellerId,String name, String description, BigDecimal startingPrice, String imageUrl, String...extraInfo) {
         String aritist = extraInfo[0];
         return new Art(sellerId,name,description,startingPrice,imageUrl,aritist);
     }

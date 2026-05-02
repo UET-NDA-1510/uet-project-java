@@ -17,12 +17,16 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class BidService {
-    private final AuctionManager manager;
+    private final AuctionManager manager = AuctionManager.getInstance();
     private final BidderDAO bidderDAO = new BidderDAO();
     private final AuctionDAO auctionDAO = new AuctionDAO();
     private final bidtransactionDAO bidtransactionDAO = new bidtransactionDAO();
-    public BidService(AuctionManager manager){
-        this.manager = manager;
+    private BidService(){};
+    private static class ServiceHelper {
+        private static final BidService INSTANCE = new BidService();
+    }
+    public static BidService getInstance() {
+        return ServiceHelper.INSTANCE;
     }
     public void placeBid(long auctionId, long bidderId, BigDecimal amount) throws InterruptedException, SQLException {
         ReentrantLock auctionLock = manager.auctionGetLock(auctionId);

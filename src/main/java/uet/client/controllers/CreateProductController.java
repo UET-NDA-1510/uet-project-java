@@ -1,5 +1,4 @@
 package uet.client.controllers;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -7,12 +6,16 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import uet.Service.CreateItemService;
 import uet.client.ClientMain;
+import uet.client.UserSession;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.sql.SQLException;
 
 public class CreateProductController {
-
+    private CreateItemService createItemService = CreateItemService.getInstance();
     @FXML private ComboBox<String> categoryComboBox; 
     @FXML private TextField name;
     @FXML private ImageView imageView;
@@ -20,18 +23,19 @@ public class CreateProductController {
     @FXML private TextArea description;
     @FXML private TextField extraInfo1;
     @FXML private TextField extraInfo2;
+    @FXML private Label note;
     private String imageUrl;
+    private String selectedType;
+    long sellerId = UserSession.getInstance().getLoggedInUserId();
     @FXML
     public void initialize() {
         // Đã bổ sung thêm "Item" vào danh sách (Tổng cộng 3 lựa chọn)
         categoryComboBox.getItems().addAll("Electronics", "Art", "Vehicle");
-        
         // Làm đẹp ComboBox
         styleDarkCombo(categoryComboBox, "Chọn Loại Sản Phẩm");
-
         // BẮT SỰ KIỆN: Tự động đổi chữ trong 2 ô nhập liệu cuối dựa trên Loại sản phẩm
         categoryComboBox.setOnAction(event -> {
-            String selectedType = categoryComboBox.getValue();
+            selectedType = categoryComboBox.getValue();
             if (selectedType != null) {
                 switch (selectedType) {
                     case "Art":
@@ -51,26 +55,43 @@ public class CreateProductController {
         });
     }
     @FXML
+    private void switchDashboarde(){
+        ClientMain.switchTo("DashboardView.fxml", 800, 600);
+    }
+    @FXML
+    private void saveProduct(){
+        String itemName = name.getText();
+        String itemDescription = description.getText();
+        String extraInfor1 = extraInfo1.getText();
+        String extraInfor2 = extraInfo2.getText();
+        if (itemName.isBlank() || itemDescription.isBlank() || extraInfor1.isBlank() || extraInfor2.isBlank() || imageUrl.isBlank() || selectedType.isBlank() || startingPrice.getText().isBlank()){
+            note.setText("Phải điền đủ thông tin.");
+        }
+        try {
+            BigDecimal price = new BigDecimal(startingPrice.getText());
+            createItemService.createItem(sellerId,selectedType,itemName,price,itemDescription,imageUrl,extraInfor1,extraInfor2);
+            ClientMain.switchTo("DashboardView.fxml", 800, 600);
+        } catch (NumberFormatException e) {
+            note.setText("Giá tiền phải nhập vào 1 số.");
+        } catch (SQLException e){
+            note.setText("Lỗi khi tạo sản phẩm");
+        }
+    }
+
+
+
+    @FXML
     public void addImage(ActionEvent event){
         FileChooser fileChooser = new FileChooser();
-        
         // Khóa định dạng: Chỉ cho người dùng chọn file ảnh
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
-        
         File selectedFile = fileChooser.showOpenDialog(((Node) event.getSource()).getScene().getWindow());
-
         if (selectedFile != null) {
             imageUrl = selectedFile.toURI().toString();
             Image image = new Image(imageUrl);
             imageView.setImage(image);
         }
     }
-
-    @FXML
-    private void switchDashboarde(){
-        ClientMain.switchTo("DashboardView.fxml", 800, 600);
-    }
-
     // Hàm tạo style tối màu cho ComboBox
     private void styleDarkCombo(ComboBox<String> combo, String prompt) {
         combo.setButtonCell(new ListCell<>() {

@@ -1,7 +1,6 @@
-package uet.DAO;
+package uet.DAO.auctionDAO;
 
 import uet.model.Auction.Auction;
-import uet.model.Auction.AuctionState;
 import uet.model.CustomException.DataAccessException;
 
 import java.math.BigDecimal;

@@ -1,5 +1,5 @@
 package uet.Service.auctionService;
-import uet.DAO.AuctionDAO;
+import uet.DAO.auctionDAO.AuctionDAO;
 import uet.DAO.DBConnection;
 import uet.DAO.userDAO.BidderDAO;
 import uet.DAO.userDAO.SellerDAO;

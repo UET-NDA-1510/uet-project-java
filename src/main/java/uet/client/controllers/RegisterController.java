@@ -7,12 +7,16 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import uet.Service.authService.AuthService;
+import uet.Service.authService.RegisterValidator;
 import uet.client.ClientMain;
+import uet.model.CustomException.AuthenticationException;
 
 import java.time.LocalDate;
 
 public class RegisterController {
-
+    private RegisterValidator checkValidator = new RegisterValidator();
+    private AuthService authService = new AuthService();
     @FXML private TextField usernameField, emailField;
     @FXML private PasswordField passwordField, repasswordField;
     @FXML private Label note;

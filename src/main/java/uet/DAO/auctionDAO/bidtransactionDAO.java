@@ -1,4 +1,4 @@
-package uet.DAO;
+package uet.DAO.auctionDAO;
 
 import uet.model.Auction.BidTransaction;
 

@@ -37,7 +37,7 @@
             <Hyperlink onAction="#switchRegister" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-border-color: transparent; -fx-underline: false;" text="Đăng ký ngay" />
          </children>
       </HBox>
-      <Label fx:id="messageLabel" textFill="#e74c3c">
+      <Label fx:id="note" textFill="#e74c3c">
          <font>
             <Font name="System Italic" size="12.0" />
          </font>

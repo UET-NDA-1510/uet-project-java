@@ -10,7 +10,7 @@ public class DBConnection {
             HikariConfig config = new HikariConfig();
             config.setJdbcUrl("jdbc:mysql://localhost:3306/auctiondb");
             config.setUsername("root");
-            config.setPassword("Ducanh2007@");
+            config.setPassword("123456");
             config.setMaximumPoolSize(5);  // Số lượng connection tối đa trong pool
             config.setConnectionTimeout(30000);   // thời gian chờ tối đa 30s
             config.setMaxLifetime(1800000);

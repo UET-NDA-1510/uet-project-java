@@ -9,6 +9,7 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -32,12 +33,16 @@
       
       <TextField fx:id="emailField" maxWidth="250.0" prefHeight="35.0" promptText="Email" 
                  style="-fx-background-color: #333333; -fx-text-fill: white; -fx-background-radius: 5; -fx-prompt-text-fill: #aaaaaa;" />
-      
-      <PasswordField fx:id="passwordField" maxWidth="250.0" prefHeight="35.0" promptText="Mật khẩu" 
-                     style="-fx-background-color: #333333; -fx-text-fill: white; -fx-background-radius: 5; -fx-prompt-text-fill: #aaaaaa;" />
-      
-      <PasswordField fx:id="repasswordField" maxWidth="250.0" prefHeight="35.0" promptText="Nhập lại mật khẩu" 
-                     style="-fx-background-color: #333333; -fx-text-fill: white; -fx-background-radius: 5; -fx-prompt-text-fill: #aaaaaa;" />
+      <StackPane alignment="CENTER_RIGHT" maxWidth="250.0"> 
+         <TextField fx:id="visiblePasswordField" promptText="Nhập mật khẩu" visible="false" style="-fx-background-color: #333333; -fx-text-fill: white; -fx-background-radius: 5; -fx-prompt-text-fill: #aaaaaa; -fx-pref-height: 35px; -fx-padding: 0 50 0 10;"/>
+         <PasswordField fx:id="hiddenPasswordField" promptText="Nhập mật khẩu" style="-fx-background-color: #333333; -fx-text-fill: white; -fx-background-radius: 5; -fx-prompt-text-fill: #aaaaaa; -fx-pref-height: 35px; -fx-padding: 0 50 0 10;"/>
+         <Button fx:id="togglePasswordBtn" mnemonicParsing="false" onAction="#togglePassword" text="HIỆN" style="-fx-background-color: transparent; -fx-cursor: hand; -fx-font-weight: bold; -fx-text-fill: #aaaaaa;"/>
+      </StackPane>
+      <StackPane alignment="CENTER_RIGHT" maxWidth="250.0"> 
+         <TextField fx:id="visibleConfirmPasswordField" promptText="Nhập lại mật khẩu" visible="false" style="-fx-background-color: #333333; -fx-text-fill: white; -fx-background-radius: 5; -fx-prompt-text-fill: #aaaaaa; -fx-pref-height: 35px; -fx-padding: 0 50 0 10;"/>
+         <PasswordField fx:id="hiddenConfirmPasswordField" promptText="Nhập lại mật khẩu" style="-fx-background-color: #333333; -fx-text-fill: white; -fx-background-radius: 5; -fx-prompt-text-fill: #aaaaaa; -fx-pref-height: 35px; -fx-padding: 0 50 0 10;"/>
+         <Button fx:id="toggleConfirmPasswordBtn" mnemonicParsing="false" onAction="#toggleConfirmPassword" text="HIỆN" style="-fx-background-color: transparent; -fx-cursor: hand; -fx-font-weight: bold; -fx-text-fill: #aaaaaa;"/>
+      </StackPane>
                      
       <ComboBox fx:id="roleComboBox" maxWidth="250.0" prefHeight="35.0" promptText="Chọn vai trò" 
                 style="-fx-background-color: #333333; -fx-background-radius: 5; -fx-cursor: hand;" />

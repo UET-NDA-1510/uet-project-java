@@ -4,23 +4,25 @@ import javafx.scene.control.*;
 import uet.Service.authService.AuthService;
 import uet.client.ClientMain;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListCell;
-
-import javafx.scene.control.Label;
 import uet.model.CustomException.AuthenticationException;
-
 
 public class LoginController {
     private AuthService authService = new AuthService();
-    @FXML
-    private TextField usernameField;
-    @FXML
-    private PasswordField passwordField;
-    @FXML
-    private ComboBox<String> roleComboBox;
+    
+    @FXML private TextField usernameField;
+    @FXML private PasswordField hiddenPasswordField;
+    @FXML private TextField visiblePasswordField;
+    @FXML private Button togglePasswordBtn;
+    
+    @FXML private ComboBox<String> roleComboBox;
     @FXML private Label note;
+
     @FXML
     public void initialize() {
+
+        if (hiddenPasswordField != null && visiblePasswordField != null) {
+            hiddenPasswordField.textProperty().bindBidirectional(visiblePasswordField.textProperty());
+        }
         // Đổ dữ liệu vào ComboBox
         roleComboBox.getItems().addAll("Bidder", "Seller", "Admin");
         roleComboBox.setButtonCell(new ListCell<>() {
@@ -53,17 +55,32 @@ public class LoginController {
             }
         });
     }
+
+    //HÀM XỬ LÝ NÚT BẤM HIỆN/ẨN 
+    @FXML
+    private void togglePassword() {
+        if (hiddenPasswordField.isVisible()) {
+            hiddenPasswordField.setVisible(false);
+            visiblePasswordField.setVisible(true);
+            togglePasswordBtn.setText("ẨN"); 
+        } else {
+            hiddenPasswordField.setVisible(true);
+            visiblePasswordField.setVisible(false);
+            togglePasswordBtn.setText("HIỆN"); 
+        }
+    }
+
     @FXML
     private void handleLogin() {
-        
         String username = usernameField.getText();
-        String password = passwordField.getText();
+        String password = hiddenPasswordField.getText();
+        
         String role = roleComboBox.getValue();
 
         // Validate cơ bản
         if (username.isBlank() || password.isBlank() || role == null) {
            note.setText("Vui lòng nhập đầy đủ thông tin!");
-            return;
+           return;
         }
         System.out.println("Đang kết nối Server... Chào mừng " + username);
         uet.client.controllers.DashboardController.currentRole = role;
@@ -74,8 +91,8 @@ public class LoginController {
         } catch (AuthenticationException e) {
             note.setText(e.getMessage());
         }
-        // Chuyển sang màn hình Dashboard (kích thước 800x600)
     }
+
     @FXML
     private void switchRegister(){
         ClientMain.switchTo("RegisterView.fxml",800,600);

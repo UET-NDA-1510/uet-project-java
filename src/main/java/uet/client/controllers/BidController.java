@@ -33,8 +33,7 @@ public class BidController {
 
     @FXML
     public void initialize() {
-        try {
-            Connection connection = DBConnection.getConnection();
+        try (Connection connection = DBConnection.getConnection();){
             User seller = sellerDAO.findById(connection,auctionToBid.getSellerId());
             User highestBidder = bidderDAO.findById(connection,auctionToBid.getHighestBidderId());
             Item item = itemService.findById(auctionToBid.getItemId());
@@ -59,43 +58,7 @@ public class BidController {
     }
 
     @FXML
-    private void handlePlaceBid() {
-        if (!"Bidder".equals(DashboardController.currentRole)) {
-            noteLabel.setText("Lỗi quyền truy cập: Chỉ có Người mua (Bidder) mới được phép đấu giá!");
-            noteLabel.setStyle("-fx-text-fill: #e74c3c;"); 
-            return; 
-        }
-
-        String bidText = bidAmountField.getText();
-        
-        if (bidText == null || bidText.trim().isEmpty()) {
-            noteLabel.setText("Vui lòng nhập số tiền bạn muốn đấu giá!");
-            noteLabel.setStyle("-fx-text-fill: #e74c3c;");
-            return;
-        }
-
-        try {
-            BigDecimal newBid = new BigDecimal(bidText);
-            BigDecimal currentHighest = auctionToBid.getCurrentHighestBid() != null ? auctionToBid.getCurrentHighestBid() : BigDecimal.ZERO;
-
-            if (newBid.compareTo(currentHighest) <= 0) {
-                noteLabel.setText("Mức giá của bạn phải CAO HƠN giá hiện tại (" + currentHighest + " $)!");
-                noteLabel.setStyle("-fx-text-fill: #e74c3c;");
-                return;
-            }
-            auctionToBid.setCurrentHighestBid(newBid);
-//            auctionToBid.setHighestBidder(DashboardController.currentUser);
-
-            currentBidLabel.setText(newBid.toString() + " $");
-            noteLabel.setText("Đấu giá thành công! Bạn đang giữ mức giá cao nhất.");
-            noteLabel.setStyle("-fx-text-fill: #2ecc71;");
-            bidAmountField.clear();
-
-        } catch (NumberFormatException e) {
-            noteLabel.setText("Vui lòng chỉ nhập số, không nhập chữ!");
-            noteLabel.setStyle("-fx-text-fill: #e74c3c;");
-        }
-    }
+    private void handlePlaceBid() {};
 
     @FXML
     private void handleBack() {

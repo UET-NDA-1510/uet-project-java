@@ -6,7 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
-import uet.server.service.CreateItemService;
+import uet.server.service.itemService.ItemService;
 import uet.client.ClientMain;
 import uet.client.UserSession;
 
@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 
 public class CreateProductController {
-    private CreateItemService createItemService = CreateItemService.getInstance();
+    private ItemService itemService = ItemService.getInstance();
     @FXML private ComboBox<String> categoryComboBox; 
     @FXML private TextField name;
     @FXML private ImageView imageView;
@@ -30,7 +30,7 @@ public class CreateProductController {
     @FXML
     public void initialize() {
         // Đã bổ sung thêm "Item" vào danh sách (Tổng cộng 3 lựa chọn)
-        categoryComboBox.getItems().addAll("Electronics", "Art", "Vehicle");
+        categoryComboBox.getItems().addAll("ELECTRONIC", "ART", "VEHICLE");
         // Làm đẹp ComboBox
         styleDarkCombo(categoryComboBox, "Chọn Loại Sản Phẩm");
         // BẮT SỰ KIỆN: Tự động đổi chữ trong 2 ô nhập liệu cuối dựa trên Loại sản phẩm
@@ -38,15 +38,15 @@ public class CreateProductController {
             selectedType = categoryComboBox.getValue();
             if (selectedType != null) {
                 switch (selectedType) {
-                    case "Art":
+                    case "ART":
                         extraInfo1.setPromptText("Tên họa sĩ");
                         extraInfo2.setPromptText("Năm sáng tác");
                         break;
-                    case "Electronics":
+                    case "ELECTRONIC":
                         extraInfo1.setPromptText("Thương hiệu");
                         extraInfo2.setPromptText("Thời gian bảo hành (tháng)");
                         break;
-                    case "Vehicle":
+                    case "VEHICLE":
                         extraInfo1.setPromptText("Hãng xe");
                         extraInfo2.setPromptText("Đời xe / Năm sản xuất");
                         break;
@@ -69,7 +69,7 @@ public class CreateProductController {
         }
         try {
             BigDecimal price = new BigDecimal(startingPrice.getText());
-            createItemService.createItem(sellerId,selectedType,itemName,price,itemDescription,imageUrl,extraInfor1,extraInfor2);
+            itemService.createItem(sellerId,selectedType,itemName,price,itemDescription,imageUrl,extraInfor1,extraInfor2);
             ClientMain.switchTo("DashboardView.fxml", 800, 600);
         } catch (NumberFormatException e) {
             note.setText("Giá tiền phải nhập vào 1 số.");

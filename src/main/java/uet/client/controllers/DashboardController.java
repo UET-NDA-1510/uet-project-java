@@ -26,8 +26,6 @@ import java.util.Optional;
 
 public class DashboardController {
     public static String currentRole = "";
-    public static String currentUser = ""; 
-    
     @FXML private TableView<Auction> auctionTable;
     @FXML private TableColumn<Auction, String> idColumn;
     @FXML private TableColumn<Auction, String> nameColumn;
@@ -133,21 +131,11 @@ public class DashboardController {
         alert.setContentText(content);
         alert.showAndWait();
     }
-    
+
     private void loadMockData() {
     //    auctionList.clear();
-    //    Auction auction1 = new Auction("Laptop Lenovo LOQ", "Seller01", new BigDecimal("1500.0"), LocalDateTime.now().minusHours(2), LocalDateTime.now().plusDays(1));
-    //    Auction auction2 = new Auction("Bàn phím cơ Aula F75", "Seller02", new BigDecimal("50.0"), LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(5));
-    //    Auction auction3 = new Auction("Chuột hình người", "Seller03", new BigDecimal("85.0"), LocalDateTime.now().minusMinutes(10), LocalDateTime.now().plusHours(3));
-    //    Auction auction4 = new Auction("Sách Tiếng Việt Premium", "Seller01", new BigDecimal("35.0"), LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(3));
-    //    Auction auction5 = new Auction("Sách tiếng Anh B1", "Seller04", new BigDecimal("12.0"), LocalDateTime.now().minusDays(2), LocalDateTime.now().minusDays(1));
-    //    auction1.start();
-    //    auction3.start();
-    //    auction5.start();
-    //    auction5.finish();
-    //    auctionList.addAll(auction1, auction2, auction3, auction4, auction5);
     }
-    
+
     @FXML
     private void switchProduct(){
         System.out.println("Chuyển sang màn hình Tạo Sản Phẩm...");
@@ -163,7 +151,7 @@ public class DashboardController {
             e.printStackTrace();
         }
     }
-    
+
     @FXML
     private void handleManageProducts() {
         try {
@@ -187,7 +175,7 @@ public class DashboardController {
         if (result.isPresent() && result.get() == buttonYes) {
             try {
                 currentRole = "";
-                currentUser = "";
+//                currentUser = "";
                 auctionList.clear();
                 uet.client.ClientMain.switchTo("LoginView.fxml", 800, 600); 
 

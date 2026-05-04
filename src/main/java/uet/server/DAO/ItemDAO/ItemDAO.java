@@ -3,6 +3,7 @@ package uet.server.DAO.ItemDAO;
 import uet.server.DAO.DBConnection;
 import uet.common.model.items.Item;
 import uet.common.model.items.ItemStatus;
+import uet.server.service.itemService.ItemDAORegistry;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,30 +16,6 @@ public abstract class ItemDAO <T extends Item>{
     public abstract String getType();
     public abstract String buildInsertSQL();
     public abstract void fillInsertParams(PreparedStatement ps, T product) throws SQLException;
-    public List<Item> findAllBySellerId(int sellerId,String type) throws SQLException {
-        String sql = "SELECT * FROM item WHERE seller_id = ? AND type = ?";
-        List<Item> result = new ArrayList<>();
-        try (Connection connect = DBConnection.getConnection();
-             PreparedStatement ps = connect.prepareStatement(sql)) {
-            ps.setInt(1, sellerId);
-            ps.setString(2,type);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                result.add(mapRow(rs));
-            }
-        }
-        return result;
-    }
-
-    public boolean delete(int id) throws SQLException {
-        String sql = "DELETE FROM item WHERE id = ?";
-        try (Connection connect = DBConnection.getConnection();
-             PreparedStatement ps = connect.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            return ps.executeUpdate() > 0;
-        }
-    }
-
     // lưu sản phẩm
     public boolean save(T product) throws SQLException {
         String sql = buildInsertSQL();

@@ -90,7 +90,6 @@ public class LoginController {
         }
         System.out.println("Đang kết nối Server... Chào mừng " + username);
         uet.client.controllers.DashboardController.currentRole = role;
-        uet.client.controllers.DashboardController.currentUser = username;
         try {
             authService.login(username,password,role);
             UserDAO userDAO = getRole(role);

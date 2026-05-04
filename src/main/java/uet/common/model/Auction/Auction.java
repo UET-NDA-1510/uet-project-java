@@ -20,9 +20,6 @@ public class Auction implements Serializable {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private AuctionState state;
-    private String itemName;
-    private String highestBidder;
-    private String sellerName;
     public Auction(){};
     public Auction(long itemId, long sellerId, BigDecimal startingPrice,LocalDateTime startTime, LocalDateTime endTime) {
         this.itemId = itemId;
@@ -93,15 +90,6 @@ public class Auction implements Serializable {
     public AuctionState getState() {
         return state;
     }
-    public String getItemName() {
-        return itemName;
-    }
-    public String getHighestBidder() {
-        return highestBidder;
-    }
-    public String getSellerName() {
-        return sellerName;
-    }
     //setter
     public void setState(AuctionState state) {
         this.state = state;
@@ -134,14 +122,5 @@ public class Auction implements Serializable {
 
     public void setHighestBidderId(long highestBidderId) {
         this.highestBidderId = highestBidderId;
-    }
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-    public void setHighestBidder(String highestBidder) {
-        this.highestBidder = highestBidder;
-    }
-    public void setSellerName(String sellerName) {
-        this.sellerName = sellerName;
     }
 }

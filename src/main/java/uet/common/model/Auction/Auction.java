@@ -2,13 +2,15 @@ package uet.common.model.Auction;
 
 import uet.common.model.CustomException.InvalidBidException;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class Auction {
+public class Auction implements Serializable {
     public enum AuctionState {
         OPEN, RUNNING, FINISHED, PAID, CANCELED;
     }
+    private static final long serialVersionUID = 1L;   // id để gửi dữ liệu cho socket
     private long auctionId;
     private long itemId;
     private long sellerId;

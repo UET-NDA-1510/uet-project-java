@@ -1,6 +1,8 @@
 package uet.common.model;
+import java.io.Serializable;
 import java.time.LocalDateTime;
-public abstract class Entity {
+public abstract class Entity implements Serializable {
+    private static final long serialVersionUID = 1L;   // id để gửi dữ liệu cho socket
     private long id;
     private LocalDateTime createdAt;     //thời gian tạo
     private LocalDateTime updatedAt;     // thời gian cập nhật

@@ -4,6 +4,8 @@ import uet.common.model.Entity;
 import java.math.BigDecimal;
 
 public abstract class Item extends Entity {
+    private static final long serialVersionUID = 1L;   // id để gửi dữ liệu cho socket
+
     private long sellerId;
     private String name;
     private String description;     // miêu tả

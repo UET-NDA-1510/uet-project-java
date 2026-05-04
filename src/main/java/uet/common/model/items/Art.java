@@ -3,6 +3,8 @@ package uet.common.model.items;
 import java.math.BigDecimal;
 
 public class Art extends Item {
+    private static final long serialVersionUID = 1L;   // id để gửi dữ liệu cho socket
+
     private String artist;// họa sĩ
     public Art(){
         super();

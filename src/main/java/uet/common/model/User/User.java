@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public abstract class User extends Entity {
+    private static final long serialVersionUID = 1L;   // id để gửi dữ liệu cho socket
     private String username;
     private String email;
     private String password;

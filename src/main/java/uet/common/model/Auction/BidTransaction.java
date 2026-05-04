@@ -1,9 +1,11 @@
 package uet.common.model.Auction;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class BidTransaction {
+public class BidTransaction implements Serializable {
+    private static final long serialVersionUID = 1L;   // id để gửi dữ liệu cho socket
     private long auctionId;
     private long bidderId;
     private BigDecimal amount;

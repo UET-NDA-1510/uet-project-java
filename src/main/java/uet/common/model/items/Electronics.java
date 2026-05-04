@@ -3,6 +3,8 @@ package uet.common.model.items;
 import java.math.BigDecimal;
 
 public class Electronics extends Item{
+    private static final long serialVersionUID = 1L;   // id để gửi dữ liệu cho socket
+
     private String brand;
     private int warrantyMonths;     // tháng bảo
     public Electronics() {

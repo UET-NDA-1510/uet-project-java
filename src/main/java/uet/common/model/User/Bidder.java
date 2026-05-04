@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Bidder extends User{
+    private static final long serialVersionUID = 1L;   // id để gửi dữ liệu cho socket
+
     private int total_win;
     public Bidder(String username, String email, String password, LocalDate dateOfbirth) {
         super(username, email, password, dateOfbirth);;

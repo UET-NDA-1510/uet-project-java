@@ -13,7 +13,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import uet.client.ClientMain;
-import uet.model.Auction.Auction;
+import uet.common.model.Auction.Auction;
 
 import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;

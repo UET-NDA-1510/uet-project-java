@@ -1,11 +1,10 @@
 package uet.client.controllers;
 
 import uet.client.ClientMain;
-import uet.model.Auction.Auction;
+import uet.common.model.Auction.Auction;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter; 
+import java.time.format.DateTimeFormatter;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

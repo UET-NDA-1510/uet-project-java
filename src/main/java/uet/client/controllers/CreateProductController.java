@@ -6,7 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
-import uet.Service.CreateItemService;
+import uet.server.service.CreateItemService;
 import uet.client.ClientMain;
 import uet.client.UserSession;
 

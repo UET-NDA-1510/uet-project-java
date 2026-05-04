@@ -8,10 +8,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import uet.Service.authService.AuthService;
-import uet.Service.authService.RegisterValidator;
+import uet.server.service.authService.AuthService;
+import uet.server.service.authService.RegisterValidator;
 import uet.client.ClientMain;
-import uet.model.CustomException.AuthenticationException;
+import uet.common.model.CustomException.AuthenticationException;
 
 import java.time.LocalDate;
 

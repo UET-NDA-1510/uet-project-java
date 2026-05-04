@@ -6,7 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import uet.client.ClientMain;
-import uet.model.items.Item;
+import uet.common.model.items.Item;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 

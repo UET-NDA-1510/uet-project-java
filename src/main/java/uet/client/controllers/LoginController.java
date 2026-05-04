@@ -1,16 +1,16 @@
 package uet.client.controllers;
 
 import javafx.scene.control.*;
-import uet.DAO.userDAO.AdminDAO;
-import uet.DAO.userDAO.BidderDAO;
-import uet.DAO.userDAO.SellerDAO;
-import uet.DAO.userDAO.UserDAO;
-import uet.Service.authService.AuthService;
+import uet.server.DAO.userDAO.AdminDAO;
+import uet.server.DAO.userDAO.BidderDAO;
+import uet.server.DAO.userDAO.SellerDAO;
+import uet.server.DAO.userDAO.UserDAO;
+import uet.server.service.authService.AuthService;
 import uet.client.ClientMain;
 import javafx.fxml.FXML;
 import uet.client.UserSession;
-import uet.model.CustomException.AuthenticationException;
-import uet.model.User.User;
+import uet.common.model.CustomException.AuthenticationException;
+import uet.common.model.User.User;
 
 public class LoginController {
     private AuthService authService = AuthService.getInstance();

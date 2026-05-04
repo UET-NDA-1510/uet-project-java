@@ -4,8 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import uet.model.Auction.Auction;
-import uet.model.CustomException.InvalidBidException; 
+import uet.common.model.Auction.Auction;
+import uet.common.model.CustomException.InvalidBidException;
 
 import java.math.BigDecimal;
 

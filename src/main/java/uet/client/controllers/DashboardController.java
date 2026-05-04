@@ -76,11 +76,11 @@ public class DashboardController {
         auctionTable.setItems(auctionList);
     }
 
-    private void setupActionColumn() {
+        private void setupActionColumn() {
         actionColumn.setCellFactory(param -> new TableCell<>() {
             private final Button btn = new Button("Đấu giá");
 
-            {
+            { 
                 btn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold;");
                 
                 // SỰ KIỆN KHI BẤM NÚT ĐẤU GIÁ
@@ -93,35 +93,12 @@ public class DashboardController {
                     Auction selectedAuction = getTableView().getItems().get(getIndex());
                     
                     try {
-                        // Tải file FXML mới
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/uet/client/views/BidDialogView.fxml")); 
-                        Parent root = loader.load();
-                        
-                        // Lấy Controller của màn hình nhỏ để truyền dữ liệu
-                        BidDialogController dialogController = loader.getController();
-                        dialogController.setAuctionData(selectedAuction);
-                        
-                        // Tạo một cửa sổ mới (Stage) đè lên cửa sổ chính
-                        Stage dialogStage = new Stage();
-                        dialogStage.setTitle("Đặt giá");
-                        dialogStage.initModality(Modality.APPLICATION_MODAL); 
-                        dialogStage.setScene(new Scene(root));
-                        dialogStage.setResizable(false);
-                        
-                        // Hiển thị và chờ người dùng thao tác xong mới chạy tiếp code bên dưới
-                        dialogStage.showAndWait();
-                        
-                        // Sau khi cửa sổ đóng, kiểm tra xem có đặt giá thành công không để Refresh bảng
-                        if (dialogController.isBidSuccessful()) {
-                            getTableView().refresh();
-                            showAlert(Alert.AlertType.INFORMATION, "Thành công", "Cập nhật giá mới thành công!");
-                        }
-                        
+                        uet.client.controllers.BidController.auctionToBid = selectedAuction;
+                        uet.client.ClientMain.switchTo("BidView.fxml", 800, 600);
                     } catch (Exception e) {
                         e.printStackTrace();
                         showAlert(Alert.AlertType.ERROR, "Lỗi hệ thống", "Không thể tải giao diện đặt giá.");
                     }
-                
                 });
             }
 
@@ -145,7 +122,7 @@ public class DashboardController {
                     }
                 }
             }
-        });
+        }); 
     }
 
     // Hàm tiện ích giúp hiển thị thông báo nhanh gọn

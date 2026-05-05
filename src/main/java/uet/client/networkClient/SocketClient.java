@@ -25,7 +25,7 @@ public class SocketClient {
     private static class ClientHelper {     // class để triển khi singleton cho đa luồng
         private static final SocketClient instance = new SocketClient();
     }
-    public SocketClient getInstance(){
+    public static SocketClient getInstance(){
         return ClientHelper.instance;
     }
     public void getConnect(){

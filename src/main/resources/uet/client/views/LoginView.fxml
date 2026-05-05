@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="400.0" prefWidth="400.0" spacing="20.0" style="-fx-background-color: #000000;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uet.client.controllers.LoginController">
+<VBox alignment="CENTER" prefHeight="400.0" prefWidth="400.0" spacing="20.0" style="-fx-background-color: #2c3e50;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uet.client.controllers.LoginController">
    <children>
       
       <Label text="HỆ THỐNG ĐẤU GIÁ" textFill="WHITE">
@@ -27,7 +27,7 @@
           <Button fx:id="togglePasswordBtn" mnemonicParsing="false" onAction="#togglePassword" text="HIỆN" style="-fx-background-color: transparent; -fx-cursor: hand; -fx-font-weight: bold; -fx-text-fill: #aaaaaa;"/>
       </StackPane>
       <ComboBox fx:id="roleComboBox" maxWidth="250.0" prefHeight="35.0" promptText="Chọn vai trò" style="-fx-background-color: #333333; -fx-background-radius: 5;" />
-      <Button mnemonicParsing="false" onAction="#handleLogin" prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 5;" text="Đăng nhập">
+      <Button mnemonicParsing="false" onAction="#handleLogin" prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 5;" text="Đăng nhập">
          <font>
             <Font size="14.0" />
          </font>

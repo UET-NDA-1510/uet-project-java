@@ -175,7 +175,6 @@ public class DashboardController {
         if (result.isPresent() && result.get() == buttonYes) {
             try {
                 currentRole = "";
-//                currentUser = "";
                 auctionList.clear();
                 uet.client.ClientMain.switchTo("LoginView.fxml", 800, 600); 
 

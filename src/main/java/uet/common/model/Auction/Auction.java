@@ -32,7 +32,7 @@ public class Auction implements Serializable {
     }
     public void updateHighestBid(BigDecimal amount, long bidderId) {
         if (state != AuctionState.RUNNING)
-            throw new IllegalStateException("Auction is not RUNNING.");
+            throw new IllegalStateException("Phiên đấu giá không diễn ra.");
         if (amount.compareTo(currentHighestBid) <= 0)
             throw new InvalidBidException("Phải đặt giá cao hơn: " + currentHighestBid);
         this.currentHighestBid = amount;
@@ -43,22 +43,22 @@ public class Auction implements Serializable {
     }
     public void start() {
         if (state != AuctionState.OPEN)
-            throw new IllegalStateException("Can only start an OPEN auction. Current: " + state);
+            throw new IllegalStateException("Chỉ có thể BẮT ĐẦU khi một phiên đấu giá được mở. Hiện tại: " + state);
         this.state = AuctionState.RUNNING;
     }
     public void finish() {
         if (state != AuctionState.RUNNING)
-            throw new IllegalStateException("Can only finish a RUNNING auction. Current: " + state);
+            throw new IllegalStateException("Chỉ có thể HOÀN TẤT một phiên đấu giá đang diễn ra. Hiện tại: " + state);
         this.state = AuctionState.FINISHED;
     }
     public void markPaid() {
         if (state != AuctionState.FINISHED)
-            throw new IllegalStateException("Can only mark FINISHED auction as PAID. Current: " + state);
+            throw new IllegalStateException("Chỉ có thể đánh dấu một phiên đấu giá đã HOÀN THÀNH là ĐÃ THANH TOÁN. Hiện tại: " + state);
         this.state = AuctionState.PAID;
     }
     public void cancel() {
         if (state == AuctionState.PAID)
-            throw new IllegalStateException("Cannot cancel a PAID auction.");
+            throw new IllegalStateException("Không thể HỦY BỎ phiên đấu giá ĐÃ THANH TOÁN.");
         this.state = AuctionState.CANCELED;
     }
     

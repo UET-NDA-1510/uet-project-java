@@ -13,11 +13,15 @@ public class ControllerManager {
     public void init(SocketClient client){
         this.client = client;
     }
-    public void setCurrent(ResponseObserver controller){
+    public void setCurrent(Object  controller){
         if (current != null){
             client.removeObservers(this.current);
         }
-        this.current = controller;
-        client.addObserver(current);
+        if (controller instanceof ResponseObserver observer) {
+            this.current = observer;
+            client.addObserver(observer);
+        } else {
+            current = null;
+        }
     }
 }

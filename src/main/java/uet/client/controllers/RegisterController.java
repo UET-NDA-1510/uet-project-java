@@ -9,7 +9,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import uet.server.service.authService.AuthService;
-import uet.server.service.authService.RegisterValidator;
+import uet.common.validator.RegisterValidator;
 import uet.client.ClientMain;
 import uet.common.model.CustomException.AuthenticationException;
 

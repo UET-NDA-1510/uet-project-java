@@ -1,4 +1,4 @@
-package uet.server.service.authService;
+package uet.common.validator;
 // class để kiểm tra định dạng mật khẩu, email khi đăng ký
 public class RegisterValidator {
     public boolean validateEmailFormat(String email){

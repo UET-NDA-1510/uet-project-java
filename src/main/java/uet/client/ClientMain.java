@@ -7,6 +7,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
+import uet.client.networkClient.ControllerManager;
+import uet.client.networkClient.ResponseObserver;
+import uet.client.networkClient.SocketClient;
 import uet.server.DAO.DBConnection;
 
 import java.io.IOException;
@@ -19,7 +22,9 @@ public class ClientMain extends Application {
     public void start(Stage primaryStage) throws Exception {
         window = primaryStage;
         window.setTitle("Hệ thống Đấu giá Trực tuyến");
-
+        SocketClient socketClient = SocketClient.getInstance();
+        socketClient.getConnect();
+        ControllerManager.getInstance().init(socketClient);
         // Load màn hình đăng nhập đầu tiên
         switchTo("LoginView.fxml", 1024, 768);
         window.show();
@@ -34,6 +39,8 @@ public class ClientMain extends Application {
         try {
             FXMLLoader loader = new FXMLLoader(ClientMain.class.getResource("/uet/client/views/" + fxmlFile));
             Parent root = loader.load();
+            Object controller = loader.getController();
+            ControllerManager.getInstance().setCurrent(controller);
             if (window.getScene() != null) {
                 // Nếu CÓ RỒI: Chỉ cần tráo đổi nội dung bên trong (Root).
                 window.getScene().setRoot(root);
@@ -57,7 +64,7 @@ public class ClientMain extends Application {
         alert.getButtonTypes().setAll(buttonYes, buttonNo);
 
         if (alert.showAndWait().orElse(buttonNo) == buttonYes){
-            DBConnection.closePool();
+            SocketClient.getInstance().disconnect();
             window.close();
             Platform.exit();    // Dừng bộ máy JavaFX
             System.exit(0);     // Tắt hoàn toàn chương trình (Kill process)

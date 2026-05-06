@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class SocketClient {
-    private static final String SERVER_IP = "192.168.1.1";  // địa chỉ IP
+    private static final String SERVER_IP = "localhost";  // địa chỉ IP
     private static final int SERVER_PORT = 1836;   // cổng
     private static SocketClient instance;   // biến để triển khai singleton
     private Socket socket;
@@ -35,6 +35,7 @@ public class SocketClient {
         try {
             socket = new Socket(SERVER_IP,SERVER_PORT);
             out = new ObjectOutputStream(socket.getOutputStream());
+            out.flush();
             in = new ObjectInputStream(socket.getInputStream());
             Thread threadListener = new ServerListener();
             threadListener.setDaemon(true);    // tự động tắt khi tắt app.
@@ -61,6 +62,7 @@ public class SocketClient {
     public void sendRequest(Request request) {
         try {
             if (out != null) {
+                out.reset();
                 out.writeObject(request);
                 out.flush();
             }
@@ -82,6 +84,12 @@ public class SocketClient {
                 }
             } catch (EOFException e) {
                 System.err.println("Mất kết nối với Server.");
+            } catch (java.net.SocketException e) {
+                if (socket.isClosed()) {
+                    System.out.println("Kết nối mạng đã được ngắt an toàn do tắt ứng dụng.");
+                } else {
+                    System.err.println("Lỗi mất kết nối mạng đột ngột: " + e.getMessage());
+                }
             } catch (Exception e) {
                 System.err.println("Lỗi đọc luồng mạng: " + e.getMessage());
             }

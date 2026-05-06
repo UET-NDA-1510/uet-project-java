@@ -33,7 +33,7 @@ public class AuthService {
         }
         userDAO.save(user);
     }
-    public void login(String name , String password , String role){
+    public User login(String name , String password , String role){
         UserDAO userDAO = getUserDAO(role);
         User user = userDAO.findByName(name);
         if (user==null){
@@ -42,6 +42,7 @@ public class AuthService {
         if (! password.equals(user.getPassword())){
             throw new AuthenticationException("Kiểm tra lại mật khẩu .");
         }
+        return user;
     }
     private UserDAO getUserDAO(String role) {
         if (role.equals("Bidder")) return new BidderDAO();

@@ -60,6 +60,7 @@ public class BidController {
     @FXML
     private void handlePlaceBid() {};
 
+
     @FXML
     private void handleBack() {
         auctionToBid = null; 

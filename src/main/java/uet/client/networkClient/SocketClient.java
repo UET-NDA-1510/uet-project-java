@@ -16,7 +16,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class SocketClient {
     private static final String SERVER_IP = "192.168.1.1";  // địa chỉ IP
     private static final int SERVER_PORT = 1836;   // cổng
-    private static volatile SocketClient instance;   // biến để triển khai singleton
+    private static SocketClient instance;   // biến để triển khai singleton
     private Socket socket;
     private ObjectOutputStream out;   // đẩy , ghi dữ liệu
     private ObjectInputStream in;   // lấy dữ liệu

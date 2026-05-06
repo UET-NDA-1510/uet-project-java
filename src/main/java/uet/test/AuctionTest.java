@@ -1,56 +1,85 @@
 package uet.test;
 
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import uet.common.model.Auction.Auction;
 import uet.common.model.CustomException.InvalidBidException;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 public class AuctionTest {
+    private Auction auction;
 
-    @Test
-    void testDatGiaThanhCong() {
-        // 1. Dữ liệu giả lập: Tạo 1 phiên đấu giá với giá khởi điểm 100$
-        Auction auction = new Auction(
-                1L, 
-                100L, 
-                new BigDecimal("100.00"), 
-                LocalDateTime.now().minusHours(1), 
-                LocalDateTime.now().plusHours(2)
+    @BeforeEach
+    void setUp() {
+        auction = new Auction(
+            101L, 
+            202L, 
+            new BigDecimal("100.0"), 
+            LocalDateTime.now().minusMinutes(5), 
+            LocalDateTime.now().plusHours(1)
         );
-        
-        // 2. Chuyển sang trạng thái đang chạy thì mới được đấu giá
-        auction.start();
-
-        // 3. Thực hiện hành động: Đặt giá 150$ từ người có ID = 99
-        auction.updateHighestBid(new BigDecimal("150.00"), 99L);
-
-        // 4. Kiểm tra kết quả (Assertions)
-        assertEquals(new BigDecimal("150.00"), auction.getCurrentHighestBid(), "Giá cao nhất phải cập nhật thành 150");
-        assertEquals(99L, auction.getHighestBidderId(), "ID người giữ giá phải là 99");
     }
 
     @Test
-    void testDatGiaThapHonGiaHienTai_BaoLoi() {
-        Auction auction = new Auction(
-                1L, 
-                100L, 
-                new BigDecimal("100.00"), 
-                LocalDateTime.now(), 
-                LocalDateTime.now().plusHours(2)
-        );
+    @DisplayName("Đặt giá thành công khi phiên đang RUNNING và giá cao hơn")
+    void testDatGiaHopLe() {
+        auction.start(); // Phải chuyển sang RUNNING mới đặt giá được
+        
+        BigDecimal bidAmount = new BigDecimal("150.0");
+        long bidderId = 25020072L;
+
+        assertDoesNotThrow(() -> auction.updateHighestBid(bidAmount, bidderId));
+        assertEquals(bidAmount, auction.getCurrentHighestBid());
+        assertEquals(bidderId, auction.getHighestBidderId());
+    }
+
+    @Test
+    @DisplayName("Báo lỗi InvalidBidException khi đặt giá thấp hơn giá hiện tại")
+    void testDatGiaThap() {
         auction.start();
+        BigDecimal lowBid = new BigDecimal("90.0");
 
-        // Dùng assertThrows để bẫy lỗi: 
-        // Kỳ vọng hệ thống sẽ quăng ra lỗi InvalidBidException khi đặt giá 80$ (nhỏ hơn 100$)
-        Exception exception = assertThrows(InvalidBidException.class, () -> {
-            auction.updateHighestBid(new BigDecimal("80.00"), 99L);
+        // Kiểm tra xem có ném đúng InvalidBidException không
+        assertThrows(InvalidBidException.class, () -> {
+            auction.updateHighestBid(lowBid, 999L);
         });
+    }
 
-        // Kiểm tra xem câu báo lỗi có đúng như mình thiết kế không
-        assertTrue(exception.getMessage().contains("Phải đặt giá cao hơn"));
+    @Test
+    @DisplayName("Báo lỗi IllegalStateException khi đặt giá lúc phiên chưa bắt đầu (OPEN)")
+    void testDatGiaKhiChuaBatDau() {
+        // Trạng thái mặc định là OPEN, chưa gọi auction.start()
+        BigDecimal bidAmount = new BigDecimal("200.0");
+
+        assertThrows(IllegalStateException.class, () -> {
+            auction.updateHighestBid(bidAmount, 999L);
+        });
+    }
+
+    @Test
+    @DisplayName("Báo lỗi IllegalStateException khi đặt giá lúc phiên đã kết thúc (FINISHED)")
+    void testDatGiaKhiDaKetThuc() {
+        auction.start();
+        auction.finish(); // Chuyển trạng thái sang FINISHED
+        
+        BigDecimal bidAmount = new BigDecimal("200.0");
+
+        assertThrows(IllegalStateException.class, () -> {
+            auction.updateHighestBid(bidAmount, 999L);
+        });
+    }
+
+    @Test
+    @DisplayName("Kiểm tra logic thời gian kết thúc (isActive)")
+    void testIsActive() {
+        // isActive trả về true nếu hiện tại trước endTime
+        assertTrue(auction.isActive());
+        
+        // Thử set endTime về quá khứ
+        auction.setEndTime(LocalDateTime.now().minusMinutes(1));
+        assertFalse(auction.isActive());
     }
 }

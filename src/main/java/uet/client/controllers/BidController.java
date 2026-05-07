@@ -40,7 +40,6 @@ public class BidController {
             if (auctionToBid != null) {
                 // Hiển thị Tên người bán (Seller)
                 sellerNameLabel.setText(seller.getUsername() != null ? seller.getUsername() : "Đang cập nhật");
-
                 // Hiển thị Tên sản phẩm
                 productNameLabel.setText(item.getName() != null ? item.getName() : "Đang cập nhật");
 

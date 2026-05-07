@@ -45,6 +45,12 @@
                </font>
             </Button>
 
+            <Button fx:id="btnManageUsers" mnemonicParsing="false" onAction="#handleManageUsers" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand;" text="Quản lý người dùng">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+
             <Button mnemonicParsing="false" onAction="#handleLogout" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand;" text="Đăng xuất">
                <font>
                   <Font name="System Bold" size="12.0" />
@@ -65,10 +71,7 @@
                 <TableColumn fx:id="idColumn" prefWidth="80.0" style="-fx-alignment: CENTER;" text="Mã Phiên" />
                 <TableColumn fx:id="nameColumn" prefWidth="180.0" text="Tên Sản Phẩm" />
                 <TableColumn fx:id="priceColumn" prefWidth="100.0" style="-fx-alignment: CENTER-RIGHT;" text="Giá ($)" />
-                
-                <!-- CỘT THỜI GIAN MỚI THÊM VÀO ĐÂY -->
                 <TableColumn fx:id="timeColumn" prefWidth="180.0" style="-fx-alignment: CENTER;" text="Thời Gian" />
-                
                 <TableColumn fx:id="statusColumn" prefWidth="120.0" style="-fx-alignment: CENTER;" text="Trạng Thái" />
                 <TableColumn fx:id="actionColumn" prefWidth="100.0" style="-fx-alignment: CENTER;" text="Thao Tác" />
               </columns>

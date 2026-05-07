@@ -89,6 +89,7 @@ public class LoginController implements ResponseObserver{
                 User user = (User) response.getData();
                 UserSession.getInstance().setLoggedInUser(user.getId(),user.getUsername());
                 ClientMain.switchTo("DashboardView.fxml", 800, 600);
+                System.err.println(UserSession.getInstance().getLoggedInUserId());
             } else {
                 // Hiển thị lỗi lên giao diện nếu sai tài khoản/mật khẩu
                 note.setText(response.getMessage());

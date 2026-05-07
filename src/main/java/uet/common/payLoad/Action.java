@@ -7,6 +7,8 @@ public enum Action {
     REGISTER,
 
     // Sản phẩm đấu giá
+    CREATE_ITEM,
+    EDIT_ITEM,
     GET_ALL_ITEMS,
     GET_ITEM_ByID,
 

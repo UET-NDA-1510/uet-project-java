@@ -67,12 +67,12 @@ public class ItemService {
         }
         return null;
     }
-    public List<Item> findAllBySellerId(int sellerId) throws SQLException {
+    public List<Item> findAllBySellerId(long sellerId) throws SQLException {
         String sql = "SELECT * FROM item WHERE seller_id = ?";
         List<Item> result = new ArrayList<>();
         try (Connection connect = DBConnection.getConnection();
              PreparedStatement ps = connect.prepareStatement(sql)) {
-            ps.setInt(1, sellerId);
+            ps.setLong(1, sellerId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 String type = rs.getString("type");

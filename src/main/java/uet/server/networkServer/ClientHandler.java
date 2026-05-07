@@ -4,6 +4,7 @@ import uet.common.payLoad.Action;
 import uet.common.payLoad.Request;
 import uet.common.payLoad.Response;
 import uet.server.networkServer.handler.LoginHandler;
+import uet.server.networkServer.handler.RegisterHandler;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -21,6 +22,7 @@ public class ClientHandler implements Runnable{
     private static final Map<Action,RequestHandler> handlerRegistry = new ConcurrentHashMap<>();
     static {
         handlerRegistry.put(Action.LOGIN,new LoginHandler());
+        handlerRegistry.put(Action.REGISTER,new RegisterHandler());
     }
     public ClientHandler(Socket socket){
         this.socket = socket;

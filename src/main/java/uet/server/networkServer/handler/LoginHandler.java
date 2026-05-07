@@ -12,8 +12,7 @@ public class LoginHandler implements RequestHandler {
     @Override
     public Response handle(Request request) {
         AuthService authService = AuthService.getInstance();
-        String text = (String) request.getData();
-        String[] arr = text.split(" ");
+        String[] arr = (String[]) request.getData();
         String username = arr[0];
         String password = arr[1];
         String role = arr[2];

@@ -1,5 +1,6 @@
 package uet.server.service.authService;
 
+import uet.common.model.CustomException.DataAccessException;
 import uet.server.DAO.userDAO.AdminDAO;
 import uet.server.DAO.userDAO.BidderDAO;
 import uet.server.DAO.userDAO.SellerDAO;
@@ -22,7 +23,13 @@ public class AuthService {
         return ServiceHelper.INSTANCE;
     }
     public void register(String name, String email, String password, String role, LocalDate dateOfBirth){
-        UserDAO userDAO = getUserDAO(role);
+        UserDAO userDAO = this.getUserDAO(role);
+        if (userDAO.existsByUsername(name)){
+            throw new DataAccessException("Tên đã tồn tại rồi,vui lòng nhập tên mới.");
+        }
+        if (userDAO.existsByEmail(email)){
+            throw new DataAccessException("Email đã tồn tại rồi,vui lòng nhập tên mới.");
+        }
         User user;
         if (role.equals("Bidder")) {
             user = new Bidder(name, email, password, dateOfBirth);

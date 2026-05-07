@@ -8,14 +8,20 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import uet.client.networkClient.ResponseObserver;
+import uet.client.networkClient.SocketClient;
+import uet.common.payLoad.Action;
+import uet.common.payLoad.Request;
+import uet.common.payLoad.Response;
 import uet.server.service.authService.AuthService;
 import uet.common.validator.RegisterValidator;
 import uet.client.ClientMain;
 import uet.common.model.CustomException.AuthenticationException;
 
+import java.net.ServerSocket;
 import java.time.LocalDate;
 
-public class RegisterController {
+public class RegisterController implements ResponseObserver {
     private RegisterValidator checkValidator = new RegisterValidator();
     private AuthService authService = AuthService.getInstance();
     @FXML private TextField usernameField, emailField;
@@ -155,19 +161,29 @@ public class RegisterController {
             note.setText("2 phần mật khẩu phải khớp nhau.");
             return;
         }
-
+        if (dateOfBirth == null) {
+            note.setText("Phải nhập đúng theo kiểu dd/mm/yy");
+            return;
+        }
         if (dateOfBirth.isAfter(LocalDate.now().minusYears(18))) {
             note.setText("Phải trên 18 tuổi.");
             return;
         }
-        try {
-            authService.register(username,mail,password,role,dateOfBirth);
-            ClientMain.switchTo("LoginView.fxml", 400, 400);
-        } catch (AuthenticationException e){
-            note.setText(e.getMessage());
+        String[] data = {username,mail,password,role,String.valueOf(dateOfBirth)};
+        Request request = new Request(Action.REGISTER,data);
+        SocketClient.getInstance().sendRequest(request);
+    }
+    @Override
+    public void onResponse(Response response){
+        if (response.getAction() == Action.REGISTER){
+            if (response.isSuccess()){
+                System.out.println("Client: Đăng ký thành công, đang chuyển màn hình...");
+                switchLogin();
+            } else {
+                note.setText(response.getMessage());
+            }
         }
     }
-
     @FXML
     private void switchLogin() {
         ClientMain.switchTo("LoginView.fxml", 400, 400);

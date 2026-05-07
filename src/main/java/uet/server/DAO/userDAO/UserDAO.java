@@ -83,7 +83,7 @@ public abstract class UserDAO {
                 }
             }
         } catch (SQLException e) {
-            throw new DataAccessException("Lỗi khi kiểm tra username");
+            System.err.println("loi tu database");
         }
         return false;
     }

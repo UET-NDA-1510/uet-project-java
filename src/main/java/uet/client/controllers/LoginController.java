@@ -77,7 +77,7 @@ public class LoginController implements ResponseObserver{
            return;
         }
         uet.client.controllers.DashboardController.currentRole = role;
-        String data = username+" "+password+" "+role;
+        String[] data = {username,password,role};
         Request request = new Request(Action.LOGIN,data);
         SocketClient.getInstance().sendRequest(request);
     }

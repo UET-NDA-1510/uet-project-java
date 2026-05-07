@@ -17,7 +17,7 @@ import uet.client.UserSession;
 import java.io.File;
 import java.math.BigDecimal;
 
-public class CreateProductController implements ResponseObserver {
+public class EditProductController implements ResponseObserver {
     @FXML private ComboBox<String> categoryComboBox;
     @FXML private TextField name;
     @FXML private ImageView imageView;
@@ -74,7 +74,7 @@ public class CreateProductController implements ResponseObserver {
             if (price.compareTo(BigDecimal.ZERO) > 0) {
                 String sellerID = String.valueOf(UserSession.getInstance().getLoggedInUserId());
                 String[] data = {sellerID,selectedType,itemName,startingPrice.getText(),itemDescription,imageUrl,extraInfor1,extraInfor2};
-                Request request = new Request(Action.CREATE_ITEM,data);
+                Request request = new Request(Action.EDIT_ITEM,data);
                 SocketClient.getInstance().sendRequest(request);
             } else {
                 note.setText("giá tiền phải lớn hơn 0");
@@ -84,7 +84,7 @@ public class CreateProductController implements ResponseObserver {
         }
     }
     public void onResponse(Response response) {
-        if (response.getAction() == Action.CREATE_ITEM){
+        if (response.getAction() == Action.EDIT_ITEM){
             if (response.isSuccess()){
                 switchDashboarde();
             } else {

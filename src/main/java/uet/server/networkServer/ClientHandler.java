@@ -3,8 +3,7 @@ package uet.server.networkServer;
 import uet.common.payLoad.Action;
 import uet.common.payLoad.Request;
 import uet.common.payLoad.Response;
-import uet.server.networkServer.handler.LoginHandler;
-import uet.server.networkServer.handler.RegisterHandler;
+import uet.server.networkServer.handler.*;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -23,6 +22,9 @@ public class ClientHandler implements Runnable{
     static {
         handlerRegistry.put(Action.LOGIN,new LoginHandler());
         handlerRegistry.put(Action.REGISTER,new RegisterHandler());
+        handlerRegistry.put(Action.CREATE_ITEM,new CreateProductHandler());
+        handlerRegistry.put(Action.EDIT_ITEM,new EditProductHandler());
+        handlerRegistry.put(Action.GET_ALL_ITEMS,new GetFuLLProductHandle());
     }
     public ClientHandler(Socket socket){
         this.socket = socket;

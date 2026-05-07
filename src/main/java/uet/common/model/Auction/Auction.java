@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 public class Auction implements Serializable {
     public enum AuctionState {
-        OPEN, RUNNING, FINISHED, PAID, CANCELED;
+        OPEN, RUNNING, FINISHED, PAID, CANCELED
     }
     private static final long serialVersionUID = 1L;   // id để gửi dữ liệu cho socket
     private long auctionId;

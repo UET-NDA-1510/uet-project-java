@@ -1,16 +1,13 @@
-package uet.client.controllers;
+package uet.client.controllers.bidderController;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import uet.client.ClientMain;
 import uet.common.model.Auction.Auction;
-import uet.common.model.User.Seller;
 import uet.common.model.User.User;
 import uet.common.model.items.Item;
 import uet.server.DAO.DBConnection;
-import uet.server.DAO.ItemDAO.ElectronicDAO;
-import uet.server.DAO.ItemDAO.ItemDAO;
 import uet.server.DAO.userDAO.BidderDAO;
 import uet.server.DAO.userDAO.SellerDAO;
 import uet.server.service.itemService.ItemService;

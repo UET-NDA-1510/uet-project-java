@@ -1,4 +1,4 @@
-package uet.client.controllers;
+package uet.client.controllers.sellerController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;

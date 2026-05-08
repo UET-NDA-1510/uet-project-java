@@ -1,4 +1,4 @@
-package uet.client.controllers;
+package uet.client.controllers.authController;
 
 import javafx.scene.control.*;
 import uet.client.networkClient.ResponseObserver;
@@ -6,15 +6,10 @@ import uet.client.networkClient.SocketClient;
 import uet.common.payLoad.Action;
 import uet.common.payLoad.Request;
 import uet.common.payLoad.Response;
-import uet.server.DAO.userDAO.AdminDAO;
-import uet.server.DAO.userDAO.BidderDAO;
-import uet.server.DAO.userDAO.SellerDAO;
-import uet.server.DAO.userDAO.UserDAO;
 import uet.server.service.authService.AuthService;
 import uet.client.ClientMain;
 import javafx.fxml.FXML;
 import uet.client.UserSession;
-import uet.common.model.CustomException.AuthenticationException;
 import uet.common.model.User.User;
 
 public class LoginController implements ResponseObserver{

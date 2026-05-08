@@ -1,4 +1,4 @@
-package uet.client.controllers;
+package uet.client.controllers.authController;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,9 +16,7 @@ import uet.common.payLoad.Response;
 import uet.server.service.authService.AuthService;
 import uet.common.validator.RegisterValidator;
 import uet.client.ClientMain;
-import uet.common.model.CustomException.AuthenticationException;
 
-import java.net.ServerSocket;
 import java.time.LocalDate;
 
 public class RegisterController implements ResponseObserver {

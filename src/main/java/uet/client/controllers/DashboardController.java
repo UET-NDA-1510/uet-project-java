@@ -1,6 +1,7 @@
 package uet.client.controllers;
 
 import uet.client.ClientMain;
+import uet.client.controllers.bidderController.BidController;
 import uet.common.model.Auction.Auction;
 import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
@@ -94,7 +95,7 @@ public class DashboardController {
                     }
                     Auction selectedAuction = getTableView().getItems().get(getIndex());
                     try {
-                        uet.client.controllers.BidController.auctionToBid = selectedAuction;
+                        BidController.auctionToBid = selectedAuction;
                         uet.client.ClientMain.switchTo("BidView.fxml", 800, 600);
                     } catch (Exception e) {
                         e.printStackTrace();

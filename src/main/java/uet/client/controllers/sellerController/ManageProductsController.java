@@ -1,4 +1,4 @@
-package uet.client.controllers;
+package uet.client.controllers.sellerController;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -14,6 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import uet.client.ClientMain;
 import uet.client.UserSession;
+import uet.client.controllers.DashboardController;
 import uet.client.networkClient.ResponseObserver;
 import uet.client.networkClient.SocketClient;
 import uet.common.model.items.Item;

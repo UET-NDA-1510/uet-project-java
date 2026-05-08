@@ -1,4 +1,4 @@
-package uet.client.controllers;
+package uet.client.controllers.sellerController;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

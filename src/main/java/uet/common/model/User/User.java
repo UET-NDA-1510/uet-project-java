@@ -15,7 +15,7 @@ public abstract class User extends Entity {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.balance = new BigDecimal(10000);
+        this.balance = new BigDecimal(1000000);
         this.dateOfbirth = dateOfbirth;
     }
 

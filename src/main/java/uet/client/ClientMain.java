@@ -13,6 +13,7 @@ import uet.client.networkClient.SocketClient;
 import uet.server.DAO.DBConnection;
 
 import java.io.IOException;
+import java.util.TimeZone;
 
 public class ClientMain extends Application {
 
@@ -71,6 +72,7 @@ public class ClientMain extends Application {
         }
     }
     public static void main(String[] args) {
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
         launch(args);
     }
 }

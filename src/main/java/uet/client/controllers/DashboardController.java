@@ -1,7 +1,10 @@
 package uet.client.controllers;
 
 import uet.client.ClientMain;
+import uet.client.UserSession;
 import uet.client.controllers.bidderController.BidController;
+import uet.client.networkClient.ResponseObserver;
+import uet.client.networkClient.SocketClient;
 import uet.common.model.Auction.Auction;
 import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
@@ -16,9 +19,14 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.Alert;
+import uet.common.payLoad.Action;
+import uet.common.payLoad.Request;
+import uet.common.payLoad.Response;
+
+import java.util.ArrayList;
 import java.util.Optional;
 
-public class DashboardController {
+public class DashboardController implements ResponseObserver {
     public static String currentRole = "";
     
     // Bảng đấu giá
@@ -70,7 +78,7 @@ public class DashboardController {
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("currentHighestBid"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("state"));
         
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm, dd/MM/yyyy");
         timeColumn.setCellValueFactory(cellData -> {
             Auction auction = cellData.getValue();
             String start = (auction.getStartTime() != null) ? auction.getStartTime().format(formatter) : "N/A";
@@ -80,7 +88,6 @@ public class DashboardController {
 
         setupActionColumn();
         loadMockData();
-        auctionTable.setItems(auctionList);
     }
 
     private void setupActionColumn() {
@@ -126,9 +133,26 @@ public class DashboardController {
             }
         });
     }
-
+    private void loadMockData() {
+        try {
+            Request request = new Request(Action.GET_ALL_AUCTIONS,null);
+            SocketClient.getInstance().sendRequest(request);
+        } catch (Exception e) {
+            System.err.println("có lỗi khi lấy danh sách phiên đấu giá");
+        }
+    }
+    @Override
+    public void onResponse(Response response){
+        if (response.getAction()==Action.GET_ALL_AUCTIONS){
+            if (response.isSuccess()){
+                ArrayList<Auction> auctions = (ArrayList<Auction>) response.getData();
+                auctionList.clear();
+                auctionList.addAll(auctions);
+                auctionTable.setItems(auctionList);
+            }
+        }
+    }
     // --- CÁC HÀM XỬ LÝ SỰ KIỆN CLICk ---
-
     @FXML
     private void handleManageUsers() {
         System.out.println("Đang chuyển sang màn hình Quản lý người dùng...");
@@ -193,13 +217,5 @@ public class DashboardController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
-    }
-
-    private void loadMockData() {
-        // auctionList.clear();
-    }
-
-    public void addOrUpdateAuction(Auction newAuction) {
-        auctionList.add(newAuction);
     }
 }

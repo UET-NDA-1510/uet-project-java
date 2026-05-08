@@ -11,15 +11,40 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 public class AuctionService {
-    private final AuctionManager manager;
+    private final AuctionManager manager = AuctionManager.getInstance();
     private final AuctionDAO auctionDAO = new AuctionDAO();
     private final BidderDAO bidderDAO = new BidderDAO();
     private final SellerDAO sellerDAO = new SellerDAO();
-    public AuctionService(AuctionManager manager){
-        this.manager = manager;
+    private AuctionService(){};
+    private static class Helper {
+        private static final AuctionService INSTANCE = new AuctionService();
+    }
+    public static AuctionService getInstance(){
+        return Helper.INSTANCE;
+    }
+    // lấy phiên đấu giá
+    public List<Auction> getALLAuction(){
+        Connection connect= null;
+        try {
+            connect = DBConnection.getConnection();
+            return auctionDAO.getAllAuctions(connect);
+        } catch (SQLException e) {
+            System.err.println("lỗi khi lấy toàn bộ phiên đấu giá");
+            return null;
+        } finally {
+            if (connect != null) {
+                try {
+                    connect.close();
+                } catch (SQLException e) {
+                    System.err.println("lỗi khi đóng kết nối");
+                }
+            }
+        }
     }
     // tạo đấu giá
     public Auction createAuction(long itemId, long sellerId, BigDecimal startingPrice, LocalDateTime startTime, LocalDateTime endTime) throws SQLException {

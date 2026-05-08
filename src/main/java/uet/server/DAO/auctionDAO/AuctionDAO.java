@@ -11,16 +11,15 @@ import java.util.List;
 
 public class AuctionDAO{
     public boolean createAuction(Connection connect,Auction auction) throws SQLException{
-        String sql = "INSERT INTO auctions (item_id,seller_id,starting_price,current_highest_bid,highest_bidder_id,start_time,end_time,status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO auctions (item_id,seller_id,starting_price,current_highest_bid,start_time,end_time,status) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = connect.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setLong(1,auction.getItemId());
-            ps.setLong(2,auction.getSellerId());
-            ps.setBigDecimal(3,auction.getStartingPrice());
-            ps.setBigDecimal(4,auction.getCurrentHighestBid());
-            ps.setObject(5,auction.getStartTime());
-            ps.setObject(6,auction.getEndTime());
-            ps.setLong(7,auction.getHighestBidderId());
-            ps.setString(8,auction.getState().name());
+            ps.setLong(1, auction.getItemId());
+            ps.setLong(2, auction.getSellerId());
+            ps.setBigDecimal(3, auction.getStartingPrice());
+            ps.setBigDecimal(4, auction.getCurrentHighestBid());
+            ps.setTimestamp(5, java.sql.Timestamp.valueOf(auction.getStartTime()));
+            ps.setTimestamp(6, java.sql.Timestamp.valueOf(auction.getEndTime()));
+            ps.setString(7, auction.getState().name());
             int affectedRows = ps.executeUpdate();
             // Lấy ID tự động tăng set ngược lại cho object
             if (affectedRows > 0) {

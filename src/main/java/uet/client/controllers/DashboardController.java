@@ -150,6 +150,11 @@ public class DashboardController implements ResponseObserver {
                 auctionList.addAll(auctions);
                 auctionTable.setItems(auctionList);
             }
+        } else if (response.getAction()==Action.AUCTION_STARTED){
+            ClientMain.showPopup("Thông báo",response.getMessage());
+            auctionTable.refresh();
+        } else if (response.getAction()==Action.AUCTION_ENDED) {
+            ClientMain.showPopup("Thông báo",response.getMessage());
         }
     }
     // --- CÁC HÀM XỬ LÝ SỰ KIỆN CLICk ---

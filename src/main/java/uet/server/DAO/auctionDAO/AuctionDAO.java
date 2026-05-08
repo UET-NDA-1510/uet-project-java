@@ -2,6 +2,7 @@ package uet.server.DAO.auctionDAO;
 
 import uet.common.model.Auction.Auction;
 import uet.common.model.CustomException.DataAccessException;
+import uet.server.DAO.DBConnection;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -44,6 +45,21 @@ public class AuctionDAO{
                 throw new DataAccessException("Không thấy phiên đấu giá");
             }
         }
+    }
+    public List<Auction> getActiveAuctions() throws SQLException {
+        List<Auction> auctions = new ArrayList<>();
+        String sql = "SELECT * FROM auctions WHERE status IN (?, ?)";
+        try (Connection connect = DBConnection.getConnection();
+             PreparedStatement pstmt = connect.prepareStatement(sql)) {
+            pstmt.setString(1, "OPEN");
+            pstmt.setString(2, "RUNNING");
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    auctions.add(mapResultSetToAuction(rs));
+                }
+            }
+        }
+        return auctions;
     }
     public List<Auction> getAllAuctions(Connection connect) throws SQLException{
         List<Auction> auctions = new ArrayList<>();

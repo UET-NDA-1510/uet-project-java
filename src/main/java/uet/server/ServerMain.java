@@ -1,14 +1,21 @@
 package uet.server;
 
+import uet.common.model.Auction.Auction;
+import uet.common.payLoad.Response;
 import uet.server.DAO.DBConnection;
+import uet.server.networkServer.AuctionScheduler;
 import uet.server.networkServer.ClientHandler;
+import uet.server.service.auctionService.AuctionService;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 import java.util.TimeZone;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -17,6 +24,7 @@ public class ServerMain {
     private static final int MAX_CLIENT = 20;
     private ExecutorService threadPool;
     private ServerSocket serverSocket;
+    public static final List<ClientHandler> onlineClients = new CopyOnWriteArrayList<>();
     private ServerMain(){
         threadPool = Executors.newFixedThreadPool(20);
     }
@@ -44,22 +52,40 @@ public class ServerMain {
     }
     private void startServer(){
         try {
+            List<Auction> activeAuctions = AuctionService.getInstance().getActiveAuctions();
+            for (Auction a : activeAuctions) {
+                AuctionScheduler.getInstance().scheduleAuctionEvents(a);
+            }
             this.serverSocket = new ServerSocket(PORT);
             System.out.println("Khởi động server");
             listenForShutdown();
-            while (true){
+            while (true) {
                 Socket socketClient = serverSocket.accept();
                 ClientHandler clientHandler = new ClientHandler(socketClient);
+                onlineClients.add(clientHandler);
                 threadPool.execute(clientHandler);
             }
+        }catch (SQLException e){
+            System.err.println("Lỗi khi lấy activeAuctions");
         }catch (SocketException e) {
             System.out.println("Đã ngừng nhận kết nối mới.");}
         catch (IOException e) {
             System.err.println("Lỗi khi chạy server");
         } finally {
+            AuctionScheduler.getInstance().shutdown();
             threadPool.shutdown();
             DBConnection.closePool();
             System.out.println("Đã đóng server.");
+        }
+    }
+    public static void broadcast(Response response) {
+        for (ClientHandler client : onlineClients) {
+            try {
+                client.sendResponse(response);
+            } catch (IOException e) {
+                // Nếu gửi lỗi (client đã ngắt mạng đột ngột) thì xóa khỏi list
+                onlineClients.remove(client);
+            }
         }
     }
     public static void main(String[] args) {

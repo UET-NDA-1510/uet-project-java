@@ -17,6 +17,8 @@ public enum Action {
     GET_ALL_AUCTIONS,
     GET_AUCTION_BY_ID,
     GET_ACTIVE_AUCTIONS,
+    AUCTION_STARTED,
+    AUCTION_ENDED,
     CLOSE_AUCTION,
 
     //  Đặt giá

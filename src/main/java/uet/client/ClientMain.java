@@ -1,12 +1,22 @@
 package uet.client;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import uet.client.networkClient.ControllerManager;
 import uet.client.networkClient.ResponseObserver;
 import uet.client.networkClient.SocketClient;
@@ -54,6 +64,34 @@ public class ClientMain extends Application {
             e.printStackTrace();
             System.err.println("Không thể tải giao diện: " + fxmlFile);
         }
+    }
+    public static void showPopup(String title, String message) {
+        Stage stage = new Stage(StageStyle.TRANSPARENT);
+        stage.setAlwaysOnTop(true);
+        Label lblTitle = new Label(title);
+        lblTitle.setStyle("-fx-font-weight: bold; -fx-text-fill: #f39c12; -fx-font-size: 14px;");
+        Label lblMsg = new Label(message);
+        lblMsg.setWrapText(true); // Chuẩn JavaFX để tự động xuống dòng
+        lblMsg.setStyle("-fx-text-fill: white; -fx-font-size: 13px;");
+        VBox root = new VBox(5, lblTitle, lblMsg);
+        root.setStyle("-fx-background-color: rgba(30, 30, 30, 0.85); -fx-padding: 15px; -fx-background-radius: 8px;");
+        root.setAlignment(Pos.CENTER_LEFT);
+        root.setPrefWidth(300);
+        stage.setScene(new Scene(root, Color.TRANSPARENT));
+        stage.setOpacity(0); // Set độ mờ mặc định = 0, tiết kiệm 1 KeyFrame
+        stage.show();
+        // Căn góc dưới phải
+        var bounds = Screen.getPrimary().getVisualBounds();
+        stage.setX(bounds.getMaxX() - stage.getWidth() - 20);
+        stage.setY(bounds.getMaxY() - stage.getHeight() - 20);
+        // Animation rút gọn chỉ với 3 mốc thời gian
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.millis(500), new KeyValue(stage.opacityProperty(), 1)),
+                new KeyFrame(Duration.millis(3000), new KeyValue(stage.opacityProperty(), 1)),
+                new KeyFrame(Duration.millis(3500), new KeyValue(stage.opacityProperty(), 0))
+        );
+        timeline.setOnFinished(e -> stage.close());
+        timeline.play();
     }
     public static void exit (){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

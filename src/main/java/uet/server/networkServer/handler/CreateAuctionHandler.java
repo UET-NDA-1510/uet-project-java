@@ -1,8 +1,10 @@
 package uet.server.networkServer.handler;
 
+import uet.common.model.Auction.Auction;
 import uet.common.payLoad.Action;
 import uet.common.payLoad.Request;
 import uet.common.payLoad.Response;
+import uet.server.networkServer.AuctionScheduler;
 import uet.server.networkServer.RequestHandler;
 import uet.server.service.auctionService.AuctionService;
 
@@ -21,7 +23,8 @@ public class CreateAuctionHandler implements RequestHandler {
         LocalDateTime start_time = LocalDateTime.parse(arr[3]);
         LocalDateTime end_time = LocalDateTime.parse(arr[4]);
         try {
-            auctionService.createAuction(itemId,sellerId,startingPrice,start_time,end_time);
+            Auction newAuction = auctionService.createAuction(itemId,sellerId,startingPrice,start_time,end_time);
+            AuctionScheduler.getInstance().scheduleAuctionEvents(newAuction);
             return new Response(Action.CREATE_AUCTION,"tao thành công",null,true);
         } catch (SQLException e) {
             System.err.println("lỗi khi tạo phiên đấu giá");

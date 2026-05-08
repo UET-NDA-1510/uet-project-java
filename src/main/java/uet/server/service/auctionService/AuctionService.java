@@ -165,6 +165,9 @@ public class AuctionService {
             }
         }
     }
+    public List<Auction> getActiveAuctions() throws SQLException{
+        return auctionDAO.getActiveAuctions();
+    }
     // 4. HỦY ĐẤU GIÁ (Do sự cố)
     public void cancelAuction(long auctionId) throws Exception {
         ReentrantLock auctionLock = manager.auctionGetLock(auctionId);

@@ -3,6 +3,7 @@ package uet.server.networkServer;
 import uet.common.payLoad.Action;
 import uet.common.payLoad.Request;
 import uet.common.payLoad.Response;
+import uet.server.ServerMain;
 import uet.server.networkServer.handler.*;
 
 import java.io.EOFException;
@@ -12,7 +13,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 public class ClientHandler implements Runnable{
     private final Socket socket;
     private ObjectOutputStream out;
@@ -65,10 +65,11 @@ public class ClientHandler implements Runnable{
         } catch (Exception e) {
             System.err.println("Lỗi xử lý Client không xác định: " + e.getMessage());
         } finally {
+            ServerMain.onlineClients.remove(this);
             closeConnections();
         }
     }
-    private void sendResponse(Response response) throws IOException{
+    public void sendResponse(Response response) throws IOException{
         if (out != null){
             out.reset();
             out.writeObject(response);

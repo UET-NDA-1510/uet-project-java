@@ -42,7 +42,7 @@ public class BidderDAO extends UserDAO {
                 int affectedRows = ps.executeUpdate();
                 if (affectedRows == 0) {
                     // Nếu update = 0 dòng, tức là sai ID hoặc SỐ DƯ KHÔNG ĐỦ
-                    throw new DataAccessException("Update error");
+                    throw new DataAccessException("Lỗi khi update giá vào database");
                 }
             } catch (SQLException e) {
                 throw new DataAccessException(e.getMessage());
@@ -55,7 +55,7 @@ public class BidderDAO extends UserDAO {
                 ps.setLong(2, bidderId);
                 int affectedRows = ps.executeUpdate();
                 if (affectedRows == 0) {
-                    throw new DataAccessException("Update error");
+                    throw new DataAccessException("Lỗi khi update giá vào database");
                 }
             } catch (SQLException e) {
                 throw new DataAccessException(e.getMessage());

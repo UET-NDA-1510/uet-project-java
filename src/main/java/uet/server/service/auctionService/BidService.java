@@ -69,7 +69,7 @@ public class BidService {
                 bidderDAO.updateBalance(connect, bidderId, deductAmount.negate());
             } else {
                 // Khác người: Hoàn tiền người cũ, trừ toàn bộ tiền người mới
-                if (preId != null) {
+                if (preId != null&&preId>0) {
                     bidderDAO.updateBalance(connect, preId, currentHighest);
                 }
                 bidderDAO.updateBalance(connect, bidderId, amount.negate());

@@ -28,7 +28,6 @@ import java.util.Optional;
 
 public class DashboardController implements ResponseObserver {
     public static String currentRole = "";
-    
     // Bảng đấu giá
     @FXML private TableView<Auction> auctionTable;
     @FXML private TableColumn<Auction, String> idColumn;
@@ -102,7 +101,7 @@ public class DashboardController implements ResponseObserver {
                     }
                     Auction selectedAuction = getTableView().getItems().get(getIndex());
                     try {
-                        BidController.auctionToBid = selectedAuction;
+                        BidController.auctionToBid = selectedAuction.getAuctionId();
                         uet.client.ClientMain.switchTo("BidView.fxml", 800, 600);
                     } catch (Exception e) {
                         e.printStackTrace();

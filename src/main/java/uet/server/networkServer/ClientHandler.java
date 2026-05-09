@@ -27,6 +27,8 @@ public class ClientHandler implements Runnable{
         handlerRegistry.put(Action.GET_ALL_ITEMS,new GetFuLLProductHandle());
         handlerRegistry.put(Action.CREATE_AUCTION,new CreateAuctionHandler());
         handlerRegistry.put(Action.GET_ALL_AUCTIONS,new GetALLauctionhandler());
+        handlerRegistry.put(Action.GET_INFO_AUCTION_BY_ID,new getAuctionInforHandler());
+        handlerRegistry.put(Action.PLACE_BID,new BidHandler());
     }
     public ClientHandler(Socket socket){
         this.socket = socket;

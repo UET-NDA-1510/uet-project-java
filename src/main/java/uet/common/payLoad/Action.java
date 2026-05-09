@@ -9,6 +9,7 @@ public enum Action {
     // Sản phẩm đấu giá
     CREATE_ITEM,
     EDIT_ITEM,
+    GET_ITEM_PENDING,
     GET_ALL_ITEMS,
     GET_ITEM_ByID,
 

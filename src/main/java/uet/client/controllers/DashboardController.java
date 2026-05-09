@@ -73,7 +73,7 @@ public class DashboardController implements ResponseObserver {
 
     private void setupAuctionTable() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("auctionId"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("itemId"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("item_name"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("currentHighestBid"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("state"));
         

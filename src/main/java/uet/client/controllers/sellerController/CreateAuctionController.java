@@ -76,7 +76,7 @@ public class CreateAuctionController implements ResponseObserver {
     }
     private void loadPendingItems() {
         try {
-            Request request = new Request(Action.GET_ALL_ITEMS, UserSession.getInstance().getLoggedInUserId());
+            Request request = new Request(Action.GET_ITEM_PENDING, UserSession.getInstance().getLoggedInUserId());
             SocketClient.getInstance().sendRequest(request);
         } catch (Exception e) {
             System.err.println("có lỗi");
@@ -84,7 +84,7 @@ public class CreateAuctionController implements ResponseObserver {
     }
     @Override
     public void onResponse(Response response){
-        if (response.getAction()==Action.GET_ALL_ITEMS){
+        if (response.getAction()==Action.GET_ITEM_PENDING){
             if (response.isSuccess()){
                 ArrayList<Item> items = (ArrayList<Item>) response.getData();
                 pendingItems.addAll(items);

@@ -102,8 +102,8 @@ public class ManageProductsController implements ResponseObserver {
                         btnDelete.setDisable(false);
                     } else {
                         // Nếu không phải Seller HOẶC không phải PENDING -> Làm mờ nút
-                        btnEdit.setDisable(true);
-                        btnDelete.setDisable(true);
+                        btnEdit.setVisible(false);
+                        btnDelete.setVisible(false);
                     }
                     setGraphic(pane);
                 }

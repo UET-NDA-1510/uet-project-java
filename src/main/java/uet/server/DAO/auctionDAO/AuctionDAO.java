@@ -91,13 +91,19 @@ public class AuctionDAO{
         }
         return auctions;
     }
-    public List<Auction> getAllAuctions(Connection connect) throws SQLException{
+    public List<Auction> getAllAuctions(Connection connect) throws SQLException {
         List<Auction> auctions = new ArrayList<>();
-        String sql = "SELECT * FROM auctions";
+        // Chú ý: Thay đổi 'items', 'item_id', 'id', 'name' cho khớp với tên bảng/cột thực tế trong MySQL của bạn
+        String sql = "SELECT a.*, i.name AS item_name " +
+                "FROM auctions a " +
+                "INNER JOIN item i ON a.item_id = i.id";
+
         try (PreparedStatement pstmt = connect.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
             while (rs.next()) {
-                auctions.add(mapResultSetToAuction(rs));
+                Auction auction = mapResultSetToAuction(rs);
+                auction.setItem_name(rs.getString("item_name"));
+                auctions.add(auction);
             }
         }
         return auctions;

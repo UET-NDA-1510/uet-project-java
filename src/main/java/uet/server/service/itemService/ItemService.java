@@ -85,9 +85,39 @@ public class ItemService {
         }
         return result;
     }
+    public List<Item> getItemPending(long sellerId) throws SQLException {
+        String sql = "SELECT * FROM item WHERE seller_id = ? AND status = ?";
+        List<Item> result = new ArrayList<>();
+        try (Connection connect = DBConnection.getConnection();
+             PreparedStatement ps = connect.prepareStatement(sql)) {
+            ps.setLong(1, sellerId);
+            ps.setString(2, "PENDING");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String type = rs.getString("type");
+                if (type == null) {
+                    throw new SQLException("Item type is null for id=" + rs.getLong("id"));
+                }
+                ItemDAO dao = ItemDAORegistry.getDAO(type);
+                result.add(dao.mapRow(rs));
+            }
+        }
+        return result;
+    }
     public boolean update(Item item) throws SQLException {
         String type = item.getType();
         ItemDAO dao = ItemDAORegistry.getDAO(type);
         return dao.update(item);
+    }
+    public void updateItemStatus(long itemId, String status) {
+        String sql = "UPDATE item SET status = ? WHERE id = ?";
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setLong(2, itemId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

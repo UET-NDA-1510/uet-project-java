@@ -29,26 +29,34 @@ public class AuctionScheduler {
     public static AuctionScheduler getInstance() {
         return instance;
     }
-
     // Gọi hàm này ngay khi Seller vừa tạo xong 1 sản phẩm đấu giá mới
     public void scheduleAuctionEvents(Auction auction) {
         LocalDateTime now = LocalDateTime.now();
-        // 1. Tính số giây từ bây giờ đến lúc BẮT ĐẦU
-        long delayToStart = ChronoUnit.SECONDS.between(now, auction.getStartTime());
-        if (delayToStart > 0) {
-            scheduler.schedule(() -> startAuction(auction), delayToStart, TimeUnit.SECONDS);
-        } else if (auction.getState() == Auction.AuctionState.OPEN) {
-            // Nếu lúc nạp lên mà đã quá giờ start -> Mở luôn
-            startAuction(auction);
-        }
-
-        // 2. Tính số giây từ bây giờ đến lúc KẾT THÚC
         long delayToEnd = ChronoUnit.SECONDS.between(now, auction.getEndTime());
-        if (delayToEnd > 0) {
+
+        if (delayToEnd <= 0) {
+            // Đã quá giờ kết thúc -> Ép đóng cửa luôn nếu chưa đóng
+            if (auction.getState() != Auction.AuctionState.FINISHED) {
+                endAuction(auction);
+            }
+            // Đã xong xuôi (hoặc đã quá hạn) thì thoát hàm luôn (return).
+            // Không cần quan tâm đến giờ bắt đầu nữa.
+            return;
+        } else {
+            // Chưa tới giờ kết thúc -> Lên lịch báo thức ĐÓNG CỬA
             scheduler.schedule(() -> endAuction(auction), delayToEnd, TimeUnit.SECONDS);
         }
+        long delayToStart = ChronoUnit.SECONDS.between(now, auction.getStartTime());
+        if (delayToStart <= 0) {
+            // Đã qua giờ bắt đầu (nhưng chưa hết giờ) -> Ép mở cửa luôn nếu đang ở trạng thái OPEN/PENDING
+            if (auction.getState() == Auction.AuctionState.OPEN) {
+                startAuction(auction);
+            }
+        } else {
+            // Chưa tới giờ bắt đầu -> Lên lịch báo thức MỞ CỬA
+            scheduler.schedule(() -> startAuction(auction), delayToStart, TimeUnit.SECONDS);
+        }
     }
-
     private void startAuction(Auction auction) {
         try {
             auctionService.startAuction(auction.getAuctionId());

@@ -109,7 +109,6 @@ public class DashboardController implements ResponseObserver {
                     }
                 });
             }
-
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
@@ -158,8 +157,8 @@ public class DashboardController implements ResponseObserver {
             }
         } else if (response.getAction()==Action.AUCTION_STARTED){
             ClientMain.showPopup("Thông báo",response.getMessage());
-            auctionTable.refresh();
         } else if (response.getAction()==Action.AUCTION_ENDED) {
+            loadMockData();
             ClientMain.showPopup("Thông báo",response.getMessage());
         }
     }

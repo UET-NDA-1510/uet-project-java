@@ -46,6 +46,36 @@ public class AuctionDAO{
             }
         }
     }
+    public String[] getAuctionInformation(long auctionID) throws SQLException{
+        String sql = "SELECT " +
+                "    s.username AS seller_name, " +
+                "    i.name AS item_name, " +
+                "    a.current_highest_bid, " +
+                "    b.username AS bidder_name " +   // Lấy b.username từ bảng bidders
+                "FROM auctions a " +
+                "JOIN sellers s ON a.seller_id = s.id " +
+                "JOIN item i ON a.item_id = i.id " +
+                "LEFT JOIN bidders b ON a.highest_bidder_id = b.id "+ // Dùng bảng bidders
+                "WHERE a.id = ?";
+        try(Connection connection = DBConnection.getConnection();
+            PreparedStatement pr = connection.prepareStatement(sql)){
+            pr.setLong(1,auctionID);
+            ResultSet rs = pr.executeQuery();
+            if (rs.next()){
+                String sellerName = rs.getString("seller_name");
+                String itemName = rs.getString("item_name");
+                BigDecimal highestBid = rs.getBigDecimal("current_highest_bid");
+                String bidderName = rs.getString("bidder_name");
+                // Nếu chưa có ai đặt giá, ID sẽ null dẫn đến tên cũng bị null
+                if (bidderName == null) {
+                    bidderName = "Chưa có ai đặt giá";
+                }
+                return new String[] {sellerName,itemName,String.valueOf(highestBid),bidderName};
+            } else {
+                return null;
+            }
+        }
+    }
     public List<Auction> getActiveAuctions() throws SQLException {
         List<Auction> auctions = new ArrayList<>();
         String sql = "SELECT * FROM auctions WHERE status IN (?, ?)";

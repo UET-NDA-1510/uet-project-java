@@ -6,10 +6,13 @@ import uet.common.model.CustomException.InvalidBidException;
 import uet.common.payLoad.Action;
 import uet.common.payLoad.Request;
 import uet.common.payLoad.Response;
+import uet.server.DAO.DBConnection;
+import uet.server.DAO.userDAO.BidderDAO;
 import uet.server.networkServer.RequestHandler;
 import uet.server.service.auctionService.BidService;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 public class BidHandler implements RequestHandler {

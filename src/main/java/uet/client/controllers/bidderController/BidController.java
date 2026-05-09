@@ -27,6 +27,7 @@ public class BidController implements ResponseObserver {
     @FXML private Label sellerNameLabel;
     @FXML private Label productNameLabel;
     @FXML private Label currentBidLabel;
+    @FXML private Label balance;
     @FXML private Label highestBidderLabel;
     @FXML private TextField bidAmountField;
     @FXML private Label noteLabel;
@@ -44,6 +45,7 @@ public class BidController implements ResponseObserver {
                 productNameLabel.setText(arr[1]);
                 currentBidLabel.setText(arr[2]);
                 highestBidderLabel.setText(arr[3]);
+                balance.setText(arr[4]);
             }
         } else if (response.getAction()==Action.PLACE_BID){
             if (response.isSuccess()){
@@ -78,7 +80,8 @@ public class BidController implements ResponseObserver {
     }
     private void mockData(){
         try {
-            Request request = new Request(Action.GET_INFO_AUCTION_BY_ID,auctionToBid);
+            String[] arr = {String.valueOf(auctionToBid),String.valueOf(UserSession.getInstance().getLoggedInUserId())};
+            Request request = new Request(Action.GET_INFO_AUCTION_BY_ID,arr);
             SocketClient.getInstance().sendRequest(request);
         } catch (Exception e) {
             System.err.println("lỗi khi gửi request lấy sản phẩm");

@@ -53,6 +53,7 @@ public class AuctionScheduler {
         try {
             auctionService.startAuction(auction.getAuctionId());
         } catch (Exception e){
+            e.printStackTrace();
             System.err.println("lỗi khi tự động bắt đầu phiên đấu giá");
         }
         // 2. Bắn thông báo Realtime cho TẤT CẢ các máy Client đang online

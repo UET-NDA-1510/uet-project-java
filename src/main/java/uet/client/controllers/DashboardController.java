@@ -118,12 +118,19 @@ public class DashboardController implements ResponseObserver {
                 } else {
                     Auction currentAuction = getTableView().getItems().get(getIndex());
                     if (currentAuction.getState() == Auction.AuctionState.RUNNING) {
-                        setGraphic(btn);
+                        if ("Bidder".equals(currentRole)) {
+                            setGraphic(btn);
+                        } else {
+                            // Admin và Seller chỉ nhìn thấy dòng chữ trạng thái
+                            Label lblRunning = new Label("Đang diễn ra");
+                            lblRunning.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold;");
+                            setGraphic(lblRunning);
+                        }
                     } else if (currentAuction.getState() == Auction.AuctionState.OPEN) {
                         Label lblWait = new Label("Chờ bắt đầu");
                         lblWait.setStyle("-fx-text-fill: #e67e22; -fx-font-weight: bold; -fx-font-style: italic;");
                         setGraphic(lblWait);
-                    } else {
+                    } else if (currentAuction.getState() == Auction.AuctionState.FINISHED) {
                         Label lblEnd = new Label("Đã kết thúc");
                         lblEnd.setStyle("-fx-text-fill: gray; -fx-font-style: italic;");
                         setGraphic(lblEnd);

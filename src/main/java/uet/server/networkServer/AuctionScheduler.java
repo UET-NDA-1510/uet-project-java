@@ -2,12 +2,15 @@ package uet.server.networkServer;
 
 import uet.common.model.Auction.Auction;
 import uet.common.model.User.User;
+import uet.common.model.items.ItemStatus;
 import uet.common.payLoad.Action;
 import uet.common.payLoad.Response;
 import uet.server.DAO.DBConnection;
 import uet.server.DAO.userDAO.BidderDAO;
 import uet.server.ServerMain;
 import uet.server.service.auctionService.AuctionService;
+import uet.server.service.itemService.ItemService;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -75,6 +78,7 @@ public class AuctionScheduler {
             BidderDAO bidderDAO = new BidderDAO();
             auctionService.finishAuction(auction.getAuctionId());
             User user = bidderDAO.findById(connection, auction.getHighestBidderId());
+            ItemService.getInstance().updateItemStatus(auction.getItemId(), ItemStatus.SOLD.name());
             // 3. Bắn thông báo Realtime cho TẤT CẢ các máy
             Response res = new Response(Action.AUCTION_ENDED,"Phiên đấu giá có Id" +auction.getAuctionId()+"đã kết thúc.Người win là "+user.getUsername(), auction, true);
             ServerMain.broadcast(res);

@@ -89,7 +89,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>uet.client.ClientMain</mainClass>
+                    <mainClass>uet.client.networkClient.ClientMain</mainClass>
                 </configuration>
             </plugin>
         </plugins>

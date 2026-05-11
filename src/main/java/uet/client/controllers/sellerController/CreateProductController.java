@@ -11,8 +11,8 @@ import uet.client.networkClient.SocketClient;
 import uet.common.payLoad.Action;
 import uet.common.payLoad.Request;
 import uet.common.payLoad.Response;
-import uet.client.ClientMain;
-import uet.client.UserSession;
+import uet.client.networkClient.ClientMain;
+import uet.client.networkClient.UserSession;
 
 import java.io.File;
 import java.math.BigDecimal;

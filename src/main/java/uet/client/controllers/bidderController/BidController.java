@@ -3,24 +3,15 @@ package uet.client.controllers.bidderController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import uet.client.ClientMain;
-import uet.client.UserSession;
+import uet.client.networkClient.ClientMain;
+import uet.client.networkClient.UserSession;
 import uet.client.networkClient.ResponseObserver;
 import uet.client.networkClient.SocketClient;
-import uet.common.model.Auction.Auction;
-import uet.common.model.User.User;
-import uet.common.model.items.Item;
 import uet.common.payLoad.Action;
 import uet.common.payLoad.Request;
 import uet.common.payLoad.Response;
-import uet.server.DAO.DBConnection;
-import uet.server.DAO.userDAO.BidderDAO;
-import uet.server.DAO.userDAO.SellerDAO;
-import uet.server.service.itemService.ItemService;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 public class BidController implements ResponseObserver {
     public static long auctionToBid;

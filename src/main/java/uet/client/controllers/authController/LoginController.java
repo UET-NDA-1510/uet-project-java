@@ -7,9 +7,9 @@ import uet.common.payLoad.Action;
 import uet.common.payLoad.Request;
 import uet.common.payLoad.Response;
 import uet.server.service.authService.AuthService;
-import uet.client.ClientMain;
+import uet.client.networkClient.ClientMain;
 import javafx.fxml.FXML;
-import uet.client.UserSession;
+import uet.client.networkClient.UserSession;
 import uet.common.model.User.User;
 
 public class LoginController implements ResponseObserver{

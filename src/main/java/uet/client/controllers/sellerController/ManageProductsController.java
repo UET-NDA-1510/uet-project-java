@@ -12,8 +12,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
-import uet.client.ClientMain;
-import uet.client.UserSession;
+import uet.client.networkClient.ClientMain;
+import uet.client.networkClient.UserSession;
 import uet.client.controllers.DashboardController;
 import uet.client.networkClient.ResponseObserver;
 import uet.client.networkClient.SocketClient;
@@ -97,8 +97,12 @@ public class ManageProductsController implements ResponseObserver {
                     // KIỂM TRA 2 ĐIỀU KIỆN: Là Seller VÀ Trạng thái là PENDING
                     boolean isSeller = "Seller".equals(currentRole);
                     boolean isPending = currentItem.getStatus() != null && currentItem.getStatus().name().equals("PENDING");
+                    boolean isSolding = currentItem.getStatus() != null && currentItem.getStatus().name().equals("SOLD");
                     if (isSeller && isPending) {
                         btnEdit.setDisable(false);
+                        btnDelete.setDisable(false);
+                    } else if (isSolding){
+                        btnEdit.setVisible(false);
                         btnDelete.setDisable(false);
                     } else {
                         // Nếu không phải Seller HOẶC không phải PENDING -> Làm mờ nút

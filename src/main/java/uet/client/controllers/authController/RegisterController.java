@@ -15,7 +15,7 @@ import uet.common.payLoad.Request;
 import uet.common.payLoad.Response;
 import uet.server.service.authService.AuthService;
 import uet.common.validator.RegisterValidator;
-import uet.client.ClientMain;
+import uet.client.networkClient.ClientMain;
 
 import java.time.LocalDate;
 

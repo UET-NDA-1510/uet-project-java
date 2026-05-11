@@ -1,4 +1,4 @@
-package uet.client;
+package uet.client.networkClient;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -17,10 +17,6 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import uet.client.networkClient.ControllerManager;
-import uet.client.networkClient.ResponseObserver;
-import uet.client.networkClient.SocketClient;
-import uet.server.DAO.DBConnection;
 
 import java.io.IOException;
 import java.util.TimeZone;

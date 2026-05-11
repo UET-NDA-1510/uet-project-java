@@ -1,7 +1,6 @@
 package uet.client.controllers;
 
-import uet.client.ClientMain;
-import uet.client.UserSession;
+import uet.client.networkClient.ClientMain;
 import uet.client.controllers.bidderController.BidController;
 import uet.client.networkClient.ResponseObserver;
 import uet.client.networkClient.SocketClient;
@@ -102,7 +101,7 @@ public class DashboardController implements ResponseObserver {
                     Auction selectedAuction = getTableView().getItems().get(getIndex());
                     try {
                         BidController.auctionToBid = selectedAuction.getAuctionId();
-                        uet.client.ClientMain.switchTo("BidView.fxml", 800, 600);
+                        ClientMain.switchTo("BidView.fxml", 800, 600);
                     } catch (Exception e) {
                         e.printStackTrace();
                         showAlert(Alert.AlertType.ERROR, "Lỗi hệ thống", "Không thể tải giao diện đặt giá.");

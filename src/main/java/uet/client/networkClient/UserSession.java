@@ -1,4 +1,4 @@
-package uet.client;
+package uet.client.networkClient;
 
 public class UserSession {
 

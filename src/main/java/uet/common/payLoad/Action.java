@@ -5,7 +5,9 @@ public enum Action {
     LOGIN,
     LOGOUT,
     REGISTER,
-
+    // người dùng
+    GET_ALL_USER,
+    DELETE_USER,
     // Sản phẩm đấu giá
     CREATE_ITEM,
     EDIT_ITEM,

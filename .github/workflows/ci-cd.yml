@@ -19,21 +19,22 @@ jobs:
       with:
         java-version: '25'
         distribution: 'temurin'
-        cache: maven 
+        cache: maven
 
-    # PHẦN CI (TÍCH HỢP & KIỂM THỬ) 
-    # Chạy lệnh test để kiểm tra logic (ví dụ file AuctionTest)
-    - name: Build and Test with Maven
-      run: mvn -B test --file pom.xml
+      # Tích hợp CI và CD vào một bước duy nhất
+    - name: Build, Test and Package
+      run: mvn -B -ntp package
 
-    # PHẦN CD (PHÂN PHỐI/ĐÓNG GÓI) 
-    # Đóng gói code thành file .jar (Bỏ qua test lại để tiết kiệm thời gian)
-    - name: Build Package (JAR)
-      run: mvn -B package --file pom.xml -DskipTests
-
-    # Lưu trữ file .jar lên GitHub để mọi người tải về
-    - name: Upload compiled JAR (Artifacts)
+      # Upload file Server
+    - name: Upload Server JAR
       uses: actions/upload-artifact@v4
       with:
-        name: uet-auction-app # Tên thư mục khi tải về
-        path: target/*.jar    # Lấy toàn bộ file .jar được sinh ra
+        name: Server-App
+        path: target/*-server.jar
+
+      # Upload file Client
+    - name: Upload Client JAR
+      uses: actions/upload-artifact@v4
+      with:
+        name: Client-App
+        path: target/*-client.jar

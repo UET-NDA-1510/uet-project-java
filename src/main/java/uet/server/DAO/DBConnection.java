@@ -7,6 +7,7 @@ public class DBConnection {
     private static HikariDataSource ds;
     static {
         try {
+            // triển khai connection pool để kết nối đến mySQL
             HikariConfig config = new HikariConfig();
             config.setJdbcUrl("jdbc:mysql://localhost:3306/auctiondb?useSSL=false&serverTimezone=Asia/Ho_Chi_Minh");
             config.setUsername("root");

@@ -19,25 +19,20 @@ jobs:
       with:
         java-version: '25'
         distribution: 'temurin'
-        cache: maven 
+        cache: maven
 
-    # PHẦN CI (TÍCH HỢP & KIỂM THỬ) 
-    # Chạy lệnh test để kiểm tra logic (ví dụ file AuctionTest)
-    - name: Build and Test with Maven
-      run: mvn -B test --file pom.xml
+      # Tích hợp CI và CD vào một bước duy nhất
+    - name: Build, Test and Package
+      run: mvn -B -ntp package
 
-    # PHẦN CD (PHÂN PHỐI/ĐÓNG GÓI) 
-    - name: Build Package (JAR)
-      run: mvn -B package --file pom.xml -DskipTests
-
-    # Upload file Server
+      # Upload file Server
     - name: Upload Server JAR
       uses: actions/upload-artifact@v4
       with:
         name: Server-App
         path: target/*-server.jar
 
-    # Upload file Client
+      # Upload file Client
     - name: Upload Client JAR
       uses: actions/upload-artifact@v4
       with:

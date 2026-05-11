@@ -61,6 +61,7 @@ public class ServerMain {
             listenForShutdown();
             while (true) {
                 Socket socketClient = serverSocket.accept();
+                socketClient.setTcpNoDelay(true);
                 ClientHandler clientHandler = new ClientHandler(socketClient);
                 onlineClients.add(clientHandler);
                 threadPool.execute(clientHandler);

@@ -1,0 +1,39 @@
+name: Java CI/CD with Maven
+
+# Kích hoạt khi có người đẩy code hoặc tạo Pull Request vào nhánh main
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-test-and-package:
+    runs-on: ubuntu-latest # GitHub sẽ cấp một máy ảo Linux để chạy
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven 
+
+    # PHẦN CI (TÍCH HỢP & KIỂM THỬ) 
+    # Chạy lệnh test để kiểm tra logic (ví dụ file AuctionTest)
+    - name: Build and Test with Maven
+      run: mvn -B test --file pom.xml
+
+    # PHẦN CD (PHÂN PHỐI/ĐÓNG GÓI) 
+    # Đóng gói code thành file .jar (Bỏ qua test lại để tiết kiệm thời gian)
+    - name: Build Package (JAR)
+      run: mvn -B package --file pom.xml -DskipTests
+
+    # Lưu trữ file .jar lên GitHub để mọi người tải về
+    - name: Upload compiled JAR (Artifacts)
+      uses: actions/upload-artifact@v4
+      with:
+        name: uet-auction-app # Tên thư mục khi tải về
+        path: target/*.jar    # Lấy toàn bộ file .jar được sinh ra

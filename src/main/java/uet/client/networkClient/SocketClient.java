@@ -14,14 +14,13 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class SocketClient {
-    private static final String SERVER_IP = "localhost";  // địa chỉ IP
+    private static final String SERVER_IP = "10.11.70.23";  // địa chỉ IP
     private static final int SERVER_PORT = 1836;   // cổng
-    private static SocketClient instance;   // biến để triển khai singleton
     private Socket socket;
     private ObjectOutputStream out;   // đẩy , ghi dữ liệu
     private ObjectInputStream in;   // lấy dữ liệu
     private final List<ResponseObserver> observers = new CopyOnWriteArrayList<>();   // arrayList bản chuẩn thread safe
-    private SocketClient(){};
+    private SocketClient(){}
     private static class ClientHelper {     // class để triển khi singleton cho đa luồng
         private static final SocketClient instance = new SocketClient();
     }

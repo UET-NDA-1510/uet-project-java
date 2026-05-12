@@ -89,6 +89,21 @@ public class ServerMain {
             }
         }
     }
+    public static void broadcastToTargetUsers(List<Long> targetUserID, Response response) {
+        if (targetUserID == null || targetUserID.isEmpty()) return;
+        for (ClientHandler client : onlineClients) {
+            Long clientID = client.getLoggedInUsername();
+            // Nếu Client đã đăng nhập VÀ tên nằm trong danh sách cần gửi
+            if (clientID != null && targetUserID.contains(clientID)) {
+                try {
+                    client.sendResponse(response);
+                } catch (Exception e) {
+                    System.err.println("Mất kết nối tới client: " + clientID);
+                    onlineClients.remove(client);
+                }
+            }
+        }
+    }
     public static void main(String[] args) {
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
         ServerMain serverMain = new ServerMain();

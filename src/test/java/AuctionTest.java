@@ -13,10 +13,10 @@ public class AuctionTest {
     @BeforeEach
     void setUp() {
         auction = new Auction(
-            101L, 
-            202L, 
-            new BigDecimal("100.0"), 
-            LocalDateTime.now().minusMinutes(5), 
+            101L,
+            202L,
+            new BigDecimal("100.0"),
+            LocalDateTime.now().minusMinutes(5),
             LocalDateTime.now().plusHours(1)
         );
     }
@@ -25,7 +25,7 @@ public class AuctionTest {
     @DisplayName("Đặt giá thành công khi phiên đang RUNNING và giá cao hơn")
     void testDatGiaHopLe() {
         auction.start(); // Phải chuyển sang RUNNING mới đặt giá được
-        
+
         BigDecimal bidAmount = new BigDecimal("150.0");
         long bidderId = 25020072L;
 
@@ -62,7 +62,7 @@ public class AuctionTest {
     void testDatGiaKhiDaKetThuc() {
         auction.start();
         auction.finish(); // Chuyển trạng thái sang FINISHED
-        
+
         BigDecimal bidAmount = new BigDecimal("200.0");
 
         assertThrows(IllegalStateException.class, () -> {
@@ -75,7 +75,7 @@ public class AuctionTest {
     void testIsActive() {
         // isActive trả về true nếu hiện tại trước endTime
         assertTrue(auction.isActive());
-        
+
         // Thử set endTime về quá khứ
         auction.setEndTime(LocalDateTime.now().minusMinutes(1));
         assertFalse(auction.isActive());

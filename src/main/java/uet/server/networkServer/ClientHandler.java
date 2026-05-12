@@ -1,5 +1,6 @@
 package uet.server.networkServer;
 
+import uet.common.model.User.User;
 import uet.common.payLoad.Action;
 import uet.common.payLoad.Request;
 import uet.common.payLoad.Response;
@@ -17,6 +18,7 @@ public class ClientHandler implements Runnable{
     private final Socket socket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
+    private Long loggedInUsername = null;
     // nơi để đăng ký các hàm trả về response , khi có resquest
     private static final Map<Action,RequestHandler> handlerRegistry = new ConcurrentHashMap<>();
     static {
@@ -51,6 +53,16 @@ public class ClientHandler implements Runnable{
                     if (handler != null) {
                         try {
                             Response response = handler.handle(request);
+                            if (request.getAction() == Action.LOGIN && response.isSuccess()) {
+                                Object responseData = response.getData();
+                                if (responseData instanceof User) {
+                                    Long loggedInId = ((User) responseData).getId();
+                                    this.setLoggedInUsername(loggedInId);
+                                    System.out.println("Client đã đăng nhập với ID: " + this.loggedInUsername);
+                                } else {
+                                    System.err.println("Cảnh báo: Dữ liệu trả về từ Login không phải là đối tượng User.");
+                                }
+                            }
                             sendResponse(response);
                         } catch (Exception ex) {
                             System.err.println("Lỗi logic khi xử lý request: " + ex.getMessage());
@@ -95,5 +107,12 @@ public class ClientHandler implements Runnable{
         } catch (IOException e) {
             System.err.println("Lỗi đóng kết nối: " + e.getMessage());
         }
+    }
+    public void setLoggedInUsername(Long username) {
+        this.loggedInUsername = username;
+    }
+
+    public Long getLoggedInUsername() {
+        return loggedInUsername;
     }
 }

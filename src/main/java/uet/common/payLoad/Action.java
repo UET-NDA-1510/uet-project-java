@@ -28,6 +28,7 @@ public enum Action {
     //  Đặt giá
     PLACE_BID,
     GET_BID_HISTORY,
+    GET_NOTIFI_BID,
 
     // Thông báo
     NEW_BID_UPDATE,

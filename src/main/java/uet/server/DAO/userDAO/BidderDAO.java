@@ -3,6 +3,7 @@ package uet.server.DAO.userDAO;
 import uet.common.model.CustomException.DataAccessException;
 import uet.common.model.User.Bidder;
 import uet.common.model.User.User;
+import uet.server.DAO.DBConnection;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -11,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BidderDAO extends UserDAO {
     @Override
@@ -61,5 +64,24 @@ public class BidderDAO extends UserDAO {
                 throw new DataAccessException(e.getMessage());
             }
         }
+    }
+    public List<Long> getAllBiddersInAuction(long auctionId) {
+        List<Long> bidders = new ArrayList<>();
+        // Dùng DISTINCT để đảm bảo mỗi người chỉ xuất hiện 1 lần trong danh sách
+        String sql = "SELECT DISTINCT bidder_id FROM bidtransaction WHERE auction_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setLong(1, auctionId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Long bidderId = rs.getLong("bidderId");
+                    bidders.add(bidderId);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy danh sách người tham gia đấu giá: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return bidders;
     }
 }

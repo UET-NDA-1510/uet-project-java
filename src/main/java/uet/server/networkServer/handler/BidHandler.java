@@ -29,12 +29,13 @@ public class BidHandler implements RequestHandler {
             long bidderId = Long.parseLong(data[1]);
             BigDecimal bid = new BigDecimal(data[2]);
             bidService.placeBid(auctionId,bidderId,bid);
-//            AuctionManager.getInstance().addParticipant(auctionId,bidderId);
-//            Set<Long> targetUsersSet = AuctionManager.getInstance().getParticipants(auctionId);
-//            ArrayList<Long> targetUserID = new ArrayList<>(targetUsersSet);
-//            String mess = "Bidder có ID : "+bidderId+",đã đặt giá thành công cho phiên có ID : "+auctionId;
-//            Response updateBid = new Response(Action.GET_NOTIFI_BID,mess,null,true);
-//            ServerMain.broadcastToTargetUsers(targetUserID,updateBid);
+            AuctionManager.getInstance().addParticipant(auctionId,bidderId);
+            Set<Long> targetUsersSet = AuctionManager.getInstance().getParticipants(auctionId);
+            ArrayList<Long> targetUserID = new ArrayList<>(targetUsersSet);
+            targetUserID.remove(bidderId);
+            String mess = "Bidder có ID : "+bidderId+",đã đặt giá thành công cho phiên có ID : "+auctionId;
+            Response updateBid = new Response(Action.GET_NOTIFI_BID,mess,null,true);
+            ServerMain.broadcastToTargetUsers(targetUserID,updateBid);
             return new Response(Action.PLACE_BID,"bạn đã đặt giá thành công",null,true);
         } catch (AuctionClosedException e){
             return new Response(Action.PLACE_BID,e.getMessage(),null,false);

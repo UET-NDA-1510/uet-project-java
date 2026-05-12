@@ -161,6 +161,8 @@ public class DashboardController implements ResponseObserver {
             loadMockData();
             ClientMain.showPopup("Thông báo",response.getMessage());
             loadMockData();
+        } else if (response.getAction()==Action.GET_NOTIFI_BID) {
+            ClientMain.showPopup("Thông báo",response.getMessage());
         }
     }
     // --- CÁC HÀM XỬ LÝ SỰ KIỆN CLICk ---

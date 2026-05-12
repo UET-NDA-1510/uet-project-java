@@ -28,7 +28,6 @@ public class CreateProductController implements ResponseObserver {
     @FXML private Label note;
     private String imageUrl;
     private String selectedType;
-    long sellerId = UserSession.getInstance().getLoggedInUserId();
     @FXML
     public void initialize() {
         // Đã bổ sung thêm "Item" vào danh sách (Tổng cộng 3 lựa chọn)
@@ -69,6 +68,7 @@ public class CreateProductController implements ResponseObserver {
         if (itemName.isBlank() || itemDescription.isBlank() || extraInfor1.isBlank() || extraInfor2.isBlank() || imageUrl.isBlank() || selectedType.isBlank() || startingPrice.getText().isBlank()){
             note.setText("Phải điền đủ thông tin.");
         }
+        int year = Integer.parseInt(extraInfor2);
         try {
             BigDecimal price = new BigDecimal(startingPrice.getText());
             if (price.compareTo(BigDecimal.ZERO) > 0) {
@@ -80,7 +80,7 @@ public class CreateProductController implements ResponseObserver {
                 note.setText("giá tiền phải lớn hơn 0");
             }
         } catch (NumberFormatException e) {
-            note.setText("Giá tiền phải nhập vào 1 số.");
+            note.setText("Giá tiền,năm,hạn bảo hành phải nhập vào 1 số.");
         }
     }
     public void onResponse(Response response) {

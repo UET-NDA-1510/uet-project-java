@@ -45,6 +45,9 @@ public class BidController implements ResponseObserver {
             } else {
                 noteLabel.setText(response.getMessage());
             }
+        } else if (response.getAction()==Action.GET_NOTIFI_BID){
+            mockData();
+            ClientMain.showPopup("Thông báo",response.getMessage());
         }
     }
     @FXML

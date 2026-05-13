@@ -132,7 +132,7 @@ public class ManageProductsController implements ResponseObserver {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Xác nhận xóa");
         alert.setHeaderText(null);
-        alert.setContentText("Bạn có chắc chắn muốn xóa phiên đấu giá này không?");
+        alert.setContentText("Bạn có chắc chắn muốn xóa sản phẩm  này không?");
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {

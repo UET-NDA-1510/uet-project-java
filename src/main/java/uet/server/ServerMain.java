@@ -5,6 +5,7 @@ import uet.common.payLoad.Response;
 import uet.server.DAO.DBConnection;
 import uet.server.networkServer.AuctionScheduler;
 import uet.server.networkServer.ClientHandler;
+import uet.server.networkServer.restoreAuction;
 import uet.server.service.auctionService.AuctionService;
 
 import java.io.IOException;
@@ -52,6 +53,7 @@ public class ServerMain {
     }
     private void startServer(){
         try {
+            restoreAuction.restoreAuctionCache();
             List<Auction> activeAuctions = AuctionService.getInstance().getActiveAuctions();
             for (Auction a : activeAuctions) {
                 AuctionScheduler.getInstance().scheduleAuctionEvents(a);
@@ -103,6 +105,7 @@ public class ServerMain {
                 }
             }
         }
+
     }
     public static void main(String[] args) {
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));

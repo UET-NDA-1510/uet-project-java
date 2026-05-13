@@ -16,6 +16,7 @@ public enum Action {
     GET_ITEM_ByID,
 
     // phiên đấu giá
+    AUCTION_EXTENDED,
     CREATE_AUCTION,
     GET_ALL_AUCTIONS,
     GET_AUCTION_BY_ID,

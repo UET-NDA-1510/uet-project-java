@@ -34,7 +34,7 @@ public class AuctionDAO{
         }
         return false;
     }
-    public Auction findById(Connection connect,long auctionID) throws SQLException{
+    public Auction findById(Connection connect,long auctionID) {
         String sql = "SELECT * FROM auctions WHERE id = ?";
         try (PreparedStatement ps = connect.prepareStatement(sql)){
             ps.setLong(1, auctionID);
@@ -42,8 +42,11 @@ public class AuctionDAO{
             if (rs.next()) {
                 return mapResultSetToAuction(rs);
             } else {
-                throw new DataAccessException("Không thấy phiên đấu giá");
+                throw new SQLException("Không thấy phiên đấu giá");
             }
+        } catch (SQLException e){
+            System.err.println("Không thấy phiên đấu giá");
+            return null;
         }
     }
     public String[] getAuctionInformation(long auctionID) throws SQLException{
@@ -172,6 +175,18 @@ public class AuctionDAO{
             e.printStackTrace();
             System.err.println("lỗi khi lấy ID phiên đấu giá từ database");
             return null;
+        }
+    }
+    public void updateEndTime(long auctionID,LocalDateTime newEndTime){
+        String sql = "UPDATE auctions SET end_time = ? WHERE id = ?";
+        try (Connection connection = DBConnection.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql)){
+            ps.setTimestamp(1, Timestamp.valueOf(newEndTime));
+            ps.setLong(2, auctionID);
+            ps.executeUpdate();
+        } catch (SQLException e){
+            System.err.println("Lỗi khi cập nhật end_time cho auction ID: " + auctionID);
+            e.printStackTrace();
         }
     }
 }

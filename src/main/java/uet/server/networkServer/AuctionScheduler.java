@@ -6,6 +6,7 @@ import uet.common.model.items.ItemStatus;
 import uet.common.payLoad.Action;
 import uet.common.payLoad.Response;
 import uet.server.DAO.DBConnection;
+import uet.server.DAO.auctionDAO.AuctionDAO;
 import uet.server.DAO.userDAO.BidderDAO;
 import uet.server.ServerMain;
 import uet.server.service.auctionService.AuctionService;
@@ -15,12 +16,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
+import java.util.concurrent.*;
+
 public class AuctionScheduler {
     AuctionService auctionService = AuctionService.getInstance();
     private static final AuctionScheduler instance = new AuctionScheduler();
+    // lưu trữ các thời gian đóng cửa của phiên đấu giá
+    private final Map<Long, ScheduledFuture<?>> endTasks = new ConcurrentHashMap<>();
     // 1 luồng chuyên để chạy ngầm đếm ngược thời gian
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, r -> {
         Thread t = new Thread(r, "auction-scheduler");
@@ -47,7 +50,8 @@ public class AuctionScheduler {
             return;
         } else {
             // Chưa tới giờ kết thúc -> Lên lịch báo thức ĐÓNG CỬA
-            scheduler.schedule(() -> endAuction(auction), delayToEnd, TimeUnit.SECONDS);
+            ScheduledFuture<?> endTask = scheduler.schedule(() -> endAuction(auction), delayToEnd, TimeUnit.SECONDS);
+            endTasks.put(auction.getAuctionId(), endTask);
         }
         long delayToStart = ChronoUnit.SECONDS.between(now, auction.getStartTime());
         if (delayToStart <= 0) {
@@ -79,6 +83,7 @@ public class AuctionScheduler {
             auctionService.finishAuction(auction.getAuctionId());
             User user = bidderDAO.findById(connection, auction.getHighestBidderId());
             ItemService.getInstance().updateItemStatus(auction.getItemId(), ItemStatus.SOLD.name());
+            endTasks.remove(auction.getAuctionId());
             // 3. Bắn thông báo Realtime cho TẤT CẢ các máy
             Response res = new Response(Action.AUCTION_ENDED,"Phiên đấu giá có Id" +auction.getAuctionId()+"đã kết thúc.Người win là "+user.getUsername(), auction, true);
             ServerMain.broadcast(res);
@@ -97,5 +102,21 @@ public class AuctionScheduler {
         } catch (InterruptedException e) {
             scheduler.shutdownNow();
         }
+    }
+    // anti -sniping
+    public void extendAuction(Auction auction){
+        // 1. Hủy lịch đóng cửa cũ
+        ScheduledFuture<?> oldTask = endTasks.get(auction.getAuctionId());
+        if (oldTask != null && !oldTask.isDone()) {
+            oldTask.cancel(false); // Hủy lệnh báo thức cũ
+        }
+        // 2. Đặt lịch đóng cửa mới
+        LocalDateTime newEndTime = auction.getEndTime().plusSeconds(60);
+        auction.setEndTime(newEndTime);
+        long newDelayToEnd = ChronoUnit.SECONDS.between(LocalDateTime.now(), newEndTime);
+        AuctionDAO auctionDAO = new AuctionDAO();
+        auctionDAO.updateEndTime(auction.getAuctionId(),newEndTime);
+        ScheduledFuture<?> newTask = scheduler.schedule(() -> endAuction(auction), newDelayToEnd, TimeUnit.SECONDS);
+        endTasks.put(auction.getAuctionId(), newTask);
     }
 }

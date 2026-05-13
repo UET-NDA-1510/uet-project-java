@@ -46,7 +46,7 @@ public class RegisterController implements ResponseObserver {
         }
 
         // Thiết lập ComboBox cho Role
-        roleComboBox.getItems().addAll("Bidder", "Seller", "Admin");
+        roleComboBox.getItems().addAll("Bidder", "Seller");
         styleDarkCombo(roleComboBox, "Chọn vai trò");
         dobPicker.getEditor().setStyle("-fx-prompt-text-fill: #aaaaaa; -fx-text-fill: white;");
         

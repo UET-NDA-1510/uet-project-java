@@ -157,4 +157,21 @@ public class AuctionDAO{
         auction.setState(Auction.AuctionState.valueOf(rs.getString("status")));
         return auction;
     }
+    public List<Long> getAllRunningAuctionId(){
+        List<Long> runningID = new ArrayList<>();
+        String sql = "SELECT id FROM auctions WHERE status IN (?)";
+        try (Connection connection = DBConnection.getConnection();
+            PreparedStatement pr = connection.prepareStatement(sql)){
+            pr.setString(1,"RUNNING");
+            ResultSet rs = pr.executeQuery();
+            while (rs.next()){
+                runningID.add(rs.getLong("id"));
+            }
+            return runningID;
+        } catch (SQLException e){
+            e.printStackTrace();
+            System.err.println("lỗi khi lấy ID phiên đấu giá từ database");
+            return null;
+        }
+    }
 }

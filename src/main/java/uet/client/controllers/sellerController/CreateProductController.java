@@ -68,8 +68,8 @@ public class CreateProductController implements ResponseObserver {
         if (itemName.isBlank() || itemDescription.isBlank() || extraInfor1.isBlank() || extraInfor2.isBlank() || imageUrl.isBlank() || selectedType.isBlank() || startingPrice.getText().isBlank()){
             note.setText("Phải điền đủ thông tin.");
         }
-        int year = Integer.parseInt(extraInfor2);
         try {
+            int year = Integer.parseInt(extraInfor2);
             BigDecimal price = new BigDecimal(startingPrice.getText());
             if (price.compareTo(BigDecimal.ZERO) > 0) {
                 String sellerID = String.valueOf(UserSession.getInstance().getLoggedInUserId());

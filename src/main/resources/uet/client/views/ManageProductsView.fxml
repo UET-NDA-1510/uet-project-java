@@ -26,7 +26,7 @@
         <columns>
           <TableColumn fx:id="itemCodeCol" prefWidth="100.0" style="-fx-alignment: CENTER;" text="Mã SP (ID)" />
           <TableColumn fx:id="nameCol" prefWidth="180.0" text="Tên Sản Phẩm" />
-          <TableColumn fx:id="highestBidCol" prefWidth="120.0" style="-fx-alignment: CENTER-RIGHT;" text="Giá Cao Nhất ($)" />
+          <TableColumn fx:id="highestBidCol" prefWidth="120.0" style="-fx-alignment: CENTER-RIGHT;" text="Giá Ban đầu ($)" />
           <TableColumn fx:id="statusCol" prefWidth="110.0" style="-fx-alignment: CENTER;" text="Trạng Thái" />
           <TableColumn fx:id="actionCol" prefWidth="120.0" style="-fx-alignment: CENTER;" text="Thao Tác" />
         </columns>

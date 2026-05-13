@@ -40,7 +40,7 @@ public class AuctionManager {
         return auctionParticipants.getOrDefault(auctionId, Collections.emptySet());
     }
     // Dọn dẹp phòng khi phiên kết thúc
-    public void clearParticipants(String auctionId) {
+    public void clearParticipants(long auctionId) {
         auctionParticipants.remove(auctionId);
     }
 }

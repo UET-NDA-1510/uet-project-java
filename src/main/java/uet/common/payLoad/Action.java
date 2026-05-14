@@ -14,7 +14,7 @@ public enum Action {
     GET_ITEM_PENDING,
     GET_ALL_ITEMS,
     GET_ITEM_ByID,
-
+    DELETE_ITEM,
     // phiên đấu giá
     AUCTION_EXTENDED,
     CREATE_AUCTION,

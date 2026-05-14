@@ -11,7 +11,7 @@ import java.util.List;
 
 public abstract class ItemDAO <T extends Item>{
     //  hàm để lớp con tự định nghĩa cách update
-    public abstract boolean update(T item) throws SQLException;
+    public abstract boolean update(T item,long itemID) throws SQLException;
     // hàm để lớp con lấy các thuộc tính riêng khi find từ database của item
     public abstract T mapRow(ResultSet rs) throws SQLException;
     // hàm để lấy type của lớp con

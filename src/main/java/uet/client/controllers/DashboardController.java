@@ -173,6 +173,12 @@ public class DashboardController implements ResponseObserver {
     }
     // --- CÁC HÀM XỬ LÝ SỰ KIỆN CLICk ---
     @FXML
+    private void handleRefresh(javafx.event.ActionEvent event) {
+        System.out.println("Đang làm mới dữ liệu bảng đấu giá từ Server...");
+        loadMockData(); 
+        showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Đã cập nhật dữ liệu bảng đấu giá mới nhất!");
+    }
+    @FXML
     private void handleManageUsers() {
         System.out.println("Đang chuyển sang màn hình Quản lý người dùng...");
         try {

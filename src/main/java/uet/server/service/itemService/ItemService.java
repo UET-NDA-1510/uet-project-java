@@ -104,10 +104,15 @@ public class ItemService {
         }
         return result;
     }
-    public boolean update(Item item) throws SQLException {
-        String type = item.getType();
-        ItemDAO dao = ItemDAORegistry.getDAO(type);
-        return dao.update(item);
+    // Hàm update mới dành cho ItemService
+    public boolean updateItem(long sellerID, String type, String name, BigDecimal price,
+                              String description, String imageUrl, long itemID, String[] extraInfo) throws SQLException {
+        ItemFactory factory = factoryMap.get(type);
+        ItemDAO itemDAO = ItemDAORegistry.getDAO(type);
+        // Dùng factory để tạo một đối tượng tạm chứa các thông tin MỚI cần cập nhật
+        Item newItem = factory.registerItem(sellerID, name, description, price, imageUrl, extraInfo);
+        // Gọi itemDAO cập nhật dữ liệu của newItem vào dòng có ID cũ (itemID) trong CSDL
+        return itemDAO.update(newItem, itemID);
     }
     public void updateItemStatus(long itemId, String status) {
         String sql = "UPDATE item SET status = ? WHERE id = ?";

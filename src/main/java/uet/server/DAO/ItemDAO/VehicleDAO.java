@@ -22,7 +22,7 @@ public class VehicleDAO extends ItemDAO<Vehicle> {
         return p;
     }
     @Override
-    public boolean update(Vehicle item) throws SQLException {
+    public boolean update(Vehicle item,long itemID) throws SQLException {
         String sql = """
             UPDATE item
             SET name=?, price=?, image_url=?, description=?, status=?, brand=?, vehicle_type=?
@@ -33,7 +33,7 @@ public class VehicleDAO extends ItemDAO<Vehicle> {
             fillCommonFields(ps, item, 1);
             ps.setString(6, item.getBrand());
             ps.setString(7, item.getVehicleType());
-            ps.setLong(8, item.getId());
+            ps.setLong(8,itemID);
             return ps.executeUpdate() > 0;
         }
     }

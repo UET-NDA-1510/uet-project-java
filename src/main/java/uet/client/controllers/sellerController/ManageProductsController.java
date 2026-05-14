@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public class ManageProductsController implements ResponseObserver {
-
+    public static long itemID;
     @FXML private TableView<Item> productTable;
     @FXML private TableColumn<Item, String> itemCodeCol;
     @FXML private TableColumn<Item, String> nameCol;
@@ -61,6 +61,10 @@ public class ManageProductsController implements ResponseObserver {
                 productTable.setItems(myItemedProducts);
             } else{
                 System.err.println(response.getMessage());
+            }
+        } else if (response.getAction()==Action.DELETE_ITEM){
+            if (response.isSuccess()){
+                handleBack();
             }
         }
     }
@@ -115,13 +119,10 @@ public class ManageProductsController implements ResponseObserver {
         });
     }
     private void handleEdit(Item item) {
-        System.out.println("Đang mở giao diện sửa cho Mã Sản Phẩm: " + item.getId());
-
+        itemID = item.getId();
         try {
             // Chuyển thẳng về màn hình Tạo/Sửa Sản Phẩm
             ClientMain.switchTo("EditProduct.fxml", 800, 600);
-
-
         } catch (Exception e) {
             System.err.println("Lỗi khi chuyển sang màn hình  Sản Phẩm:");
             e.printStackTrace();
@@ -139,7 +140,8 @@ public class ManageProductsController implements ResponseObserver {
             try {
                 // Cập nhật lại giao diện
                 myItemedProducts.remove(item);
-                System.out.println("Đã xóa thành công Mã SP: " + item.getId());
+                Request request = new Request(Action.DELETE_ITEM,item.getId());
+                SocketClient.getInstance().sendRequest(request);
             } catch (Exception e) {
                 System.err.println("Lỗi khi xóa: " + e.getMessage());
             }

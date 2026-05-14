@@ -14,7 +14,7 @@ public class ElectronicDAO extends ItemDAO<Electronics> {
         return "ELECTRONIC";
     }
     @Override
-    public boolean update(Electronics item) throws SQLException {
+    public boolean update(Electronics item,long itemID) throws SQLException {
         String sql = """
             UPDATE item
             SET name=?, price=?, image_url=?, description=?, status=?, brand=?, warranty=?
@@ -25,7 +25,7 @@ public class ElectronicDAO extends ItemDAO<Electronics> {
             fillCommonFields(ps, item, 1);   // 1..5
             ps.setString(6, item.getBrand());
             ps.setInt(7, item.getWarrantyMonths());
-            ps.setLong(8, item.getId());
+            ps.setLong(8,itemID);
             return ps.executeUpdate() > 0;
         }
     }

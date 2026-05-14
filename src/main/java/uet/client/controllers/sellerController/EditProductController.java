@@ -73,7 +73,8 @@ public class EditProductController implements ResponseObserver {
             BigDecimal price = new BigDecimal(startingPrice.getText());
             if (price.compareTo(BigDecimal.ZERO) > 0) {
                 String sellerID = String.valueOf(UserSession.getInstance().getLoggedInUserId());
-                String[] data = {sellerID,selectedType,itemName,startingPrice.getText(),itemDescription,imageUrl,extraInfor1,extraInfor2};
+                long itemID = ManageProductsController.itemID;
+                String[] data = {sellerID,selectedType,itemName,startingPrice.getText(),itemDescription,imageUrl,String.valueOf(itemID),extraInfor1,extraInfor2};
                 Request request = new Request(Action.EDIT_ITEM,data);
                 SocketClient.getInstance().sendRequest(request);
             } else {

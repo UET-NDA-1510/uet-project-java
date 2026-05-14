@@ -34,6 +34,7 @@ public class ClientHandler implements Runnable{
         handlerRegistry.put(Action.GET_ITEM_PENDING,new GetFuLLProductPedingHandle());
         handlerRegistry.put(Action.GET_ALL_USER,new GetALLuserHandler());
         handlerRegistry.put(Action.DELETE_USER,new DeleteUserHandler());
+        handlerRegistry.put(Action.DELETE_ITEM,new DeleteItemHandler());
     }
     public ClientHandler(Socket socket){
         this.socket = socket;
@@ -65,6 +66,7 @@ public class ClientHandler implements Runnable{
                             }
                             sendResponse(response);
                         } catch (Exception ex) {
+                            ex.printStackTrace();
                             System.err.println("Lỗi logic khi xử lý request: " + ex.getMessage());
                             sendResponse(new Response(Action.ERROR, "Lỗi nội bộ Server: " + ex.getMessage(), null, false));
                         }

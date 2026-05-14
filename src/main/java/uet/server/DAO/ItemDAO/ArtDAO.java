@@ -21,7 +21,7 @@ public class ArtDAO extends ItemDAO<Art>{
         return art;
     }
     @Override
-    public boolean update(Art item) throws SQLException {
+    public boolean update(Art item,long itemID) throws SQLException {
         String sql = """
             UPDATE item
             SET name=?, price=?, image_url=?, description=?, status=?, artist=?
@@ -31,7 +31,7 @@ public class ArtDAO extends ItemDAO<Art>{
              PreparedStatement ps = conn.prepareStatement(sql)) {
             fillCommonFields(ps,item, 1);   // index 1..5
             ps.setString(6, item.getArtist());
-            ps.setLong(7, item.getId());
+            ps.setLong(7, itemID);
             return ps.executeUpdate() > 0;
         }
     }

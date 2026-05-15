@@ -25,7 +25,7 @@ public enum Action {
     AUCTION_STARTED,
     AUCTION_ENDED,
     CLOSE_AUCTION,
-
+    Line_Chart,
     //  Đặt giá
     PLACE_BID,
     GET_BID_HISTORY,

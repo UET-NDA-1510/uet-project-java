@@ -39,16 +39,20 @@ public class BidHandler implements RequestHandler {
             Auction auction = auctionDAO.findById(connection,auctionId);
             // đặt giá
             bidService.placeBid(auctionId,bidderId,bid);
+            // cập nhật UI khi có lượt đặt giá mới
+            Response uiUpdateRes = new Response(Action.NEW_BID_UPDATE, "Giá mới",bid, true);
+            ServerMain.broadcast(uiUpdateRes);
             // lấy list những người đã từng đấu giá phiên này để gửi thông báo
             AuctionManager.getInstance().addParticipant(auctionId,bidderId);
             Set<Long> targetUsersSet = AuctionManager.getInstance().getParticipants(auctionId);
             ArrayList<Long> targetUserID = new ArrayList<>(targetUsersSet);
             targetUserID.remove(bidderId);
-            // cập nhật UI khi có lượt đặt giá mới
-            Response uiUpdateRes = new Response(Action.NEW_BID_UPDATE, "Giá mới",null, true);
-            ServerMain.broadcast(uiUpdateRes);
             // gửi pop up cho những ai đã đặt giá
             String mess = "Bidder có ID : "+bidderId+",đã đặt giá thành công cho phiên có ID : "+auctionId;
+            if (!targetUserID.isEmpty()) { // Có người để gửi thì mới gửi
+                Response updateBid = new Response(Action.GET_NOTIFI_BID,mess,null,true);
+                ServerMain.broadcastToTargetUsers(targetUserID,updateBid);
+            }
             // anti sniping
             long secondsLeft = ChronoUnit.SECONDS.between(LocalDateTime.now(),auction.getEndTime());
             // Nếu thời gian còn lại <= 60 giây (1 phút)
@@ -59,10 +63,6 @@ public class BidHandler implements RequestHandler {
                 String antiSnipingMess = "Phiên đấu giá có ID : "+auction.getAuctionId()+"đã gia hạn thêm 1 phút!";
                 Response extendRes = new Response(Action.AUCTION_EXTENDED, antiSnipingMess,null, true);
                 ServerMain.broadcast(extendRes);
-            }
-            if (!targetUserID.isEmpty()) { // Có người để gửi thì mới gửi
-                Response updateBid = new Response(Action.GET_NOTIFI_BID,mess,null,true);
-                ServerMain.broadcastToTargetUsers(targetUserID,updateBid);
             }
             // gửi thông báo cho chính người đã đặt giá
             return new Response(Action.PLACE_BID,"bạn đã đặt giá thành công",null,true);

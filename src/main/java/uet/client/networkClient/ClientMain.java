@@ -17,7 +17,8 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.io.IOException;
 import java.util.TimeZone;
 
@@ -61,25 +62,33 @@ public class ClientMain extends Application {
             System.err.println("Không thể tải giao diện: " + fxmlFile);
         }
     }
+    public static final List<Stage> activePopups = new ArrayList<>();
     public static void showPopup(String title, String message) {
         Stage stage = new Stage(StageStyle.TRANSPARENT);
         stage.setAlwaysOnTop(true);
+
         Label lblTitle = new Label(title);
         lblTitle.setStyle("-fx-font-weight: bold; -fx-text-fill: #f39c12; -fx-font-size: 14px;");
+
         Label lblMsg = new Label(message);
         lblMsg.setWrapText(true); // Chuẩn JavaFX để tự động xuống dòng
         lblMsg.setStyle("-fx-text-fill: white; -fx-font-size: 13px;");
+
         VBox root = new VBox(5, lblTitle, lblMsg);
         root.setStyle("-fx-background-color: rgba(30, 30, 30, 0.85); -fx-padding: 15px; -fx-background-radius: 8px;");
         root.setAlignment(Pos.CENTER_LEFT);
         root.setPrefWidth(300);
+
         stage.setScene(new Scene(root, Color.TRANSPARENT));
         stage.setOpacity(0); // Set độ mờ mặc định = 0, tiết kiệm 1 KeyFrame
         stage.show();
-        // Căn góc dưới phải
-        var bounds = Screen.getPrimary().getVisualBounds();
-        stage.setX(bounds.getMaxX() - stage.getWidth() - 20);
-        stage.setY(bounds.getMaxY() - stage.getHeight() - 20);
+
+        // Căn góc dưới phải dựa vào biến 'window' (Stage của ứng dụng đang mở)
+        if (window != null) {
+            stage.setX(window.getX() + window.getWidth() - stage.getWidth() - 20);
+            stage.setY(window.getY() + window.getHeight() - stage.getHeight() - 20);
+        }
+
         // Animation rút gọn chỉ với 3 mốc thời gian
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.millis(500), new KeyValue(stage.opacityProperty(), 1)),

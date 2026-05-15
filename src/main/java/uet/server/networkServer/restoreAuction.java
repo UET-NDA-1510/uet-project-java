@@ -1,8 +1,7 @@
 package uet.server.networkServer;
 
-import uet.common.model.Auction.BidTransaction;
 import uet.server.DAO.auctionDAO.AuctionDAO;
-import uet.server.DAO.auctionDAO.bidtransactionDAO;
+import uet.server.DAO.auctionDAO.BidtransactionDAO;
 import uet.server.service.auctionService.AuctionManager;
 
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.List;
 public class restoreAuction {
     static public void restoreAuctionCache() {
         AuctionDAO auctionDAO = new AuctionDAO();
-        bidtransactionDAO bidtransactionDAO = new bidtransactionDAO();
+        BidtransactionDAO bidtransactionDAO = new BidtransactionDAO();
         AuctionManager manager = AuctionManager.getInstance();
         // 1. Lấy tất cả ID của các phiên đang RUNNING
         List<Long> runningIds = auctionDAO.getAllRunningAuctionId();

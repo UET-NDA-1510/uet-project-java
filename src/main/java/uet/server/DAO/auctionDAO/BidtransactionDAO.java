@@ -1,7 +1,7 @@
 package uet.server.DAO.auctionDAO;
 
+import uet.common.model.Auction.BidDTO;
 import uet.common.model.Auction.BidTransaction;
-import uet.common.payLoad.Request;
 import uet.server.DAO.DBConnection;
 
 import java.sql.Connection;
@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class bidtransactionDAO {
+public class BidtransactionDAO {
     public void InsertBidTransaction(Connection connect,BidTransaction bidTransaction) throws SQLException {
         String sql = "INSERT INTO bidtransaction (auction_id,bidder_id,amount,bid_time) VALUES (?,?,?,?)";
         try (PreparedStatement ps = connect.prepareStatement(sql)) {
@@ -37,5 +37,23 @@ public class bidtransactionDAO {
         } finally {
             return allBidderID;
         }
+    }
+    public ArrayList<BidDTO> getHistoryByAuctionId(long auctionId) {
+        ArrayList<BidDTO> history = new ArrayList<>();
+        // Sắp xếp tăng dần theo thời gian (cũ nhất -> mới nhất) để vẽ Chart
+        String sql = "SELECT amount, bid_time FROM bidtransaction WHERE auction_id = ? ORDER BY bid_time ASC";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setLong(1, auctionId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    BidDTO dto = new BidDTO(rs.getBigDecimal("amount"),rs.getTimestamp("bid_time").toLocalDateTime());
+                    history.add(dto);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return history;
     }
 }

@@ -2,7 +2,7 @@ package uet.server.service.auctionService;
 
 import uet.server.DAO.auctionDAO.AuctionDAO;
 import uet.server.DAO.DBConnection;
-import uet.server.DAO.auctionDAO.bidtransactionDAO;
+import uet.server.DAO.auctionDAO.BidtransactionDAO;
 import uet.server.DAO.userDAO.BidderDAO;
 import uet.common.model.Auction.Auction;
 import uet.common.model.Auction.BidTransaction;
@@ -20,7 +20,7 @@ public class BidService {
     private final AuctionManager manager = AuctionManager.getInstance();
     private final BidderDAO bidderDAO = new BidderDAO();
     private final AuctionDAO auctionDAO = new AuctionDAO();
-    private final bidtransactionDAO bidtransactionDAO = new bidtransactionDAO();
+    private final BidtransactionDAO bidtransactionDAO = new BidtransactionDAO();
     private BidService(){};
     private static class ServiceHelper {
         private static final BidService INSTANCE = new BidService();

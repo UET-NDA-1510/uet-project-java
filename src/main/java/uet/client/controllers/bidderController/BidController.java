@@ -60,6 +60,10 @@ public class BidController implements ResponseObserver {
         ClientMain.switchTo("LineChart.fxml",800,600);
     }
     @FXML
+    private void switchAutoBid(){
+        ClientMain.switchTo("AutoBidView.fxml",800,600);
+    }
+    @FXML
     private void handlePlaceBid() {
         String price = bidAmountField.getText();
         if (price.isBlank()) {

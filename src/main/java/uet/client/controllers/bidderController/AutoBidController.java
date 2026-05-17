@@ -3,8 +3,15 @@ package uet.client.controllers.bidderController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import uet.client.networkClient.ClientMain;
+import uet.client.networkClient.SocketClient;
+import uet.client.networkClient.UserSession;
+import uet.common.payLoad.Action;
+import uet.common.payLoad.Request;
 
 import java.math.BigDecimal;
+
+import static uet.client.controllers.bidderController.BidController.auctionToBid;
 
 public class AutoBidController {
     @FXML private TextField maxBid;
@@ -31,5 +38,15 @@ public class AutoBidController {
             noteLabel.setText("Giá tiền phải lớn hơn 0.");
             return;
         }
+        String auctionID = String.valueOf(auctionToBid);
+        String bidderID = String.valueOf(UserSession.getInstance().getLoggedInUserId());
+        String[] data = {auctionID,bidderID,maxBidPrice,incrementPrice};
+        Request request = new Request(Action.AUTO_BID,data);
+        SocketClient.getInstance().sendRequest(request);
+        backBidview();
+    }
+    @FXML
+    private void backBidview(){
+        ClientMain.switchTo("BidView.fxml",800,600);
     }
 }

@@ -30,7 +30,7 @@ public enum Action {
     PLACE_BID,
     GET_BID_HISTORY,
     GET_NOTIFI_BID,
-
+    AUTO_BID,
     // Thông báo
     NEW_BID_UPDATE,
     AUCTION_CLOSED,

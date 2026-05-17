@@ -134,14 +134,6 @@ public class AuctionService {
                 sellerDAO.getMoney(connect, auction.getSellerId(), auction.getCurrentHighestBid());
             }
             connect.commit(); //  lưu DB
-            // 3. Cập nhật RAM
-            auction.markPaid();
-            if (winnerId != null){
-                Seller seller = (Seller) sellerDAO.findById(connect, auction.getSellerId());
-                if (seller != null) {
-                    seller.getMoney(auction.getCurrentHighestBid());
-                }
-            }
         } catch (SQLException | RuntimeException e) {
             if (connect != null) {
                 try {

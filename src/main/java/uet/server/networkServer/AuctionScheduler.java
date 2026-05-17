@@ -87,6 +87,7 @@ public class AuctionScheduler {
             // 3. Bắn thông báo Realtime cho TẤT CẢ các máy
             Response res = new Response(Action.AUCTION_ENDED,"Phiên đấu giá có Id" +auction.getAuctionId()+"đã kết thúc.Người win là "+user.getUsername(), auction, true);
             ServerMain.broadcast(res);
+            auctionService.markAuctionPaid(auction.getAuctionId());
         } catch (SQLException e){
             System.err.println("lỗi khi lấy bidder về từ database khi hoàn thành phiên");
         }catch (Exception e) {
@@ -118,5 +119,10 @@ public class AuctionScheduler {
         auctionDAO.updateEndTime(auction.getAuctionId(),newEndTime);
         ScheduledFuture<?> newTask = scheduler.schedule(() -> endAuction(auction), newDelayToEnd, TimeUnit.SECONDS);
         endTasks.put(auction.getAuctionId(), newTask);
+    }
+    // auto bidding
+    // Trong class AuctionScheduler.java
+    public void scheduleTask(Runnable task, long delay, TimeUnit unit) {
+        scheduler.schedule(task, delay, unit);
     }
 }

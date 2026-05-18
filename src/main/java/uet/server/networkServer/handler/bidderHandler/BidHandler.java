@@ -1,9 +1,6 @@
-package uet.server.networkServer.handler;
+package uet.server.networkServer.handler.bidderHandler;
 
 import uet.common.model.Auction.Auction;
-import uet.common.model.CustomException.AuctionClosedException;
-import uet.common.model.CustomException.DataAccessException;
-import uet.common.model.CustomException.InvalidBidException;
 import uet.common.payLoad.Action;
 import uet.common.payLoad.Request;
 import uet.common.payLoad.Response;
@@ -22,7 +19,6 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 

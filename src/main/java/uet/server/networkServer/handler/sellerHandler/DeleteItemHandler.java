@@ -1,4 +1,4 @@
-package uet.server.networkServer.handler;
+package uet.server.networkServer.handler.sellerHandler;
 
 import uet.common.payLoad.Action;
 import uet.common.payLoad.Request;

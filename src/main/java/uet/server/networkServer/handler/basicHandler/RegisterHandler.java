@@ -1,4 +1,4 @@
-package uet.server.networkServer.handler;
+package uet.server.networkServer.handler.basicHandler;
 
 import uet.common.model.CustomException.DataAccessException;
 import uet.common.payLoad.Action;
@@ -7,7 +7,6 @@ import uet.common.payLoad.Response;
 import uet.server.networkServer.RequestHandler;
 import uet.server.service.authService.AuthService;
 
-import java.time.DateTimeException;
 import java.time.LocalDate;
 
 public class RegisterHandler implements RequestHandler {

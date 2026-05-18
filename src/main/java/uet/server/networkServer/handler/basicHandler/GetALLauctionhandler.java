@@ -1,4 +1,4 @@
-package uet.server.networkServer.handler;
+package uet.server.networkServer.handler.basicHandler;
 
 import uet.common.model.Auction.Auction;
 import uet.common.payLoad.Action;
@@ -7,7 +7,6 @@ import uet.common.payLoad.Response;
 import uet.server.networkServer.RequestHandler;
 import uet.server.service.auctionService.AuctionService;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class GetALLauctionhandler implements RequestHandler {

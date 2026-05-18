@@ -45,17 +45,28 @@ public class SocketClient {
     }
     public void disconnect() {
         try {
-            if (in != null) {
-                in.close();
-            }
+            // Cố gắng đóng luồng ghi trước
             if (out != null) {
-                out.close();
+                try {
+                    out.close();
+                } catch (Exception e) { /* Bỏ qua lỗi nếu luồng đã chết */ }
             }
+            
+            // Cố gắng đóng luồng đọc
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (Exception e) { /* Bỏ qua */ }
+            }
+            
+            // Cuối cùng mới đóng Socket
             if (socket != null && !socket.isClosed()) {
                 socket.close();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            
+            System.out.println("Đã ngắt kết nối với Server an toàn.");
+        } catch (Exception e) {
+            System.err.println("Có lỗi nhỏ khi đóng Socket nhưng không sao: " + e.getMessage());
         }
     }
     public void sendRequest(Request request) {

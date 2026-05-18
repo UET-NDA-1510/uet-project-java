@@ -37,5 +37,8 @@ public enum Action {
 
     // hệ thống
     ERROR,
-    SUCCESSS
+    SUCCESSS,
+    
+    // thông tin
+    GET_USER_INFO
 }

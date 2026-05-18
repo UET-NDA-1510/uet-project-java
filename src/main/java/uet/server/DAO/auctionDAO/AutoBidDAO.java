@@ -64,7 +64,9 @@ public class AutoBidDAO {
             ps.setBigDecimal(4, stepPrice);
 
             ps.executeUpdate();
-
+            if (!conn.getAutoCommit()) {
+                conn.commit();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

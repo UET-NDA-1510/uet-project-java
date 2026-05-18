@@ -23,6 +23,7 @@ public class SetAutoBidHandler implements RequestHandler {
         BigDecimal maxLimit = new BigDecimal(data[2]);
         BigDecimal stepPrice = new BigDecimal(data[3]);
         autoBidDAO.saveOrEnableAutoBid(auctionId, bidderId, maxLimit, stepPrice);
-        return null;
+        System.err.println("tạo auto bid");
+        return new Response(Action.AUTO_BID,"tt",null,true);
     }
 }

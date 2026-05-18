@@ -25,7 +25,11 @@ public class BidController implements ResponseObserver {
 
     @FXML
     public void initialize() {
-        mockData();
+        try {
+            mockData();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     @Override
     public void onResponse(Response response){

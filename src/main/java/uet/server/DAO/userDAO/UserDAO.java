@@ -105,4 +105,22 @@ public abstract class UserDAO {
         }
         return false;
     }
+    // update
+    public void update(User user) {
+        String sql = "UPDATE " + getTableName() + " SET email = ?, username = ?, password = ?, date_of_birth = ? WHERE id = ?";
+        try (Connection connect = DBConnection.getConnection();
+             PreparedStatement ps = connect.prepareStatement(sql)) {
+            ps.setString(1, user.getEmail());
+            ps.setString(2, user.getUsername());
+            ps.setString(3, user.getPassword());
+            ps.setObject(4, user.getDateOfbirth());
+            ps.setLong(5, user.getId());
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new DataAccessException("Không tìm thấy người dùng để cập nhật (ID: " + user.getId() + ")");
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("Lỗi khi cập nhật thông tin người dùng");
+        }
+    }
 }

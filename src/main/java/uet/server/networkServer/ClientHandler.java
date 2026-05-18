@@ -36,6 +36,7 @@ public class ClientHandler implements Runnable{
         handlerRegistry.put(Action.DELETE_USER,new DeleteUserHandler());
         handlerRegistry.put(Action.DELETE_ITEM,new DeleteItemHandler());
         handlerRegistry.put(Action.Line_Chart, new LineChartHandler());
+        handlerRegistry.put(Action.AUTO_BID,new SetAutoBidHandler());
     }
     public ClientHandler(Socket socket){
         this.socket = socket;

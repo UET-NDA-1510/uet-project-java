@@ -1,4 +1,4 @@
-package uet.server.networkServer.handler;
+package uet.server.networkServer.handler.sellerHandler;
 
 import uet.common.model.items.Item;
 import uet.common.payLoad.Action;
@@ -9,7 +9,6 @@ import uet.server.service.itemService.ItemService;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class GetFuLLProductHandle implements RequestHandler {
     @Override

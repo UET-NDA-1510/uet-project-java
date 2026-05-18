@@ -1,4 +1,4 @@
-package uet.server.networkServer.handler;
+package uet.server.networkServer.handler.basicHandler;
 
 import uet.common.model.CustomException.AuthenticationException;
 import uet.common.model.User.User;

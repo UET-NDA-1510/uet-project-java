@@ -25,7 +25,11 @@ public class BidController implements ResponseObserver {
 
     @FXML
     public void initialize() {
-        mockData();
+        try {
+            mockData();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     @Override
     public void onResponse(Response response){
@@ -58,6 +62,10 @@ public class BidController implements ResponseObserver {
     @FXML
     private void switchLineChart(){
         ClientMain.switchTo("LineChart.fxml",800,600);
+    }
+    @FXML
+    private void switchAutoBid(){
+        ClientMain.switchTo("AutoBidView.fxml",800,600);
     }
     @FXML
     private void handlePlaceBid() {

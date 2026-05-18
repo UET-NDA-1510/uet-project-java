@@ -105,6 +105,7 @@
          <children>
             <Button mnemonicParsing="false" onAction="#handleBack" prefHeight="45.0" prefWidth="180.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-size: 14px;" text="Quay lại" />
             <Button mnemonicParsing="false" onAction="#handlePlaceBid" prefHeight="45.0" prefWidth="180.0" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-size: 14px;" text="Xác nhận đặt giá" />
+            <Button mnemonicParsing="false" onAction="#switchAutoBid" prefHeight="45.0" prefWidth="180.0" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-size: 14px;" text="AutoBid" />
             <Button mnemonicParsing="false" onAction="#switchLineChart" prefHeight="45.0" prefWidth="180.0" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-size: 14px;" text="Xem đồ thị" />
          </children>
          <VBox.margin>

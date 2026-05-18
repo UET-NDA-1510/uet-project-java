@@ -1,4 +1,4 @@
-package uet.server.networkServer.handler;
+package uet.server.networkServer.handler.adminHandler;
 
 import uet.common.model.CustomException.DataAccessException;
 import uet.common.payLoad.Action;

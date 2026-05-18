@@ -1,9 +1,6 @@
-package uet.server.networkServer.handler;
+package uet.server.networkServer.handler.bidderHandler;
 
 import uet.common.model.Auction.Auction;
-import uet.common.model.CustomException.AuctionClosedException;
-import uet.common.model.CustomException.DataAccessException;
-import uet.common.model.CustomException.InvalidBidException;
 import uet.common.payLoad.Action;
 import uet.common.payLoad.Request;
 import uet.common.payLoad.Response;
@@ -14,6 +11,7 @@ import uet.server.networkServer.AuctionScheduler;
 import uet.server.networkServer.RequestHandler;
 import uet.server.service.auctionService.AuctionManager;
 import uet.server.service.auctionService.BidService;
+import uet.server.service.strategy.AutoBiddingStrategy;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -22,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 
 public class BidHandler implements RequestHandler {
@@ -29,15 +28,14 @@ public class BidHandler implements RequestHandler {
     public Response handle(Request request){
         BidService bidService = BidService.getInstance();
         AuctionDAO auctionDAO = new AuctionDAO();
-        try {
-            Connection connection = DBConnection.getConnection();
+        try (Connection connection = DBConnection.getConnection()){
             String[] data = (String[]) request.getData();
             // ép về đúng kiểu để dùng hàm place bid
             long auctionId = Long.parseLong(data[0]);
             long bidderId = Long.parseLong(data[1]);
             BigDecimal bid = new BigDecimal(data[2]);
             Auction auction = auctionDAO.findById(connection,auctionId);
-            // đặt giá
+            // đặt giá thủ công
             bidService.placeBid(auctionId,bidderId,bid);
             // cập nhật UI khi có lượt đặt giá mới
             Response uiUpdateRes = new Response(Action.NEW_BID_UPDATE, "Giá mới",bid, true);
@@ -64,24 +62,49 @@ public class BidHandler implements RequestHandler {
                 Response extendRes = new Response(Action.AUCTION_EXTENDED, antiSnipingMess,null, true);
                 ServerMain.broadcast(extendRes);
             }
+            // auto biding
+            broadcastAutoBiding(auctionDAO,auctionId,bidderId,targetUserID);
             // gửi thông báo cho chính người đã đặt giá
             return new Response(Action.PLACE_BID,"bạn đã đặt giá thành công",null,true);
-        } catch (AuctionClosedException e){
-            return new Response(Action.PLACE_BID,e.getMessage(),null,false);
-        } catch (InvalidBidException e){
-            return new Response(Action.PLACE_BID,e.getMessage(),null,false);
         } catch (SQLException e) {
             System.err.println("Lỗi khi lấy dữ liệu từ database khi đặt giá");
             return new Response(Action.PLACE_BID, "Lỗi khi lấy dữ liệu từ database", null, false);
-        } catch (DataAccessException e){
-            return new Response(Action.PLACE_BID, e.getMessage(), null, false);
         } catch (InterruptedException e) {
             e.printStackTrace();
             System.err.println(" lỗi đa luồng khi đặt giá");
             return null;
         } catch (RuntimeException e) {
-            e.printStackTrace();
             return new Response(Action.PLACE_BID, e.getMessage(), null, false);
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
         }
+    }
+    private void broadcastAutoBiding(AuctionDAO auctionDAO , long auctionId, long bidderId,ArrayList<Long> targetUserID){
+        AuctionScheduler.getInstance().scheduleTask(() -> {
+            try (Connection botConn = DBConnection.getConnection()) {
+                // Lấy lại giá cao nhất mới nhất từ DB vì trong 1 giây qua có thể đã có người xen ngang
+                Auction currentAuction = auctionDAO.findById(botConn, auctionId);
+                // Thả dàn Robot (Thuật toán nhảy cóc Vickrey)
+                AutoBiddingStrategy auto = new AutoBiddingStrategy();
+                auto.executeBidding(auctionId, bidderId, currentAuction.getCurrentHighestBid());
+                // Kiểm tra kết quả chiến trường
+                Auction finalAuction = auctionDAO.findById(botConn, auctionId);
+                // NẾU ROBOT THỰC SỰ CÓ ĐÈ GIÁ (Giá hiện tại > Giá 1 giây trước)
+                if (finalAuction.getCurrentHighestBid().compareTo(currentAuction.getCurrentHighestBid()) > 0) {
+                    // Sóng 1: Cập nhật lại LineChart bằng giá của Robot
+                    Response botUiUpdate = new Response(Action.NEW_BID_UPDATE, "Giá mới", finalAuction.getCurrentHighestBid(), true);
+                    ServerMain.broadcast(botUiUpdate);
+                    // Sóng 2: Gửi popup thông báo
+                    if (!targetUserID.isEmpty()) {
+                        String mess = "Bidder có ID : "+bidderId+",đã đặt giá thành công cho phiên có ID : "+auctionId;
+                        Response botNoti = new Response(Action.GET_NOTIFI_BID, mess, null, true);
+                        ServerMain.broadcastToTargetUsers(targetUserID, botNoti);
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Lỗi khi chạy AutoBidding ngầm: " + e.getMessage());
+            }
+        }, 1, TimeUnit.SECONDS);
     }
 }

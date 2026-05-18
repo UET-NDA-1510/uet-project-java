@@ -55,6 +55,9 @@
                    <Font name="System Bold" size="12.0" />
                 </font>
             </Button>
+            <Button mnemonicParsing="false" onAction="#handleAccountInfo" style="-fx-background-color: #ecf0f1; -fx-text-fill: #2c3e50; -fx-cursor: hand;" text="Tài khoản">
+                <font><Font name="System Bold" size="12.0" /></font>
+            </Button>
 
             <Button mnemonicParsing="false" onAction="#handleLogout" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand;" text="Đăng xuất">
                <font>

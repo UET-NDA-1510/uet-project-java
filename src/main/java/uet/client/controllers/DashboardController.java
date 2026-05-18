@@ -212,6 +212,11 @@ public class DashboardController implements ResponseObserver {
             e.printStackTrace();
         }
     }
+    
+    @FXML
+    private void handleAccountInfo() {
+        ClientMain.switchTo("AccountInfoView.fxml", 400, 450);
+    }
 
     @FXML
     private void handleLogout() {

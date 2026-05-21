@@ -65,4 +65,15 @@ public class BidderDAO extends UserDAO {
             }
         }
     }
+    public void updateTotalWin(int count,long id){
+        String sql = "UPDATE bidders SET total_win = ? WHERE id = ?";
+        try (Connection connection = DBConnection.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql)){
+            ps.setInt(1,count);
+            ps.setLong(2,id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

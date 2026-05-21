@@ -27,7 +27,7 @@ public class ServerMain {
     private ServerSocket serverSocket;
     public static final List<ClientHandler> onlineClients = new CopyOnWriteArrayList<>();
     private ServerMain(){
-        threadPool = Executors.newFixedThreadPool(20);
+        threadPool = Executors.newFixedThreadPool(MAX_CLIENT);
     }
     private void listenForShutdown() {
         Thread shutdownThread = new Thread(() -> {

@@ -111,10 +111,10 @@ public class AuctionDAO{
         }
         return auctions;
     }
-    public boolean deleteAuction(Connection connect,int id) throws SQLException{
+    public boolean deleteAuction(Connection connect,long id) throws SQLException{
         String sql = "DELETE FROM auctions WHERE id = ?";
         try (PreparedStatement pstmt = connect.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
+            pstmt.setLong(1, id);
             int rows = pstmt.executeUpdate();
             return rows > 0; // true nếu xóa được
         }

@@ -91,6 +91,7 @@ public class AuctionScheduler {
         } catch (SQLException e){
             System.err.println("lỗi khi lấy bidder về từ database khi hoàn thành phiên");
         }catch (Exception e) {
+            e.printStackTrace();
             System.err.println("lỗi khi tự động kết thúc phiên đấu giá phiên đấu giá");
         }
     }

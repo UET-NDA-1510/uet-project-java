@@ -24,14 +24,14 @@ public class ArtDAO extends ItemDAO<Art>{
     public boolean update(Art item,long itemID) throws SQLException {
         String sql = """
             UPDATE item
-            SET name=?, price=?, image_url=?, description=?, status=?, artist=?
+            SET name=?, price=?, image_url=?, description=?, status=?,type=?, artist=?
             WHERE id=?
             """;
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             fillCommonFields(ps,item, 1);   // index 1..5
-            ps.setString(6, item.getArtist());
-            ps.setLong(7, itemID);
+            ps.setString(7, item.getArtist());
+            ps.setLong(8, itemID);
             return ps.executeUpdate() > 0;
         }
     }

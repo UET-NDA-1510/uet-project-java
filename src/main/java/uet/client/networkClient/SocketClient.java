@@ -33,6 +33,7 @@ public class SocketClient {
         }
         try {
             socket = new Socket(SERVER_IP,SERVER_PORT);
+            socket.setTcpNoDelay(true);
             out = new ObjectOutputStream(socket.getOutputStream());
             out.flush();
             in = new ObjectInputStream(socket.getInputStream());

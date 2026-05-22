@@ -9,9 +9,8 @@ on:
 
 jobs:
   build-test-and-package:
-    runs-on: windows-latest  # Sửa dòng này
+    runs-on: windows-latest
 #    runs-on: ubuntu-latest # GitHub sẽ cấp một máy ảo Linux để chạy
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4

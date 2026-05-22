@@ -28,7 +28,6 @@ public class EditProductController implements ResponseObserver {
     @FXML private Label note;
     private String imageUrl;
     private String selectedType;
-    long sellerId = UserSession.getInstance().getLoggedInUserId();
     @FXML
     public void initialize() {
         // Đã bổ sung thêm "Item" vào danh sách (Tổng cộng 3 lựa chọn)

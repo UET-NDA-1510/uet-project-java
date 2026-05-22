@@ -25,15 +25,15 @@ public class VehicleDAO extends ItemDAO<Vehicle> {
     public boolean update(Vehicle item,long itemID) throws SQLException {
         String sql = """
             UPDATE item
-            SET name=?, price=?, image_url=?, description=?, status=?, brand=?, vehicle_type=?
+            SET name=?, price=?, image_url=?, description=?, status=?,type=?, brand=?, vehicle_type=?
             WHERE id=?
             """;
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             fillCommonFields(ps, item, 1);
-            ps.setString(6, item.getBrand());
-            ps.setString(7, item.getVehicleType());
-            ps.setLong(8,itemID);
+            ps.setString(7, item.getBrand());
+            ps.setString(8, item.getVehicleType());
+            ps.setLong(9,itemID);
             return ps.executeUpdate() > 0;
         }
     }

@@ -62,41 +62,64 @@ public class ClientMain extends Application {
         }
     }
     public static final List<Stage> activePopups = new ArrayList<>();
-    public static void showPopup(String title, String message) {
-        Stage stage = new Stage(StageStyle.TRANSPARENT);
-        stage.setAlwaysOnTop(true);
+public static void showPopup(String title, String message) {
+    Stage stage = new Stage(StageStyle.TRANSPARENT);
+    stage.setAlwaysOnTop(true);
 
-        Label lblTitle = new Label(title);
-        lblTitle.setStyle("-fx-font-weight: bold; -fx-text-fill: #f39c12; -fx-font-size: 14px;");
+    Label lblTitle = new Label(title);
+    lblTitle.setStyle("-fx-font-weight: bold; -fx-text-fill: #f39c12; -fx-font-size: 14px;");
 
-        Label lblMsg = new Label(message);
-        lblMsg.setWrapText(true); // Chuẩn JavaFX để tự động xuống dòng
-        lblMsg.setStyle("-fx-text-fill: white; -fx-font-size: 13px;");
+    Label lblMsg = new Label(message);
+    lblMsg.setWrapText(true);
+    lblMsg.setStyle("-fx-text-fill: white; -fx-font-size: 13px;");
 
-        VBox root = new VBox(5, lblTitle, lblMsg);
-        root.setStyle("-fx-background-color: rgba(30, 30, 30, 0.85); -fx-padding: 15px; -fx-background-radius: 8px;");
-        root.setAlignment(Pos.CENTER_LEFT);
-        root.setPrefWidth(300);
+    VBox root = new VBox(5, lblTitle, lblMsg);
+    root.setStyle("-fx-background-color: rgba(30, 30, 30, 0.85); -fx-padding: 15px; -fx-background-radius: 8px;");
+    root.setAlignment(Pos.CENTER_LEFT);
+    root.setPrefWidth(300);
 
-        stage.setScene(new Scene(root, Color.TRANSPARENT));
-        stage.setOpacity(0); // Set độ mờ mặc định = 0, tiết kiệm 1 KeyFrame
-        stage.show();
+    Scene scene = new Scene(root, Color.TRANSPARENT);
+    stage.setScene(scene);
 
-        // Căn góc dưới phải dựa vào biến 'window' (Stage của ứng dụng đang mở)
-        if (window != null) {
-            stage.setX(window.getX() + window.getWidth() - stage.getWidth() - 20);
-            stage.setY(window.getY() + window.getHeight() - stage.getHeight() - 20);
+    // 1. Ép JavaFX tính toán kích thước root trước khi show
+    root.applyCss();
+    root.layout();
+    double popupWidth = root.prefWidth(-1);
+    double popupHeight = root.prefHeight(popupWidth);
+
+    stage.setOpacity(0);
+
+    if (window != null) {
+        double baseX = window.getX() + window.getWidth() - popupWidth - 20;
+        double baseY = window.getY() + window.getHeight() - popupHeight - 20;
+
+        // 3. Trừ lùi tọa độ Y nếu đang có popup khác hiển thị
+        for (Stage activePopup : activePopups) {
+            baseY -= (activePopup.getHeight() + 10); // 10px khoảng cách giữa các popup
         }
 
-        // Animation rút gọn chỉ với 3 mốc thời gian
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.millis(500), new KeyValue(stage.opacityProperty(), 1)),
-                new KeyFrame(Duration.millis(3000), new KeyValue(stage.opacityProperty(), 1)),
-                new KeyFrame(Duration.millis(3500), new KeyValue(stage.opacityProperty(), 0))
-        );
-        timeline.setOnFinished(e -> stage.close());
-        timeline.play();
+        stage.setX(baseX);
+        stage.setY(baseY);
     }
+
+    // 4. Thêm vào danh sách và hiển thị
+    activePopups.add(stage);
+    stage.show();
+
+    Timeline timeline = new Timeline(
+            new KeyFrame(Duration.millis(500), new KeyValue(stage.opacityProperty(), 1)),
+            new KeyFrame(Duration.millis(3000), new KeyValue(stage.opacityProperty(), 1)),
+            new KeyFrame(Duration.millis(3500), new KeyValue(stage.opacityProperty(), 0))
+    );
+
+    timeline.setOnFinished(e -> {
+        stage.close();
+        // 5. Xóa khỏi danh sách sau khi animation kết thúc
+        activePopups.remove(stage);
+    });
+
+    timeline.play();
+}
     public static void exit (){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Thoát");

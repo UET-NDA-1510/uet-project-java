@@ -24,7 +24,7 @@ public class AuctionScheduler {
     private static final AuctionScheduler instance = new AuctionScheduler();
     // lưu trữ các thời gian đóng cửa của phiên đấu giá
     private final Map<Long, ScheduledFuture<?>> endTasks = new ConcurrentHashMap<>();
-    // 1 luồng chuyên để chạy ngầm đếm ngược thời gian
+    // luồng chuyên để chạy ngầm đếm ngược thời gian
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, r -> {
         Thread t = new Thread(r, "auction-scheduler");
         t.setDaemon(true); // JVM không đợi thread này khi tắt

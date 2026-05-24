@@ -18,27 +18,31 @@ public class AutoBiddingStrategy implements BiddingStrategy {
         long currentLeaderId = bidderId;
 
         while (!activeBots.isEmpty()) {
+            // trường hợp chỉ có 1 autobid
             if (activeBots.size() == 1) {
                 processSingleBot(auctionId, activeBots.get(0), currentLeaderId, currentHighestPrice);
                 break;
             }
-
+            // kiểm với autobid có giá tối đa lơns nhất
             AutoBidConfig topBot = activeBots.get(0);
+            // nếu dẫn đầu thì break không cần check
             if (topBot.getBidderId() == currentLeaderId) {
                 break;
             }
-
+            // autobid thứ 2
             AutoBidConfig secondBot = activeBots.get(1);
+            // mức giá tối thiểu để vượt qua autobid thứ 2
             BigDecimal targetPrice = computeTargetPrice(topBot, secondBot, currentHighestPrice);
-
+            // bắt đầu đặt giá
             boolean canOutbid = targetPrice.compareTo(currentHighestPrice) > 0
-                    && targetPrice.compareTo(secondBot.getMaxLimitPrice()) > 0;
-
+                    && targetPrice.compareTo(secondBot.getMaxLimitPrice()) >= 0;
             if (canOutbid) {
                 boolean placed = tryPlaceBid(auctionId, topBot.getBidderId(), targetPrice);
                 if (placed) {
+                    // Cập nhật trạng thái nội bộ sau khi topBot đặt giá thành công
                     currentHighestPrice = targetPrice;
                     currentLeaderId = topBot.getBidderId();
+                    // loại bỏ bot thua cuộc
                     for (int i = 1; i < activeBots.size(); i++) {
                         disableBot(auctionId, activeBots.get(i).getBidderId());
                     }
@@ -97,6 +101,7 @@ public class AutoBiddingStrategy implements BiddingStrategy {
             BidService.getInstance().placeBid(auctionId, bidderId, price);
             return true;
         } catch (InvalidBidException e) {
+            // Giá không hợp lệ tắt bot thay vì để lỗi lan ra ngoài
             disableBot(auctionId, bidderId);
             return false;
         }

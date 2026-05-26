@@ -10,10 +10,7 @@ import uet.server.networkServer.handler.adminHandler.GetALLuserHandler;
 import uet.server.networkServer.handler.basicHandler.GetALLauctionhandler;
 import uet.server.networkServer.handler.basicHandler.LoginHandler;
 import uet.server.networkServer.handler.basicHandler.RegisterHandler;
-import uet.server.networkServer.handler.bidderHandler.BidHandler;
-import uet.server.networkServer.handler.bidderHandler.LineChartHandler;
-import uet.server.networkServer.handler.bidderHandler.SetAutoBidHandler;
-import uet.server.networkServer.handler.bidderHandler.getAuctionInforHandler;
+import uet.server.networkServer.handler.bidderHandler.*;
 import uet.server.networkServer.handler.GetUserInfoHandler;
 import uet.server.networkServer.handler.sellerHandler.*;
 
@@ -48,6 +45,7 @@ public class ClientHandler implements Runnable{
         handlerRegistry.put(Action.Line_Chart, new LineChartHandler());
         handlerRegistry.put(Action.GET_USER_INFO, new GetUserInfoHandler());
         handlerRegistry.put(Action.AUTO_BID,new SetAutoBidHandler());
+        handlerRegistry.put(Action.GET_ITEM_ByID,new ProductInforHandler());
     }
     public ClientHandler(Socket socket){
         this.socket = socket;

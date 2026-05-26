@@ -100,6 +100,7 @@
             </Label>
          </children>
       </VBox>
+      <Button mnemonicParsing="false" onAction="#switchProductInfo" text="Xem thông tin sản phẩm" />
 
       <HBox alignment="CENTER" spacing="30.0">
          <children>

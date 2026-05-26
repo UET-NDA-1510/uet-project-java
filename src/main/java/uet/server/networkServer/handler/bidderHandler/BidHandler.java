@@ -47,7 +47,7 @@ public class BidHandler implements RequestHandler {
             targetUserID.remove(bidderId);
             // gửi pop up cho những ai đã đặt giá
             String mess = "Bidder có ID : "+bidderId+" ,đã đặt giá thành công cho phiên có ID : "+auctionId;
-            if (!targetUserID.isEmpty()) { // Có người để gửi thì mới gửi
+            if (!targetUserID.isEmpty()) {
                 Response updateBid = new Response(Action.GET_NOTIFI_BID,mess,null,true);
                 ServerMain.broadcastToTargetUsers(targetUserID,updateBid);
             }

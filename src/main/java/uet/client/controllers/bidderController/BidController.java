@@ -22,7 +22,7 @@ public class BidController implements ResponseObserver {
     @FXML private Label highestBidderLabel;
     @FXML private TextField bidAmountField;
     @FXML private Label noteLabel;
-
+    public static long itemId;
     @FXML
     public void initialize() {
         try {
@@ -40,7 +40,8 @@ public class BidController implements ResponseObserver {
                 productNameLabel.setText(arr[1]);
                 currentBidLabel.setText(arr[2]);
                 highestBidderLabel.setText(arr[3]);
-                balance.setText(arr[4]);
+                itemId = Long.parseLong(arr[4]);
+                balance.setText(arr[5]);
             }
         } else if (response.getAction()==Action.PLACE_BID){
             if (response.isSuccess()){
@@ -101,5 +102,9 @@ public class BidController implements ResponseObserver {
     @FXML
     private void handleBack() {
         ClientMain.switchTo("DashboardView.fxml", 800, 600);
+    }
+    @FXML
+    private void switchProductInfo(){
+        ClientMain.switchTo("ProductInformstionVIew.fxml",800,600);
     }
 }

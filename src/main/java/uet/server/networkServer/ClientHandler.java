@@ -25,7 +25,7 @@ public class ClientHandler implements Runnable{
     private final Socket socket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
-    private Long loggedInUsername = null;
+    private Long loggedInUserID = null;
     // nơi để đăng ký các hàm trả về response , khi có resquest
     private static final Map<Action,RequestHandler> handlerRegistry = new ConcurrentHashMap<>();
     static {
@@ -69,8 +69,8 @@ public class ClientHandler implements Runnable{
                                 Object responseData = response.getData();
                                 if (responseData instanceof User) {
                                     Long loggedInId = ((User) responseData).getId();
-                                    this.setLoggedInUsername(loggedInId);
-                                    System.out.println("Client đã đăng nhập với ID: " + this.loggedInUsername);
+                                    this.setLoggedInUserID(loggedInId);
+                                    System.out.println("Client đã đăng nhập với ID: " + this.loggedInUserID);
                                 } else {
                                     System.err.println("Cảnh báo: Dữ liệu trả về từ Login không phải là đối tượng User.");
                                 }
@@ -121,11 +121,12 @@ public class ClientHandler implements Runnable{
             System.err.println("Lỗi đóng kết nối: " + e.getMessage());
         }
     }
-    public void setLoggedInUsername(Long username) {
-        this.loggedInUsername = username;
+
+    public Long getLoggedInUserID() {
+        return loggedInUserID;
     }
 
-    public Long getLoggedInUsername() {
-        return loggedInUsername;
+    public void setLoggedInUserID(Long loggedInUserID) {
+        this.loggedInUserID = loggedInUserID;
     }
 }

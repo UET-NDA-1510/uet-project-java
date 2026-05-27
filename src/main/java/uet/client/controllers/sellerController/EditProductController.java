@@ -16,6 +16,8 @@ import uet.client.networkClient.UserSession;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.util.Base64;
 
 public class EditProductController implements ResponseObserver {
     @FXML private ComboBox<String> categoryComboBox;
@@ -92,8 +94,6 @@ public class EditProductController implements ResponseObserver {
             }
         }
     }
-
-
     @FXML
     public void addImage(ActionEvent event){
         FileChooser fileChooser = new FileChooser();
@@ -101,9 +101,25 @@ public class EditProductController implements ResponseObserver {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
         File selectedFile = fileChooser.showOpenDialog(((Node) event.getSource()).getScene().getWindow());
         if (selectedFile != null) {
-            imageUrl = selectedFile.toURI().toString();
-            Image image = new Image(imageUrl);
-            imageView.setImage(image);
+            try {
+                byte[] fileContent = Files.readAllBytes(selectedFile.toPath());
+                String base64Image = Base64.getEncoder().encodeToString(fileContent);
+                // Lấy tên file để trích xuất đuôi (ví dụ: .png, .jpg)
+                String fileName = selectedFile.getName();
+                String extension = "";
+                int i = fileName.lastIndexOf('.');
+                if (i > 0) {
+                    extension = fileName.substring(i).toLowerCase(); // lấy ra ".png" hoặc ".jpg"
+                }
+
+                // Ghép đuôi file, chuỗi "|||", và chuỗi Base64 lại với nhau
+                imageUrl = extension + "|||" + base64Image;
+                Image image = new Image(selectedFile.toURI().toString());
+                imageView.setImage(image);
+
+            } catch (Exception e) {
+                note.setText("Lỗi khi tải ảnh");
+            }
         }
     }
     // Hàm tạo style tối màu cho ComboBox

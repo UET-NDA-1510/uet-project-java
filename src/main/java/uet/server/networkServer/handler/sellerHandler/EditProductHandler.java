@@ -6,9 +6,14 @@ import uet.common.payLoad.Response;
 import uet.server.networkServer.RequestHandler;
 import uet.server.service.itemService.ItemService;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Base64;
 
 public class EditProductHandler implements RequestHandler {
     @Override
@@ -24,7 +29,18 @@ public class EditProductHandler implements RequestHandler {
         long olditemId = Long.parseLong(arr[6]);
         String[] extraInfo = Arrays.copyOfRange(arr, 7, arr.length);
         try {
-            boolean isUpdate = itemService.updateItem(sellerID, type, name, price, description, imageUrl, olditemId, extraInfo);
+            String[] parts =imageUrl.split("\\|\\|\\|");
+            String extension = parts[0];   // Sẽ là ".jpg", ".png", v.v.
+            String base64Image = parts[1]; // Dữ liệu ảnh thực tế
+            byte[] imageBytes = Base64.getDecoder().decode(base64Image);
+            String myFolderPath = "C:/Users/PC/Downloads";
+
+            // 4. Tạo tên file mới CÓ ĐUÔI LINH HOẠT
+            String newFileName = "item_" + System.currentTimeMillis() + extension;
+            Path filePath = Paths.get(myFolderPath, newFileName);
+            Files.write(filePath, imageBytes);
+            String savedImagePath = filePath.toString();
+            boolean isUpdate = itemService.updateItem(sellerID, type, name, price, description, savedImagePath, olditemId, extraInfo);
             if (isUpdate) {
                 System.out.println("Đã cập nhật thành công Item ID: " + olditemId);
                 return new Response(Action.EDIT_ITEM, "Sửa thành công", null, true);
@@ -36,6 +52,9 @@ public class EditProductHandler implements RequestHandler {
 //            return new Response(Action.EDIT_ITEM,"sửa thành công",null,true);
         } catch (SQLException e) {
             System.err.println("lỗi khi sửa sản phẩm");
+            return new Response(Action.EDIT_ITEM,"lỗi khi sửa sản phẩm",null,false);
+        } catch (IOException e){
+            e.printStackTrace();
             return new Response(Action.EDIT_ITEM,"lỗi khi sửa sản phẩm",null,false);
         }
     }

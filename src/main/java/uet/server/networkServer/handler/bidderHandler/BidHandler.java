@@ -58,7 +58,7 @@ public class BidHandler implements RequestHandler {
                 // Cộng thêm 60 giây nữa
                 AuctionScheduler.getInstance().extendAuction(auction);
                 // GỬI SÓNG PHÁT THANH CHO MỌI NGƯỜI ĐỂ CẬP NHẬT ĐỒNG HỒ ĐẾM NGƯỢC
-                String antiSnipingMess = "Phiên đấu giá có ID : "+auction.getAuctionId()+"đã gia hạn thêm 1 phút!";
+                String antiSnipingMess = "Phiên đấu giá có ID : "+auction.getAuctionId()+" đã gia hạn thêm 1 phút!";
                 Response extendRes = new Response(Action.AUCTION_EXTENDED, antiSnipingMess,null, true);
                 ServerMain.broadcast(extendRes);
             }
@@ -97,7 +97,7 @@ public class BidHandler implements RequestHandler {
                     ServerMain.broadcast(botUiUpdate);
                     // Sóng 2: Gửi popup thông báo
                     if (!targetUserID.isEmpty()) {
-                        String mess = "Bidder có ID : "+finalAuction.getHighestBidderId()+",đã đặt giá thành công cho phiên có ID : "+auctionId;
+                        String mess = "Bidder có ID : "+finalAuction.getHighestBidderId()+" ,đã đặt giá thành công cho phiên có ID : "+auctionId;
                         Response botNoti = new Response(Action.GET_NOTIFI_BID, mess, null, true);
                         targetUserID.add(bidderId);
                         ServerMain.broadcastToTargetUsers(targetUserID, botNoti);

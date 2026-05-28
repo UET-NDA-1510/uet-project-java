@@ -72,7 +72,7 @@ public class AuctionScheduler {
             System.err.println("lỗi khi tự động bắt đầu phiên đấu giá");
         }
         // 2. Bắn thông báo Realtime cho TẤT CẢ các máy Client đang online
-        Response res = new Response(Action.AUCTION_STARTED, "Phiên đấu giá có Id" +auction.getAuctionId()+"đã chính thức bắt đầu.", auction, true);
+        Response res = new Response(Action.AUCTION_STARTED, "Phiên đấu giá có Id " +auction.getAuctionId()+" đã chính thức bắt đầu.", auction, true);
         ServerMain.broadcast(res);
     }
 
@@ -85,7 +85,7 @@ public class AuctionScheduler {
             ItemService.getInstance().updateItemStatus(auction.getItemId(), ItemStatus.SOLD.name());
             endTasks.remove(auction.getAuctionId());
             // 3. Bắn thông báo Realtime cho TẤT CẢ các máy
-            Response res = new Response(Action.AUCTION_ENDED,"Phiên đấu giá có Id" +auction.getAuctionId()+"đã kết thúc.Người win là "+user.getUsername(), auction, true);
+            Response res = new Response(Action.AUCTION_ENDED,"Phiên đấu giá có Id " +auction.getAuctionId()+" đã kết thúc.Người win là "+user.getUsername(), auction, true);
             ServerMain.broadcast(res);
             auctionService.markAuctionPaid(auction.getAuctionId());
         } catch (SQLException e){

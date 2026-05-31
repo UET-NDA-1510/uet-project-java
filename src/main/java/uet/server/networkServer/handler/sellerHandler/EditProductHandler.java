@@ -34,7 +34,7 @@ public class EditProductHandler implements RequestHandler {
             String base64Image = parts[1]; // Dữ liệu ảnh thực tế
             byte[] imageBytes = Base64.getDecoder().decode(base64Image);
             String myFolderPath = "C:/Users/PC/Downloads";
-
+// ccd
             // 4. Tạo tên file mới CÓ ĐUÔI LINH HOẠT
             String newFileName = "item_" + System.currentTimeMillis() + extension;
             Path filePath = Paths.get(myFolderPath, newFileName);

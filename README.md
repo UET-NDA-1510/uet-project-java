@@ -1,4 +1,4 @@
-<img width="972" height="349" alt="image" src="https://github.com/user-attachments/assets/e846dc33-6a2a-4a70-872d-f1d8d2e15e1d" /># uet-project-java
+# uet-project-java
 
 Bài tập lớn - Nhóm 6: Nguyễn Đức Anh, Hoàng Quang Anh, Phạm Đức Anh, Nguyễn Quốc Dũng
 

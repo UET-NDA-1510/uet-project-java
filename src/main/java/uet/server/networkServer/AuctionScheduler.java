@@ -84,8 +84,14 @@ public class AuctionScheduler {
             User user = bidderDAO.findById(connection, auction.getHighestBidderId());
             ItemService.getInstance().updateItemStatus(auction.getItemId(), ItemStatus.SOLD.name());
             endTasks.remove(auction.getAuctionId());
+            Response res;
+            if (user != null) {
+                res = new Response(Action.AUCTION_ENDED,"Phiên đấu giá có Id " +auction.getAuctionId()+" đã kết thúc.Người win là "+ user.getUsername(), auction, true);
+            } else {
+                // Có thể set trạng thái auction thành "UNSOLD" (Không bán được)
+                res = new Response(Action.AUCTION_ENDED,"Phiên đấu giá có Id " +auction.getAuctionId()+" đã kết thúc. Không có người chiến thắng", auction, true);
+            }
             // 3. Bắn thông báo Realtime cho TẤT CẢ các máy
-            Response res = new Response(Action.AUCTION_ENDED,"Phiên đấu giá có Id " +auction.getAuctionId()+" đã kết thúc.Người win là "+user.getUsername(), auction, true);
             ServerMain.broadcast(res);
             auctionService.markAuctionPaid(auction.getAuctionId());
         } catch (SQLException e){

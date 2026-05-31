@@ -49,22 +49,24 @@ public class AuctionDAO{
             return null;
         }
     }
-    public String[] getAuctionInformation(long auctionID) throws SQLException{
+    public String[] getAuctionInformation(long auctionID) throws SQLException {
         String sql = "SELECT " +
+                "    i.id AS item_id, " +
                 "    s.username AS seller_name, " +
                 "    i.name AS item_name, " +
                 "    a.current_highest_bid, " +
-                "    b.username AS bidder_name " +   // Lấy b.username từ bảng bidders
+                "    b.username AS bidder_name " +
                 "FROM auctions a " +
                 "JOIN sellers s ON a.seller_id = s.id " +
                 "JOIN item i ON a.item_id = i.id " +
-                "LEFT JOIN bidders b ON a.highest_bidder_id = b.id "+ // Dùng bảng bidders
+                "LEFT JOIN bidders b ON a.highest_bidder_id = b.id "+
                 "WHERE a.id = ?";
-        try(Connection connection = DBConnection.getConnection();
-            PreparedStatement pr = connection.prepareStatement(sql)){
-            pr.setLong(1,auctionID);
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement pr = connection.prepareStatement(sql)) {
+            pr.setLong(1, auctionID);
             ResultSet rs = pr.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
+                String itemId = rs.getString("item_id"); // Lấy dữ liệu item_id
                 String sellerName = rs.getString("seller_name");
                 String itemName = rs.getString("item_name");
                 BigDecimal highestBid = rs.getBigDecimal("current_highest_bid");
@@ -73,7 +75,7 @@ public class AuctionDAO{
                 if (bidderName == null) {
                     bidderName = "Chưa có ai đặt giá";
                 }
-                return new String[] {sellerName,itemName,String.valueOf(highestBid),bidderName};
+                return new String[] {sellerName, itemName, String.valueOf(highestBid),bidderName,itemId};
             } else {
                 return null;
             }
@@ -111,10 +113,10 @@ public class AuctionDAO{
         }
         return auctions;
     }
-    public boolean deleteAuction(Connection connect,int id) throws SQLException{
+    public boolean deleteAuction(Connection connect,long id) throws SQLException{
         String sql = "DELETE FROM auctions WHERE id = ?";
         try (PreparedStatement pstmt = connect.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
+            pstmt.setLong(1, id);
             int rows = pstmt.executeUpdate();
             return rows > 0; // true nếu xóa được
         }

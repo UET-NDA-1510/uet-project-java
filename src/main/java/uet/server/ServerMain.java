@@ -27,7 +27,7 @@ public class ServerMain {
     private ServerSocket serverSocket;
     public static final List<ClientHandler> onlineClients = new CopyOnWriteArrayList<>();
     private ServerMain(){
-        threadPool = Executors.newFixedThreadPool(20);
+        threadPool = Executors.newFixedThreadPool(MAX_CLIENT);
     }
     private void listenForShutdown() {
         Thread shutdownThread = new Thread(() -> {
@@ -94,7 +94,7 @@ public class ServerMain {
     public static void broadcastToTargetUsers(List<Long> targetUserID, Response response) {
         if (targetUserID == null || targetUserID.isEmpty()) return;
         for (ClientHandler client : onlineClients) {
-            Long clientID = client.getLoggedInUsername();
+            Long clientID = client.getLoggedInUserID();
             // Nếu Client đã đăng nhập VÀ tên nằm trong danh sách cần gửi
             if (clientID != null && targetUserID.contains(clientID)) {
                 try {

@@ -46,8 +46,8 @@ public class BidHandler implements RequestHandler {
             ArrayList<Long> targetUserID = new ArrayList<>(targetUsersSet);
             targetUserID.remove(bidderId);
             // gửi pop up cho những ai đã đặt giá
-            String mess = "Bidder có ID : "+bidderId+",đã đặt giá thành công cho phiên có ID : "+auctionId;
-            if (!targetUserID.isEmpty()) { // Có người để gửi thì mới gửi
+            String mess = "Bidder có ID : "+bidderId+" ,đã đặt giá thành công cho phiên có ID : "+auctionId;
+            if (!targetUserID.isEmpty()) {
                 Response updateBid = new Response(Action.GET_NOTIFI_BID,mess,null,true);
                 ServerMain.broadcastToTargetUsers(targetUserID,updateBid);
             }
@@ -58,7 +58,7 @@ public class BidHandler implements RequestHandler {
                 // Cộng thêm 60 giây nữa
                 AuctionScheduler.getInstance().extendAuction(auction);
                 // GỬI SÓNG PHÁT THANH CHO MỌI NGƯỜI ĐỂ CẬP NHẬT ĐỒNG HỒ ĐẾM NGƯỢC
-                String antiSnipingMess = "Phiên đấu giá có ID : "+auction.getAuctionId()+"đã gia hạn thêm 1 phút!";
+                String antiSnipingMess = "Phiên đấu giá có ID : "+auction.getAuctionId()+" đã gia hạn thêm 1 phút!";
                 Response extendRes = new Response(Action.AUCTION_EXTENDED, antiSnipingMess,null, true);
                 ServerMain.broadcast(extendRes);
             }
@@ -85,20 +85,21 @@ public class BidHandler implements RequestHandler {
             try (Connection botConn = DBConnection.getConnection()) {
                 // Lấy lại giá cao nhất mới nhất từ DB vì trong 1 giây qua có thể đã có người xen ngang
                 Auction currentAuction = auctionDAO.findById(botConn, auctionId);
-                // Thả dàn Robot (Thuật toán nhảy cóc Vickrey)
+                // Thả dàn autoBid
                 AutoBiddingStrategy auto = new AutoBiddingStrategy();
                 auto.executeBidding(auctionId, bidderId, currentAuction.getCurrentHighestBid());
-                // Kiểm tra kết quả chiến trường
+                // Kiểm tra kết quả
                 Auction finalAuction = auctionDAO.findById(botConn, auctionId);
-                // NẾU ROBOT THỰC SỰ CÓ ĐÈ GIÁ (Giá hiện tại > Giá 1 giây trước)
+                // NẾU autobid THỰC SỰ CÓ ĐÈ GIÁ (Giá hiện tại > Giá 1 giây trước)
                 if (finalAuction.getCurrentHighestBid().compareTo(currentAuction.getCurrentHighestBid()) > 0) {
-                    // Sóng 1: Cập nhật lại LineChart bằng giá của Robot
+                    // Sóng 1: Cập nhật lại LineChart bằng giá của autoBid
                     Response botUiUpdate = new Response(Action.NEW_BID_UPDATE, "Giá mới", finalAuction.getCurrentHighestBid(), true);
                     ServerMain.broadcast(botUiUpdate);
                     // Sóng 2: Gửi popup thông báo
                     if (!targetUserID.isEmpty()) {
-                        String mess = "Bidder có ID : "+bidderId+",đã đặt giá thành công cho phiên có ID : "+auctionId;
+                        String mess = "Bidder có ID : "+finalAuction.getHighestBidderId()+" ,đã đặt giá thành công cho phiên có ID : "+auctionId;
                         Response botNoti = new Response(Action.GET_NOTIFI_BID, mess, null, true);
+                        targetUserID.add(bidderId);
                         ServerMain.broadcastToTargetUsers(targetUserID, botNoti);
                     }
                 }

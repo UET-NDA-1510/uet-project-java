@@ -43,6 +43,7 @@ public abstract class ItemDAO <T extends Item>{
         ps.setString(startIndex + 2, item.getImageUrl());
         ps.setString(startIndex + 3, item.getDescription());
         ps.setString(startIndex + 4, item.getStatus().name());
+        ps.setString(startIndex + 5, item.getType());
     }
     // hàm lấy các thuộc tính chung của item
     public void mapCommonFields(ResultSet rs, Item p) throws SQLException {

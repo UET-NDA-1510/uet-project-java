@@ -1,4 +1,5 @@
 package uet.server.service.auctionService;
+import uet.common.model.User.User;
 import uet.server.DAO.auctionDAO.AuctionDAO;
 import uet.server.DAO.DBConnection;
 import uet.server.DAO.userDAO.BidderDAO;
@@ -127,10 +128,11 @@ public class AuctionService {
             connect.setAutoCommit(false);
             Auction auction = auctionDAO.findById(connect, auctionId);
             Long winnerId = auction.getHighestBidderId();
-            // 1. Cập nhật trạng thái phiên đấu giá trong DB
-            auctionDAO.updateAuctionStatus(connect,auctionId, Auction.AuctionState.PAID);
-            // 2. Cộng tiền cho Seller trong DB
+            // 1. Cộng tiền cho Seller trong DB
             if (winnerId != null){
+                Bidder bidder = (Bidder) bidderDAO.findById(connect,winnerId);
+                int total_win = bidder.getTotal_win() + 1;
+                bidderDAO.updateTotalWin(total_win,winnerId);
                 sellerDAO.getMoney(connect, auction.getSellerId(), auction.getCurrentHighestBid());
             }
             connect.commit(); //  lưu DB

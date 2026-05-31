@@ -7,8 +7,12 @@ import uet.server.networkServer.RequestHandler;
 import uet.server.service.itemService.ItemService;
 
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Base64;
 
 public class CreateProductHandler implements RequestHandler {
     @Override
@@ -23,11 +27,25 @@ public class CreateProductHandler implements RequestHandler {
         String imageUrl = arr[5];
         String[] extraInfo = Arrays.copyOfRange(arr, 6, arr.length);
         try {
-            itemService.createItem(sellerID,type,name,price,description,imageUrl,extraInfo);
+            String[] parts =imageUrl.split("\\|\\|\\|");
+            String extension = parts[0];   // Sẽ là ".jpg", ".png", v.v.
+            String base64Image = parts[1]; // Dữ liệu ảnh thực tế
+            byte[] imageBytes = Base64.getDecoder().decode(base64Image);
+            String myFolderPath = "C:/Users/PC/Downloads";
+
+            // 4. Tạo tên file mới CÓ ĐUÔI LINH HOẠT
+            String newFileName = "item_" + System.currentTimeMillis() + extension;
+            Path filePath = Paths.get(myFolderPath, newFileName);
+            Files.write(filePath, imageBytes);
+            String savedImagePath = filePath.toString();
+            itemService.createItem(sellerID,type,name,price,description,savedImagePath,extraInfo);
             return new Response(Action.CREATE_ITEM,"tạo thành công",null,true);
         } catch (SQLException e) {
             System.err.println("lỗi khi tạo sản phẩm");
             return new Response(Action.CREATE_ITEM,"lỗi khi tạo sản phẩm",null,false);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

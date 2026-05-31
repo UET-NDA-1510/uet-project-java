@@ -5,7 +5,7 @@ import uet.server.DAO.auctionDAO.BidtransactionDAO;
 import uet.server.service.auctionService.AuctionManager;
 
 import java.util.List;
-
+// class để lấy lại dữ liệu người tham gia phiên đấu giá khi mở lại server
 public class restoreAuction {
     static public void restoreAuctionCache() {
         AuctionDAO auctionDAO = new AuctionDAO();

@@ -1,4 +1,4 @@
-# uet-project-java
+<img width="972" height="349" alt="image" src="https://github.com/user-attachments/assets/e846dc33-6a2a-4a70-872d-f1d8d2e15e1d" /># uet-project-java
 
 Bài tập lớn - Nhóm 6: Nguyễn Đức Anh, Hoàng Quang Anh, Phạm Đức Anh, Nguyễn Quốc Dũng
 
@@ -96,4 +96,4 @@ java -jar uet-project-java-1.0-SNAPSHOT-client.jar
 ## 7. Link báo cáo PDF và video demo
 
 - **Link video demo:** https://drive.google.com/file/d/18Few9Qu_Q-gNnkUP7tSCjlwoGC90A2Vr/view?fbclid=IwY2xjawSH9kdleHRuA2FlbQIxMABicmlkETJCM3NiMTFGdzZVMEpDbEdEc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHrZbRKTXhVd95DEo8CkMSttuRuBnp84tG7oqtcmEd0F65yAgx-OXpKZmpyf1_aem_vcOLzB4yve5EzGRFN9fFMQ
-- **Link  báo cáo PDF:** 
+- **Link báo cáo PDF:** https://drive.google.com/file/d/1v7hdBUWQq6t5JK6qXHhbyOMNCoj2H1om/view?usp=sharing

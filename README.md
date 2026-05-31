@@ -13,7 +13,7 @@ Bài tập lớn - Nhóm 6: Nguyễn Đức Anh, Hoàng Quang Anh, Phạm Đức
 **Ngôn ngữ lập trình:** Java.
 **Giao diện người dùng (GUI):** JavaFX (thiết kế qua FXML).
 **Cơ sở dữ liệu:** MySQL.
-**Kiến trúc & Giao tiếp mạng:** Socket TCP/IP (truyền nhận dữ liệu đóng gói dạng Object/JSON), kiến trúc MVC, tuân thủ chặt chẽ OOP và các Design Pattern (Singleton, Observer, Factory).
+**Kiến trúc & Giao tiếp mạng:** Socket TCP/IP (truyền nhận dữ liệu đóng gói dạng Object/JSON), kiến trúc MVC, tuân thủ chặt chẽ OOP và các Design Pattern (Singleton, Observer, Factory,Strategy).
 **Môi trường chạy:** Tương thích hoàn toàn đa nền tảng (Windows, macOS, Linux).
 **Yêu cầu cài đặt (Prerequisites):**
   Đã cài đặt **JDK 25**.
@@ -29,7 +29,7 @@ uet-project-java/
 │   ├── main/
 │   │   ├── java/uet/
 │   │   │   ├── client/ # Module Client: Chứa các Controllers (phân theo admin, auth, bidder, seller) và Network Client (gửi Request/nhận Response).
-│   │   │   ├── server/ # Module Server: Chứa DAO (kết nối Database), Network Server (Handlers, đa luồng) và Services (chứa Strategy logic).
+│   │   │   ├── server/ # Module Server: Chứa DAO (kết nối Database), Network Server (Handlers, đa luồng) và Services (chứa logic nghiệp vụ).
 │   │   │   └── common/ # Module Common: Các class dùng chung giữa Client và Server (Models, Payloads).
 │   │   └── resources/uet/client/views/ # Chứa toàn bộ các file giao diện FXML (AccountInfoView, DashboardView, AutoBidView...).
 │   └── test/java/      # Thư mục chứa các file Unit Test (JUnit).
